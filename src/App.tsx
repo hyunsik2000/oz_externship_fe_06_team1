@@ -1,7 +1,5 @@
-import './App.css'
+import AdminHeader from './components/layout/AdminHeader.tsx'
 
-function App() {
-  return <div>template</div>
+export default function App() {
+  return <AdminHeader />
 }
-
-export default App
