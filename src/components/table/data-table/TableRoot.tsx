@@ -7,5 +7,5 @@ interface TableProps {
 }
 
 export function TableRoot({ children, className }: TableProps) {
-  return <div className={cn('w-[1540px] w-full', className)}>{children}</div>
+  return <div className={cn('w-full', className)}>{children}</div>
 }
