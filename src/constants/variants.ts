@@ -22,6 +22,35 @@ export const badgeVariants = cva(
   }
 )
 
+export const buttonVariants = cva(
+  'inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-bold transition-all remove-focus-outline disabled:pointer-events-none disabled:opacity-50 cursor-pointer active:scale-[0.98]',
+  {
+    variants: {
+      variant: {
+        primary: 'bg-primary-700 text-white hover:opacity-90',
+        secondary: 'bg-grey-400 text-white hover:opacity-90',
+        outline:
+          'border border-grey-300 bg-white text-grey-600 hover:bg-grey-50',
+        confirm: 'bg-primary-600 text-white hover:opacity-90',
+        success: 'bg-success-400 text-white hover:opacity-90',
+        warning: 'bg-warning-400 text-white hover:opacity-90',
+        danger: 'bg-error-400 text-white hover:opacity-80',
+        ghost: 'bg-transparent text-grey-600 hover:bg-grey-100',
+      },
+      size: {
+        default: 'h-11 px-6 py-2.5',
+        sm: 'h-9 px-4 text-xs',
+        lg: 'h-14 px-10 text-base',
+        icon: 'h-6 w-6 p-0',
+      },
+    },
+    defaultVariants: {
+      variant: 'primary',
+      size: 'default',
+    },
+  }
+)
+
 export const modalVariants = cva(
   'relative flex flex-col bg-white w-full overflow-hidden transition-all duration-200 shadow-[0_20px_50px_rgba(0,0,0,0.15)]',
   {
