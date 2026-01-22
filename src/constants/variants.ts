@@ -87,3 +87,20 @@ export const modalVariants = cva(
     },
   }
 )
+
+export const toastVariants = cva(
+  'relative flex items-center w-full max-w-[400px] bg-white rounded-2xl p-4 shadow-[0_8px_30px_rgb(0,0,0,0.12)] overflow-hidden transition-all animate-in slide-in-from-right-5',
+  {
+    variants: {
+      variant: {
+        success:
+          'before:absolute before:left-0 before:top-0 before:bottom-0 before:w-1.5 before:bg-success-400',
+        error:
+          'before:absolute before:left-0 before:top-0 before:bottom-0 before:w-1.5 before:bg-error-400',
+      },
+    },
+    defaultVariants: {
+      variant: 'success',
+    },
+  }
+)
