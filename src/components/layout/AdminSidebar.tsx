@@ -43,7 +43,7 @@ export default function AdminSidebar() {
 
   return (
     <aside className="border-grey-300 min-h-screen w-64 shrink-0 border-r bg-white">
-      <div className="border-grey-300 text-grey-800 flex h-16 items-center justify-center border-b text-xl font-semibold">
+      <div className="border-grey-300 text-grey-600 flex h-16 items-center justify-center border-b text-xl font-semibold">
         오즈코딩스쿨 관리자
       </div>
 

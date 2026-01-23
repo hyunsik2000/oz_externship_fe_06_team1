@@ -106,12 +106,12 @@ export const toastVariants = cva(
 )
 
 export const sidebarSectionButtonVariants = cva(
-  'flex w-full items-center justify-between px-6 py-4 text-left',
+  'flex w-full items-center justify-between px-6 py-4 text-left text-primary-700',
   {
     variants: {
       open: {
-        true: 'bg-primary-50 text-primary-600',
-        false: 'text-grey-800',
+        true: 'bg-primary-50',
+        false: '',
       },
     },
     defaultVariants: {
