@@ -1,3 +1,4 @@
+import { Outlet } from 'react-router-dom'
 import AdminHeader from './AdminHeader'
 import AdminSidebar from './AdminSidebar'
 
@@ -6,11 +7,11 @@ export default function AdminLayout() {
     <div className="flex min-h-screen">
       <AdminSidebar />
 
-      <div className="flex min-h-screen flex-1 flex-col">
+      <div className="flex min-h-screen min-w-0 flex-1 flex-col">
         <AdminHeader />
 
-        <main className="flex-1">
-          <div className="p-6" />
+        <main className="min-w-0 flex-1 overflow-x-hidden">
+          <Outlet />
         </main>
       </div>
     </div>

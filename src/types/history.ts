@@ -1,4 +1,4 @@
-export type HistoryItem = {
+export interface HistoryItem {
   exam_id: number
   history_id: number
   exam_title: string
@@ -10,4 +10,11 @@ export type HistoryItem = {
   score: number
   started_at: string
   finished_at: string
+}
+
+export interface HistoryListResponse {
+  page: number
+  size: number
+  total_count: number
+  submissions: HistoryItem[]
 }
