@@ -5,7 +5,7 @@ import DetailExamFooter from './DetailExamFooter'
 import DetailExamHeader from './DetailExamHeader'
 import {
   MOCK_EMPTY_QUESTION_LIST_RESPONSE,
-  MOCK_QUESTION_LIST_RESPONSE,
+  // MOCK_QUESTION_LIST_RESPONSE,
 } from '@/mocks/exam-data/QuestionList'
 
 export default function DetailExamContainer() {
