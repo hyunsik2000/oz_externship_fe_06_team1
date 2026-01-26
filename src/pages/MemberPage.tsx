@@ -1,9 +1,8 @@
-import PageContainer from "@/components/layout/PageContainer";
+import AdminContainer from "@/components/layout/AdminContainer";
 
 export default function MemberPage() {
   return (
-    <PageContainer>
-      <div className="p-6 font-semibold">회원관리</div>
-    </PageContainer>
+    <AdminContainer title="회원관리">
+    </AdminContainer>
   );
 }
