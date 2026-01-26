@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom'
 import AdminHeader from './AdminHeader'
 import AdminSidebar from './AdminSidebar'
+import AdminContainer from "./AdminContainer";
 
 export default function AdminLayout() {
   return (
@@ -17,3 +18,4 @@ export default function AdminLayout() {
     </div>
   )
 }
+
