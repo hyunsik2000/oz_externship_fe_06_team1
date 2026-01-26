@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom'
 import AdminHeader from './AdminHeader'
 import AdminSidebar from './AdminSidebar'
-import AdminContainer from "./AdminContainer";
+import AdminContainer from './AdminContainer'
 
 export default function AdminLayout() {
   return (
@@ -11,11 +11,12 @@ export default function AdminLayout() {
       <div className="flex min-h-screen min-w-0 flex-1 flex-col">
         <AdminHeader />
 
-        <main className="min-w-0 flex-1 overflow-x-hidden">
-          <Outlet />
+       <main className="flex-1 min-w-0 bg-grey-100">
+          <AdminContainer title='회원관리'>
+            <Outlet />
+          </AdminContainer>
         </main>
       </div>
     </div>
   )
 }
-

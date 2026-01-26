@@ -12,12 +12,12 @@ export default function AdminContainer({
   className = "",
 }: Props) {
   return (
-
     <div
       className={[
         "min-w-0",
         "pl-[17.5px] pr-[41.5px] pt-[65px] pb-[62px]",
-        "overflow-x-auto", 
+        "overflow-x-auto",          
+        "overflow-y-auto",          
         className,
       ].join(" ")}
     >
@@ -26,7 +26,7 @@ export default function AdminContainer({
           "w-[1600px] min-w-[1600px] shrink-0", 
           "min-h-[873px]",
           "bg-white border border-[var(--color-grey-300)]",
-          "rounded-none", 
+          "rounded-none",           
           "shadow-sm box-border",
         ].join(" ")}
       >
