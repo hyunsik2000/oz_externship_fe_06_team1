@@ -34,7 +34,7 @@ export const FormSectionLayout = ({
 
     {/* noContainer가 true면 children만, false면 회색 박스 유지 */}
     {noContainer ? (
-      <>{children}</>
+      children
     ) : (
       <div className="bg-grey-50 mt-1 flex flex-col gap-2 rounded-[4px] p-5">
         {children}
