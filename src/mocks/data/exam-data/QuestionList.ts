@@ -1,5 +1,4 @@
 import type { QuestionListResponse } from '@/types/question'
-
 export const MOCK_QUESTION_LIST_RESPONSE: QuestionListResponse = {
   id: 101,
   title: 'TypeScript 쪽지시험',
@@ -80,7 +79,7 @@ export const MOCK_QUESTION_LIST_RESPONSE: QuestionListResponse = {
         'TypeScript의 타입 호환성 규칙에 따라, 상위 타입-하위 타입 관계에서 보통 안전하게 허용되는 값 할당은 어떤 방식일까요?',
       prompt: '',
       point: 5,
-      blank_count: 2,
+      blank_count: 0,
       options: [
         '변수나 함수의 매개변수, 반환값에 타입을 명시하는 것을  (A) ________이라고 한다.',
         'interface 또는 type 키워드를 사용하여 객체의 구조를 정의할 수 있는데, 이렇게 만든 타입을 (B) ________이라고 부른다.',
