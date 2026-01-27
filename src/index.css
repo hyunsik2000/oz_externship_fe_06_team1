@@ -23,6 +23,8 @@
 
   --color-warning-100: #fdeece;
   --color-warning-400: #f6a818;
+
+  --color-overlay: rgba(0, 0, 0, 0.2);
 }
 
 @font-face {
@@ -41,4 +43,9 @@ body {
   font-family: 'Pretendard', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* 모달 팝업시 background 색상 지정 */
+.bg-overlay {
+  background-color: var(--color-overlay);
 }

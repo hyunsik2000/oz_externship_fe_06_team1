@@ -11,8 +11,8 @@ export default function AdminLayout() {
       <div className="flex min-h-screen min-w-0 flex-1 flex-col">
         <AdminHeader />
 
-       <main className="flex-1 min-w-0 bg-grey-100">
-          <AdminContainer title='회원관리'>
+        <main className="bg-grey-100 min-w-0 flex-1">
+          <AdminContainer title="회원관리">
             <Outlet />
           </AdminContainer>
         </main>
