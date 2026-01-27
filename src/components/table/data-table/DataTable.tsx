@@ -15,17 +15,14 @@ interface DataTableProps<T> {
   columns: Column<T>[]
 }
 
-export function DataTable<T extends { exam_id: number }>({
-  data,
-  columns,
-}: DataTableProps<T>) {
+export function DataTable<T>({ data, columns }: DataTableProps<T>) {
   return (
     <div className="w-full overflow-x-auto">
       <Table className="min-w-[1200px]">
         <Table.Header>
           {columns.map((col) => (
             <Table.Cell
-              key={`header-${col.key}`}
+              key={crypto.randomUUID()}
               size={col.size}
               className={cn('text-grey-800', col.className)}
             >
@@ -35,10 +32,10 @@ export function DataTable<T extends { exam_id: number }>({
         </Table.Header>
         <Table.Body>
           {data.map((item) => (
-            <Table.Row key={item.exam_id}>
+            <Table.Row key={crypto.randomUUID()}>
               {columns.map((col) => (
                 <Table.Cell
-                  key={`cell-${item.exam_id}-${col.key}`}
+                  key={crypto.randomUUID()}
                   size={col.size}
                   className={col.className}
                 >
