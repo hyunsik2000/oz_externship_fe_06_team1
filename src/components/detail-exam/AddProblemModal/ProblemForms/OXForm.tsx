@@ -1,5 +1,6 @@
 import { cn } from '@/lib/cn'
 import { FormSectionLayout } from './CommonSections'
+import { Check } from 'lucide-react'
 
 export interface OXFormProps {
   correctAnswer: string // 'O' 또는 'X'
@@ -17,20 +18,33 @@ export const OXForm = ({ correctAnswer, setCorrectAnswer }: OXFormProps) => {
         {['O', 'X'].map((val, index) => {
           const isSelected = correctAnswer === val
           return (
-            <div key={val} className="flex items-center gap-3 text-xs">
+            <div
+              key={`ox-${index}`}
+              className="flex items-center gap-3 text-xs"
+            >
               <span className="text-grey-600 font-medium">{index + 1}.</span>
               <button
-                key={val}
                 type="button"
                 onClick={() => setCorrectAnswer(val)}
                 className={cn(
-                  'flex flex-1 cursor-pointer items-center justify-start rounded border px-2 py-1',
-                  isSelected
-                    ? 'border-primary-700 text-primary-700 ring-0.5 ring-primary-700 bg-white'
-                    : 'border-grey-300 text-grey-600 bg-white'
+                  'flex flex-1 cursor-pointer items-center justify-start rounded border bg-white px-2 py-1',
+                  isSelected ? 'border-primary-700' : 'border-grey-300'
                 )}
               >
                 {val}
+              </button>
+              <button
+                type="button"
+                onClick={() => setCorrectAnswer(val)}
+                className="cursor-pointer"
+              >
+                {isSelected ? (
+                  <div className="bg-primary-700 flex h-4 w-4 items-center justify-center">
+                    <Check size={12} className="text-white" />
+                  </div>
+                ) : (
+                  <div className="h-4 w-4 bg-white" />
+                )}
               </button>
             </div>
           )

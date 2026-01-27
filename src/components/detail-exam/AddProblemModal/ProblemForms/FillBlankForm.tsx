@@ -38,7 +38,7 @@ export const FillBlankForm = ({
         }
       >
         {answers.map((answer, index) => (
-          <div key={`${answer}-${index}`} className="flex items-center gap-2">
+          <div key={`blank-${index}`} className="flex items-center gap-2">
             <span className="text-grey-600 text-sm">
               ({String.fromCharCode(65 + index)})
             </span>

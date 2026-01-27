@@ -41,7 +41,7 @@ export const MultipleChoiceForm = ({
       {options.map((option, index) => {
         const isCorrect = correctAnswers.includes(index)
         return (
-          <div key={`option-${index}`} className="flex items-center gap-3">
+          <div key={`choice-${index}`} className="flex items-center gap-3">
             <span className="text-grey-600 text-xs">{index + 1}.</span>
             <Input
               className="h-[30px] flex-1"
@@ -51,7 +51,7 @@ export const MultipleChoiceForm = ({
                 newOps[index] = e.target.value
                 setOptions(newOps)
               }}
-              placeholder="상위 타입 값을 하위 타입 변수에 할당"
+              placeholder="보기 내용을 입력하세요"
             />
             {/* 정답 체크 */}
             <button
