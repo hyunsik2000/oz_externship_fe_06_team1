@@ -10,12 +10,23 @@ export interface Subject {
   title: string
 }
 
+export interface QuestionRequestBody {
+  type: QuestionType
+  question: string
+  prompt: string
+  options: string[] | null
+  blank_count: number
+  correct_answer: string | string[]
+  point: number
+  explanation: string
+}
+
 export interface Question {
   id: number
   type: QuestionType
   question: string
   prompt: string
-  options?: string[] | null
+  options: string[] | null
   blank_count: number
   correct_answer: string | string[]
   point: number
