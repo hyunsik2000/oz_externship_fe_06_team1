@@ -48,7 +48,7 @@ function SelectRow({
   const selected = options.find((o) => o.value === value)
 
   return (
-    <div className="grid grid-cols-[56px_1fr] items-center gap-4">
+    <div className="grid grid-cols-[45px_1fr] items-center">
       <span className="text-grey-700 text-sm font-semibold">{label}</span>
 
       <div ref={wrapRef} className="relative">
@@ -183,14 +183,14 @@ export default function CourseSubjectFilterModal({
 
   return (
     <Modal isOpen={open} onClose={onClose} showCloseButton>
-      <Modal.Header className="border-grey-100">
+      <Modal.Header className="border-b-0 px-10 py-3">
         과정-과목별 필터링
-      </Modal.Header>
-
-      <Modal.Body className="px-10 pt-8 pb-6">
-        <p className="text-grey-500 mt-1 text-sm">
+        <p className="text-grey-500 mb-3 text-sm">
           필터를 적용할 과정-기수와 과목을 선택해주세요.
         </p>
+      </Modal.Header>
+
+      <Modal.Body className="px-10 pt-1 pb-5">
         <div className="space-y-4">
           <SelectRow
             label="과정"
@@ -229,7 +229,7 @@ export default function CourseSubjectFilterModal({
           />
         </div>
 
-        <div className="mt-8">
+        <div className="mt-8 pl-2">
           <p className="text-grey-700 text-sm">현재 선택된 과정은</p>
           <p className="text-grey-700 mt-1 text-sm">
             <span className="text-primary-700 font-semibold">
