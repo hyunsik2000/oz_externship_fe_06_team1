@@ -5,8 +5,8 @@ import { cn } from '@/lib/cn'
 
 interface ProblemOptionProps {
   type: QuestionType
-  options?: string[]
-  answer?: string | string[]
+  options: string[] | null
+  answer: any
 }
 
 export default function ProblemOption({
@@ -21,9 +21,7 @@ export default function ProblemOption({
           <div className="flex flex-col gap-11">
             {(options || []).map((option, i) => {
               const alphabet = String.fromCharCode(65 + i)
-              const isCorrect = Array.isArray(answer)
-                ? answer.includes(option)
-                : answer === option
+              const isCorrect = answer.includes(option)
 
               return (
                 <div
@@ -48,14 +46,12 @@ export default function ProblemOption({
             })}
           </div>
         )
-      case 'true_false':
+      case 'ox':
         return (
           <div className="flex flex-col gap-11">
             {['O', 'X'].map((option, i) => {
               const alphabet = String.fromCharCode(65 + i)
-              const isCorrect = Array.isArray(answer)
-                ? answer.includes(option)
-                : answer === option
+              const isCorrect = answer.includes(option)
 
               return (
                 <div
@@ -99,7 +95,7 @@ export default function ProblemOption({
             value="타입단언"
           />
         )
-      case 'fill_in_the_blank':
+      case 'fill_blank':
         return (
           <div className="flex flex-col gap-6">
             <div className="border-grey-300 flex w-2/3 flex-col gap-4 rounded-[8px] border p-6">

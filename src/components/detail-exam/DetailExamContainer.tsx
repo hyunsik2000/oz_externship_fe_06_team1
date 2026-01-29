@@ -6,7 +6,7 @@ import DetailExamHeader from './DetailExamHeader'
 import {
   MOCK_EMPTY_QUESTION_LIST_RESPONSE,
   // MOCK_QUESTION_LIST_RESPONSE,
-} from '@/mocks/exam-data/QuestionList'
+} from '@/mocks/data/exam-data/QuestionList'
 
 export default function DetailExamContainer() {
   const [currentIndex, setCurrentIndex] = useState(0)
