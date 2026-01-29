@@ -83,9 +83,6 @@ export const MOCK_STUDENT_SCORES_DATA: Record<
 }
 
 export const MOCK_TERM_AVG_DATA = [
-  { name: '1기', score: 40 },
-  { name: '2기', score: 12 },
-  { name: '3기', score: 20 },
   { name: '4기', score: 70 },
   { name: '5기', score: 8 },
   { name: '6기', score: 32 },
@@ -99,3 +96,83 @@ export const MOCK_TERM_AVG_DATA = [
   { name: '14기', score: 42 },
   { name: '15기', score: 68 },
 ]
+
+export const MOCK_SCATTER_DATA_BY_SUBJECT: Record<
+  string,
+  { time: number; score: number }[]
+> = {
+  html: [
+    { time: 1.5, score: 95 },
+    { time: 2.1, score: 85 },
+    { time: 3.5, score: 95 },
+    { time: 1.8, score: 70 },
+    { time: 4.2, score: 96 },
+    { time: 6.8, score: 58 },
+    { time: 2.5, score: 42 },
+    { time: 8.2, score: 10 },
+    { time: 9.5, score: 22 },
+    { time: 3.1, score: 100 },
+  ],
+  js: [
+    { time: 3.2, score: 75 },
+    { time: 5.1, score: 88 },
+    { time: 6.8, score: 92 },
+    { time: 2.5, score: 60 },
+    { time: 4.1, score: 55 },
+    { time: 7.2, score: 70 },
+    { time: 8.5, score: 95 },
+    { time: 1.5, score: 95 },
+    { time: 4.5, score: 92 },
+  ],
+
+  gh: [
+    { time: 1.0, score: 100 },
+    { time: 1.5, score: 90 },
+    { time: 2.0, score: 95 },
+    { time: 0.8, score: 80 },
+    { time: 1.2, score: 85 },
+  ],
+  react: [
+    { time: 5.5, score: 40 },
+    { time: 7.2, score: 65 },
+    { time: 9.8, score: 88 },
+    { time: 6.1, score: 50 },
+    { time: 8.5, score: 72 },
+    { time: 11.2, score: 95 },
+  ],
+  node: [
+    { time: 4.5, score: 55 },
+    { time: 6.2, score: 45 },
+    { time: 8.8, score: 70 },
+    { time: 5.1, score: 60 },
+    { time: 7.5, score: 68 },
+  ],
+  db: [
+    { time: 2.8, score: 80 },
+    { time: 4.2, score: 85 },
+    { time: 6.5, score: 90 },
+    { time: 3.5, score: 75 },
+    { time: 5.8, score: 82 },
+  ],
+  ts: [
+    { time: 3.0, score: 60 },
+    { time: 5.5, score: 75 },
+    { time: 8.2, score: 85 },
+    { time: 4.5, score: 55 },
+    { time: 7.1, score: 70 },
+  ],
+  aws: [
+    { time: 7.5, score: 30 },
+    { time: 9.2, score: 45 },
+    { time: 11.8, score: 60 },
+    { time: 8.1, score: 25 },
+    { time: 10.5, score: 50 },
+  ],
+  rn: [
+    { time: 6.5, score: 45 },
+    { time: 8.8, score: 60 },
+    { time: 10.2, score: 75 },
+    { time: 7.2, score: 40 },
+    { time: 9.5, score: 65 },
+  ],
+}
