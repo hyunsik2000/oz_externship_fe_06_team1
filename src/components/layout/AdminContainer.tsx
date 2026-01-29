@@ -6,7 +6,7 @@ type AdminContainerProps = {
   className?: string
 }
 
-export default function AdminContainer({
+export function AdminContainer({
   title,
   children,
   className = '',

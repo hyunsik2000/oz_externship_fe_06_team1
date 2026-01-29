@@ -7,7 +7,7 @@ import {
 } from '@/constants/variants'
 import { cn } from '@/lib/cn'
 import { useOutsideClick } from '@/hooks/useOutsideClick'
-import type { DropdownOption } from '@/types/commonComponents'
+import type { DropdownOption } from '@/types'
 
 interface DropdownProps {
   options: DropdownOption[]

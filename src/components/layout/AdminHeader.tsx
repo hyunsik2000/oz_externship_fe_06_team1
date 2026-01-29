@@ -1,6 +1,6 @@
 import VectorIcon from '@/assets/icons/Vector.svg?react'
 
-export default function AdminHeader() {
+export function AdminHeader() {
   return (
     <header className="bg-primary-50 border-grey-300 flex h-16 w-full items-center justify-end border-b px-6">
       <div className="text-grey-800 flex items-center gap-2 text-sm">

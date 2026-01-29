@@ -1,8 +1,7 @@
 import { Outlet } from 'react-router-dom'
-import AdminHeader from './AdminHeader'
-import AdminSidebar from './AdminSidebar'
+import { AdminHeader, AdminSidebar } from '@/components/layout'
 
-export default function AdminLayout() {
+export function AdminLayout() {
   return (
     <div className="flex min-h-screen">
       <AdminSidebar />

@@ -1,5 +1,5 @@
 import NotFoundIcon from '@/assets/404.svg?react'
-import { Button } from '@/components/common/Button'
+import { Button, FilterButton } from '@/components/common'
 import { Link } from 'react-router'
 
 export function NotFoundPage() {

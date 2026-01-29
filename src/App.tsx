@@ -1,8 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
-import AdminLayout from '@/components/layout/AdminLayout'
-import { NotFoundPage } from '@/pages/NotFoundPage'
-import { ExamDashboardPage } from './pages/ExamDashboardPage'
-import ExamHistoryPage from '@/pages/ExamHistoryPage'
+import { AdminLayout } from '@/components/layout'
+import { ExamDashboardPage, ExamHistoryPage, NotFoundPage } from '@/pages'
 
 export default function App() {
   return (

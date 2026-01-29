@@ -5,7 +5,7 @@ import {
   MOCK_TERM_AVG_DATA,
   MOCK_SCATTER_DATA_BY_SUBJECT,
   MOCK_STUDENTS_BY_TERM,
-} from '@/mocks/data/graph-data/ExamGraph'
+} from '@/mocks/data/graph-data'
 
 export const examGraphHandlers = [
   http.get(

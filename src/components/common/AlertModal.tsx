@@ -1,8 +1,7 @@
-import { Modal } from '@/components/common/Modal'
-import { Button } from '@/components/common/Button'
 import { AlertTriangle, CircleAlert, CircleCheck } from 'lucide-react'
+import { Button, Modal } from '@/components/common'
 import { cn } from '@/lib/cn'
-import type { AlertType } from '@/types/commonComponents'
+import type { AlertType } from '@/types'
 
 type AlertModalProps = {
   isOpen: boolean
