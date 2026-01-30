@@ -142,6 +142,7 @@ export const modalVariants = cva(
     variants: {
       size: {
         sm: 'max-w-[400px] rounded-2xl',
+        sm2: 'max-w-[426px] rounded-sm',
         md: 'max-w-[600px] rounded-xl',
         ml: 'max-w-[790px] min-w-[550px] rounded-md ',
         lg: 'max-w-[900px] rounded-xl',
