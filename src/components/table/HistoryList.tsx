@@ -87,13 +87,11 @@ export default function HistoryList() {
     <div className="w-full">
       <DataTable data={pagedSubmissions} columns={COLUMNS} />
 
-      <div className="mt-6 flex justify-center">
-        <Pagination
-          currentPage={page}
-          totalPages={totalPages}
-          onChange={setPage}
-        />
-      </div>
+      <Pagination
+        currentPage={page}
+        totalPages={totalPages}
+        onChange={setPage}
+      />
     </div>
   )
 }
