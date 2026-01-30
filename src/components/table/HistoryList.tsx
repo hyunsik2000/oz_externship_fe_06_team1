@@ -71,8 +71,6 @@ const COLUMNS: Column<HistoryItem>[] = [
 export default function HistoryList() {
   return (
     <div className="w-full">
-      <div className="mb-4 flex items-center justify-between"></div>
-
       <DataTable
         data={MOCK_HISTORY_LIST_RESPONSE.submissions}
         columns={COLUMNS}
