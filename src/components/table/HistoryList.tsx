@@ -1,4 +1,6 @@
+import { useMemo, useState } from 'react'
 import type { HistoryItem } from '@/types/history'
+import { Pagination } from '@/components/common/Pagination'
 import { DataTable, type Column } from './data-table/DataTable'
 import { MOCK_HISTORY_LIST_RESPONSE } from '@/mocks/data/table-data/HistoryList'
 
@@ -68,14 +70,27 @@ const COLUMNS: Column<HistoryItem>[] = [
   },
 ]
 
+const PAGE_SIZE = 10
+
 export default function HistoryList() {
+  const [page, setPage] = useState(1)
+  const submissions = MOCK_HISTORY_LIST_RESPONSE.submissions
+
+  const totalPages = Math.max(1, Math.ceil(submissions.length / PAGE_SIZE))
+
+  const pagedSubmissions = useMemo(() => {
+    const start = (page - 1) * PAGE_SIZE
+    return submissions.slice(start, start + PAGE_SIZE)
+  }, [page, submissions])
+
   return (
     <div className="w-full">
-      <div className="mb-4 flex items-center justify-between"></div>
+      <DataTable data={pagedSubmissions} columns={COLUMNS} />
 
-      <DataTable
-        data={MOCK_HISTORY_LIST_RESPONSE.submissions}
-        columns={COLUMNS}
+      <Pagination
+        currentPage={page}
+        totalPages={totalPages}
+        onChange={setPage}
       />
     </div>
   )
