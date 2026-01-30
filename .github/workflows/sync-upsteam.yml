@@ -34,7 +34,7 @@ jobs:
       - name: Sync Upstream to Local
         # Upstream의 main을 내 main으로 병합
         run: |
-          git merge upstream/main --allow-unrelated-histories -m "chore: sync with upstream organization repo"
+          git merge upstream/develop --allow-unrelated-histories -m "chore: sync with upstream organization repo"
 
       - name: Push to Personal Repo
         run: |
