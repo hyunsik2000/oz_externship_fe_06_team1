@@ -95,24 +95,28 @@ export function AlertModal({
           {currentConfig.icon}
         </div>
 
-        <h3 className="text-grey-800 mb-2 text-xl font-bold break-keep">
+        <h3 className="text-grey-800 mb-2 text-xl font-semibold break-keep">
           {title}
         </h3>
         {description && (
-          <p className="text-grey-400 mb-8 text-sm leading-relaxed break-keep">
+          <p className="text-grey-600 mb-4 text-base leading-relaxed break-keep">
             {description}
           </p>
         )}
 
-        <div className="flex w-full justify-center gap-3">
+        <div className="flex w-full justify-center gap-2">
           {currentConfig.showCancel && (
-            <Button variant="outline" className="w-20" onClick={onClose}>
+            <Button
+              variant="outline"
+              className="rounded-sm font-normal"
+              onClick={onClose}
+            >
               {cancelText}
             </Button>
           )}
           <Button
             variant={currentConfig.buttonVariant}
-            className="w-20"
+            className="rounded-sm font-normal"
             onClick={() => {
               onConfirm()
               onClose()
