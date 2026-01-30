@@ -1,0 +1,61 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-primary-50: #f2effd;
+  --color-primary-300: #d7cbf7;
+  --color-primary-400: #b69cf1;
+  --color-primary-500: #986be9;
+  --color-primary-600: #7c35d9;
+  --color-primary-700: #522193;
+
+  --color-grey-50: #f7f7f7;
+  --color-grey-100: #f5f5f5;
+  --color-grey-300: #dddddd;
+  --color-grey-400: #a6a6a6;
+  --color-grey-600: #666666;
+  --color-grey-800: #222222;
+
+  --color-success-100: #e1f2e3;
+  --color-success-400: #5eb669;
+
+  --color-error-100: #f9e2e2;
+  --color-error-400: #cc0a0a;
+
+  --color-warning-100: #fdeece;
+  --color-warning-400: #f6a818;
+
+  --color-overlay: rgba(0, 0, 0, 0.2);
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  font-weight: 45 920;
+  font-style: normal;
+  font-display: swap;
+  src: url('./assets/fonts/PretendardVariable.woff2') format('woff2-variations');
+}
+
+@theme {
+  --font-sans: 'Pretendard', sans-serif;
+}
+
+body {
+  font-family: 'Pretendard', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 모달 팝업시 background 색상 지정 */
+.bg-overlay {
+  background-color: var(--color-overlay);
+}
+
+/* 스크롤바 숨기기 */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* 익스플로러, 엣지 */
+  scrollbar-width: none; /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
