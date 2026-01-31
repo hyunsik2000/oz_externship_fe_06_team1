@@ -1,37 +1,39 @@
-
 import { useState } from 'react'
-import AdminContainer from '@/components/layout/AdminContainer'
+import { AdminContainer } from '@/components/layout/AdminContainer'
 import DeploymentToggle from '@/components/common/DeploymentToggle'
-import { examDeploymentHistoryMock } from '@/mocks/table-data/ExamDeploymentHistory'
-import type { ExamDeploymentRow } from '@/mocks/table-data/ExamDeploymentHistory'
+import {
+  examDeploymentHistoryMock,
+  type ExamDeploymentRow,
+} from '@/mocks/table-data/ExamDeploymentHistory'
 
 export default function ExamDeploymentHistoryPage() {
-  const [rows, setRows] = useState<ExamDeploymentRow[]>(examDeploymentHistoryMock)
+  const [rows, setRows] = useState<ExamDeploymentRow[]>(
+    examDeploymentHistoryMock
+  )
 
   const handleToggle = (id: number, value: boolean) => {
-    setRows(prev =>
-      prev.map(row => (row.id === id ? { ...row, active: value } : row))
+    setRows((prev) =>
+      prev.map((row) => (row.id === id ? { ...row, active: value } : row))
     )
   }
 
   return (
     <AdminContainer title="쪽지시험 배포 내역 조회">
-      <div className="bg-white border border-[#DDDDDD] rounded-sm">
+      <div className="rounded-sm border border-[#DDDDDD] bg-white">
         <div className="px-6 pt-4 pb-5">
-
           {/* 검색 영역 */}
-          <div className="flex items-center justify-between mb-4">
+          <div className="mb-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <input
-                className="h-10 w-[260px] border border-[#E5E5EC] text-sm px-4 rounded-md"
+                className="h-10 w-[260px] rounded-md border border-[#E5E5EC] px-4 text-sm"
                 placeholder="검색어를 입력하세요."
               />
-              <button className="h-10 w-[72px] bg-[#E5E5EC] text-sm text-[#6B6B80] rounded-md">
+              <button className="h-10 w-[72px] rounded-md bg-[#E5E5EC] text-sm text-[#6B6B80]">
                 조회
               </button>
             </div>
 
-            <button className="flex h-10 items-center gap-2 bg-[#F3F0FF] text-sm text-[#6C5DD3] px-4 rounded-md">
+            <button className="flex h-10 items-center gap-2 rounded-md bg-[#F3F0FF] px-4 text-sm text-[#6C5DD3]">
               🔍 과목별 필터링
             </button>
           </div>
@@ -42,12 +44,18 @@ export default function ExamDeploymentHistoryPage() {
               <thead>
                 <tr className="bg-[#F7F7F7]">
                   {[
-                    'ID','제목','과목명','과정 / 기수',
-                    '응시 수','평균','배포 생성 일시','배포 활성 상태'
-                  ].map(h => (
+                    'ID',
+                    '제목',
+                    '과목명',
+                    '과정 / 기수',
+                    '응시 수',
+                    '평균',
+                    '배포 생성 일시',
+                    '배포 활성 상태',
+                  ].map((h) => (
                     <th
                       key={h}
-                      className="h-[50px] px-2 border-b border-[#DDDDDD] text-[#6B6B80] font-normal text-center"
+                      className="h-[50px] border-b border-[#DDDDDD] px-2 text-center font-normal text-[#6B6B80]"
                     >
                       {h}
                     </th>
@@ -56,10 +64,15 @@ export default function ExamDeploymentHistoryPage() {
               </thead>
 
               <tbody>
-                {rows.map(row => (
-                  <tr key={row.id} className="h-[54px] border-b border-[#EEEEEE]">
+                {rows.map((row) => (
+                  <tr
+                    key={row.id}
+                    className="h-[54px] border-b border-[#EEEEEE]"
+                  >
                     <td className="px-2 text-center">{row.id}</td>
-                    <td className="px-2 text-left underline text-[#6B6B80]">{row.title}</td>
+                    <td className="px-2 text-left text-[#6B6B80] underline">
+                      {row.title}
+                    </td>
                     <td className="px-2 text-center">{row.subject}</td>
                     <td className="px-2 text-center">{row.course}</td>
                     <td className="px-2 text-center">{row.count}</td>
@@ -68,7 +81,7 @@ export default function ExamDeploymentHistoryPage() {
                     <td className="px-2 text-center">
                       <DeploymentToggle
                         checked={row.active}
-                        onChange={v => handleToggle(row.id, v)}
+                        onChange={(v) => handleToggle(row.id, v)}
                       />
                     </td>
                   </tr>
@@ -78,10 +91,7 @@ export default function ExamDeploymentHistoryPage() {
           </div>
 
           {/* 페이지네이션 */}
-          <div className="flex justify-center mt-3 text-sm">
-            « 1 2 3 4 5 »
-          </div>
-
+          <div className="mt-3 flex justify-center text-sm">« 1 2 3 4 5 »</div>
         </div>
       </div>
     </AdminContainer>
