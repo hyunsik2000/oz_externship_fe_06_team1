@@ -1,6 +1,6 @@
 export interface ExamItem {
-  exam_id: number
-  exam_title: string
+  id: number
+  title: string
   subject_name: string
   question_count: number
   submit_count: number

@@ -1,4 +1,5 @@
 import type { QuestionListResponse } from '@/types/question'
+import reactLogo from '@/assets/react.svg'
 
 export const MOCK_QUESTION_LIST_RESPONSE: QuestionListResponse = {
   id: 101,
@@ -69,6 +70,7 @@ export const MOCK_QUESTION_LIST_RESPONSE: QuestionListResponse = {
       prompt: '20글자 이내로 입력하세요',
       point: 5,
       blank_count: 0,
+      options: null,
       correct_answer: '타입단언',
       explanation:
         '하위 타입 값을 상위 타입으로 취급하는 것을 업캐스팅이라고 하며, 이는 대부분의 경우 안전하게 허용됩니다. 반대인 다운캐스팅은 일반적으로 허용되지 않아요.',
@@ -90,8 +92,7 @@ export const MOCK_QUESTION_LIST_RESPONSE: QuestionListResponse = {
         '하위 타입 값을 상위 타입으로 취급하는 것을 업캐스팅이라고 하며, 이는 대부분의 경우 안전하게 허용됩니다. 반대인 다운캐스팅은 일반적으로 허용되지 않아요.',
     },
   ],
-  thumbnail_img_url:
-    'https://oz-externship.s3.ap-northeast-2.amazonaws.com/exams/image.png',
+  thumbnail_img_url: reactLogo,
   created_at: '2025-02-01 13:20:33',
   updated_at: '2025-02-05 15:10:20',
 }
@@ -104,8 +105,7 @@ export const MOCK_EMPTY_QUESTION_LIST_RESPONSE: QuestionListResponse = {
     title: 'TypeScript',
   },
   questions: [],
-  thumbnail_img_url:
-    'https://oz-externship.s3.ap-northeast-2.amazonaws.com/exams/image.png',
+  thumbnail_img_url: reactLogo,
   created_at: '2025-02-01 13:20:33',
   updated_at: '2025-02-05 15:10:20',
 }

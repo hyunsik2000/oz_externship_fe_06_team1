@@ -2,6 +2,7 @@
 import type { ExamItem } from '@/types/exam'
 import { DataTable, type Column } from './data-table/DataTable'
 import { MOCK_EXAM_LIST_RESPONSE } from '@/mocks/data/table-data/ExamList'
+import { Link } from 'react-router'
 
 const StatusBadge = () => (
   <button
@@ -11,31 +12,26 @@ const StatusBadge = () => (
     배포
   </button>
 )
-// const TitleCell = ({ title,to }: { title: string; to:string }) => ( // 추후에 Router 사용시 Link로 변경 예정
-//   <Link to={to} className="font-medium cursor-pointer text-grey-800">
-//     {title}
-//   </Link>
-const TitleCell = ({ title }: { title: string }) => (
-  <span
-    className="block max-w-full min-w-[180px] cursor-pointer truncate font-medium underline"
-    title={title}
-  >
+const TitleCell = ({ title, to }: { title: string; to: string }) => (
+  <Link to={to} className="text-grey-800 cursor-pointer font-medium underline">
     {title}
-  </span>
+  </Link>
 )
 
 const COLUMNS: Column<ExamItem>[] = [
   {
-    key: 'exam_id',
+    key: 'id',
     title: 'ID',
     size: 'md',
-    cell: (item) => item.exam_id,
+    cell: (item) => item.id,
   },
   {
-    key: 'exam_title',
+    key: 'title',
     title: '제목',
     className: 'flex-1 justify-center min-w-[180px]',
-    cell: (item) => <TitleCell title={item.exam_title} />,
+    cell: (item) => (
+      <TitleCell title={item.title} to={`/exam/list/${item.id}`} />
+    ),
   },
   {
     key: 'subject_name',
@@ -75,6 +71,6 @@ const COLUMNS: Column<ExamItem>[] = [
   },
 ]
 
-export default function ExamList() {
-  return <DataTable data={MOCK_EXAM_LIST_RESPONSE.exams} columns={COLUMNS} />
+export default function ExamList({ data }: { data: ExamItem[] }) {
+  return <DataTable data={data} columns={COLUMNS} />
 }
