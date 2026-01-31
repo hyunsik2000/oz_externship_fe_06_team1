@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { AlertModal } from '@/components/common/AlertModal'
 import { Button } from '@/components/common/Button'
+import { SolutionViewButton } from '@/components/common/SolutionViewButton'
 import { Modal } from '@/components/common/Modal'
 import type { HistoryItem } from '@/types/history'
 
@@ -10,21 +11,17 @@ type Props = {
   item: HistoryItem | null
 }
 
-function SectionTitle({ children }: { children: string }) {
-  return <h3 className="text-grey-800 mb-3 text-sm font-bold">{children}</h3>
-}
-
 function TableWrap({ children }: { children: React.ReactNode }) {
-  return <div className="border-grey-100 border-y">{children}</div>
+  return <div className="border-grey-300 border-t">{children}</div>
 }
 
 function Row2({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <div className="border-grey-100 grid grid-cols-[150px_1fr] border-t first:border-t-0">
-      <div className="bg-grey-50 text-grey-700 px-5 py-3 text-sm font-medium">
+    <div className="border-grey-300 grid grid-cols-[140px_1fr] border-b">
+      <div className="bg-grey-50 text-grey-600 px-4 py-3 text-sm font-medium">
         {label}
       </div>
-      <div className="text-grey-700 px-5 py-3 text-sm break-keep">{value}</div>
+      <div className="text-grey-600 px-4 py-3 text-sm break-keep">{value}</div>
     </div>
   )
 }
@@ -41,18 +38,18 @@ function Row4({
   rightValue: React.ReactNode
 }) {
   return (
-    <div className="border-grey-100 grid grid-cols-[150px_minmax(0,2fr)_110px_minmax(0,1fr)] border-t first:border-t-0">
-      <div className="bg-grey-50 text-grey-700 px-5 py-3 text-sm font-medium">
+    <div className="border-grey-300 grid grid-cols-[140px_minmax(0,2fr)_160px_minmax(0,1fr)] border-b">
+      <div className="bg-grey-50 text-grey-600 px-4 py-3 text-sm font-medium whitespace-nowrap">
         {leftLabel}
       </div>
-      <div className="text-grey-700 border-grey-100 border-r px-5 py-3 text-sm break-keep">
+      <div className="text-grey-600 px-4 py-3 text-sm break-keep">
         {leftValue}
       </div>
 
-      <div className="bg-grey-50 text-grey-700 px-3 py-3 text-sm font-medium">
+      <div className="bg-grey-50 text-grey-600 px-4 py-3 text-sm font-medium whitespace-nowrap">
         {rightLabel}
       </div>
-      <div className="text-grey-700 px-4 py-3 text-sm break-keep">
+      <div className="text-grey-600 px-4 py-3 text-sm break-keep">
         {rightValue}
       </div>
     </div>
@@ -73,17 +70,27 @@ export function ExamAttemptDetailModal({ open, onClose, item }: Props) {
 
   return (
     <>
-      <Modal isOpen={open} onClose={onClose} showCloseButton>
-        <Modal.Body className="px-10 pt-8 pb-10">
-          <div className="mb-8 flex items-start justify-between">
+      <Modal
+        isOpen={open}
+        onClose={onClose}
+        showCloseButton
+        className="flex h-[911px] w-[790px] flex-col overflow-hidden"
+      >
+        <Modal.Body className="flex h-full flex-col px-8 pt-8 pb-6">
+          <div className="mb-6">
             <h2 className="text-grey-800 text-lg font-bold">
               쪽지시험 응시 상세 조회
             </h2>
           </div>
 
-          <div className="space-y-10">
+          <div className="flex flex-grow flex-col space-y-8">
             <section>
-              <SectionTitle>쪽지시험 정보</SectionTitle>
+              <div className="mt-4 mb-3 flex items-end justify-between">
+                <h3 className="text-grey-800 mb-0 text-sm font-bold">
+                  쪽지시험 정보
+                </h3>
+                <SolutionViewButton onClick={() => {}} />
+              </div>
               <TableWrap>
                 <Row2 label="쪽지시험 명" value={item.exam_title} />
                 <Row2 label="과목" value={item.subject_name} />
@@ -94,7 +101,12 @@ export function ExamAttemptDetailModal({ open, onClose, item }: Props) {
             </section>
 
             <section>
-              <SectionTitle>시험 응시 정보</SectionTitle>
+              <div className="mb-3 flex items-end justify-between">
+                <h3 className="text-grey-800 mb-0 text-sm font-bold">
+                  시험 응시 정보
+                </h3>
+                <div className="h-9" aria-hidden />
+              </div>
               <TableWrap>
                 <Row2 label="응시 ID" value={item.history_id} />
                 <Row2 label="닉네임" value={item.nickname} />
@@ -119,7 +131,7 @@ export function ExamAttemptDetailModal({ open, onClose, item }: Props) {
               </TableWrap>
             </section>
 
-            <div className="flex justify-end">
+            <div className="mt-6 flex justify-end">
               <Button
                 type="button"
                 variant="danger"
