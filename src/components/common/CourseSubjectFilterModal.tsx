@@ -3,15 +3,15 @@ import { Button } from '@/components/common/Button'
 import { Dropdown } from '@/components/common/Dropdown'
 import { Modal } from '@/components/common/Modal'
 
-type Option = { label: string; value: string }
+export type Option = { label: string; value: string }
 
-type FilterValue = {
+export type FilterValue = {
   course: string
   cohort: string
   subject: string
 }
 
-type Props = {
+export type Props = {
   open: boolean
   onClose: () => void
 
