@@ -11,7 +11,7 @@ interface ModalProps extends VariantProps<typeof modalVariants> {
   onClose: () => void
   children: React.ReactNode
   showCloseButton: boolean
-  blur?: boolean
+  className?: string
 }
 
 export function Modal({
@@ -20,7 +20,7 @@ export function Modal({
   children,
   size,
   showCloseButton = true,
-  blur = true,
+  className,
 }: ModalProps) {
   const modalRef = useRef<HTMLDivElement>(null)
 
@@ -32,14 +32,15 @@ export function Modal({
     <div
       className={cn(
         'fixed inset-0 z-100 flex items-center justify-center bg-black/40 p-4',
-        blur && 'animate-in fade-in backdrop-blur-sm duration-200'
+        'animate-in fade-in duration-200'
       )}
     >
       <div
         ref={modalRef}
         className={cn(
           modalVariants({ size }),
-          'animate-in zoom-in-95 duration-200'
+          'animate-in zoom-in-95 duration-200',
+          className
         )}
       >
         {showCloseButton && (

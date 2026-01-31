@@ -4,16 +4,30 @@ import { Pagination } from '@/components/common/Pagination'
 import { DataTable, type Column } from './data-table/DataTable'
 import { MOCK_HISTORY_LIST_RESPONSE } from '@/mocks/data/table-data/HistoryList'
 
-const TitleCell = ({ title }: { title: string }) => (
-  <span
+type Props = {
+  onClickTitle?: (item: HistoryItem) => void
+}
+
+const TitleCell = ({
+  title,
+  onClick,
+}: {
+  title: string
+  onClick?: () => void
+}) => (
+  <button
+    type="button"
+    onClick={onClick}
     className="block w-full cursor-pointer truncate font-medium underline"
     title={title}
   >
     {title}
-  </span>
+  </button>
 )
 
-const COLUMNS: Column<HistoryItem>[] = [
+const COLUMNS = (
+  onClickTitle?: (item: HistoryItem) => void
+): Column<HistoryItem>[] => [
   {
     key: 'history_id',
     title: 'ID',
@@ -24,7 +38,9 @@ const COLUMNS: Column<HistoryItem>[] = [
     key: 'exam_title',
     title: '제목',
     className: 'flex-1 justify-center min-w-[180px]',
-    cell: (item) => <TitleCell title={item.exam_title} />,
+    cell: (item) => (
+      <TitleCell title={item.exam_title} onClick={() => onClickTitle?.(item)} />
+    ),
   },
   {
     key: 'subject_name',
@@ -72,12 +88,11 @@ const COLUMNS: Column<HistoryItem>[] = [
 
 const PAGE_SIZE = 10
 
-export default function HistoryList() {
+export default function HistoryList({ onClickTitle }: Props) {
   const [page, setPage] = useState(1)
   const submissions = MOCK_HISTORY_LIST_RESPONSE.submissions
-
   const totalPages = Math.max(1, Math.ceil(submissions.length / PAGE_SIZE))
-
+  const columns = COLUMNS(onClickTitle)
   const pagedSubmissions = useMemo(() => {
     const start = (page - 1) * PAGE_SIZE
     return submissions.slice(start, start + PAGE_SIZE)
@@ -85,7 +100,7 @@ export default function HistoryList() {
 
   return (
     <div className="w-full">
-      <DataTable data={pagedSubmissions} columns={COLUMNS} />
+      <DataTable data={pagedSubmissions} columns={columns} />
 
       <Pagination
         currentPage={page}

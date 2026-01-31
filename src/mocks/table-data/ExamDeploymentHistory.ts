@@ -9,8 +9,9 @@ export type ExamDeploymentRow = {
   active: boolean
 }
 
-export const examDeploymentHistoryMock: ExamDeploymentRow[] =
-  Array.from({ length: 10 }, (_, i) => ({
+export const examDeploymentHistoryMock: ExamDeploymentRow[] = Array.from(
+  { length: 10 },
+  (_, i) => ({
     id: i + 1,
     title: `쪽지시험 ${i + 1}`,
     subject: 'React',
@@ -19,4 +20,5 @@ export const examDeploymentHistoryMock: ExamDeploymentRow[] =
     avg: 80,
     createdAt: '2025.02.01 11:22:28',
     active: i % 2 === 0,
-  }))
+  })
+)

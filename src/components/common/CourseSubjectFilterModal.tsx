@@ -3,22 +3,20 @@ import { Button } from '@/components/common/Button'
 import { Dropdown } from '@/components/common/Dropdown'
 import { Modal } from '@/components/common/Modal'
 
-type Option = { label: string; value: string }
+export type Option = { label: string; value: string }
 
-type FilterValue = {
+export type FilterValue = {
   course: string
   cohort: string
   subject: string
 }
 
-type Props = {
+export type Props = {
   open: boolean
   onClose: () => void
-
   courseOptions: Option[]
   cohortOptions: Option[]
   subjectOptions: Option[]
-
   value: FilterValue
   onChange: (next: FilterValue) => void
   onSubmit: () => void
@@ -96,16 +94,21 @@ export default function CourseSubjectFilterModal({
   const canSubmit = Boolean(value.course && value.cohort && value.subject)
 
   return (
-    <Modal isOpen={open} onClose={onClose} showCloseButton>
-      <Modal.Header className="border-b-0 px-10 py-3">
+    <Modal
+      isOpen={open}
+      onClose={onClose}
+      showCloseButton
+      className="flex h-[400px] w-[509px] flex-col overflow-hidden"
+    >
+      <Modal.Header className="border-b-0 px-10 pt-8 pb-3">
         과정-과목별 필터링
-        <p className="text-grey-500 mb-3 text-sm">
+        <p className="text-grey-500 mb-1 text-sm">
           필터를 적용할 과정-기수와 과목을 선택해주세요.
         </p>
       </Modal.Header>
 
-      <Modal.Body className="px-10 pt-1 pb-5">
-        <div className="space-y-4">
+      <Modal.Body className="min-h-0 flex-1 overflow-y-auto px-10 pt-1 pb-5">
+        <div className="space-y-3">
           <SelectRow
             label="과정"
             placeholder="과정을 선택해주세요"
@@ -143,7 +146,7 @@ export default function CourseSubjectFilterModal({
           />
         </div>
 
-        <div className="mt-8 pl-2">
+        <div className="mt-3 pl-2">
           <p className="text-grey-700 text-sm">현재 선택된 과정은</p>
           <p className="text-grey-700 mt-1 text-sm">
             <span className="text-primary-700 font-semibold">
@@ -154,7 +157,7 @@ export default function CourseSubjectFilterModal({
         </div>
       </Modal.Body>
 
-      <Modal.Footer className="bg-white px-10 pb-9">
+      <Modal.Footer className="bg-white px-10 pb-6">
         <Button
           variant="confirm"
           className="h-10 w-20"
