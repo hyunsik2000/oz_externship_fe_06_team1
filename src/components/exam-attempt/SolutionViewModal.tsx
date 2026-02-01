@@ -8,7 +8,7 @@ import {
 type SolutionViewModalProps = {
   isOpen: boolean
   onClose: () => void
-  data: QuestionListResponse
+  data?: QuestionListResponse | null
   pickedAnswerByQuestionId?: Record<number, string>
 }
 
@@ -22,10 +22,16 @@ export function SolutionViewModal({
     <Modal isOpen={isOpen} onClose={onClose} size="solution" showCloseButton>
       <Modal.Body className="p-0">
         <SolveViewLayout>
-          <SolveViewContainer
-            data={data}
-            pickedAnswerByQuestionId={pickedAnswerByQuestionId}
-          />
+          {data ? (
+            <SolveViewContainer
+              data={data}
+              pickedAnswerByQuestionId={pickedAnswerByQuestionId}
+            />
+          ) : (
+            <div className="text-grey=500 flex h-full w-full items-center justify-center">
+              풀이 데이터를 불러오는 중...
+            </div>
+          )}
         </SolveViewLayout>
       </Modal.Body>
     </Modal>
