@@ -9,7 +9,7 @@ type SolutionViewModalProps = {
   isOpen: boolean
   onClose: () => void
   data?: QuestionListResponse | null
-  pickedAnswerByQuestionId?: Record<number, string>
+  pickedAnswerByQuestionId?: Record<number, string | string[]>
 }
 
 export function SolutionViewModal({
