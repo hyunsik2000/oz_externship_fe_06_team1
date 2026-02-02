@@ -48,11 +48,6 @@ export function ExamListPage() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         mode="create"
-        initialData={{
-          title: '',
-          subject_name: '',
-          logo_url: '',
-        }}
       />
     </>
   )
