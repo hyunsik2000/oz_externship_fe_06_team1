@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { Swiper as SwiperClass } from 'swiper'
-import QuestionList from './QuestionList'
+import { QuestionList } from './QuestionList'
 import DetailExamFooter from './DetailExamFooter'
 import DetailExamHeader from './DetailExamHeader'
 import type { QuestionListResponse } from '@/types/question'
@@ -9,9 +9,7 @@ interface DetailExamContainerProps {
   data: QuestionListResponse
 }
 
-export default function DetailExamContainer({
-  data,
-}: DetailExamContainerProps) {
+export function DetailExamContainer({ data }: DetailExamContainerProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [swiperRef, setSwiperRef] = useState<SwiperClass | null>(null)
   const totalQuestions = data.questions.length

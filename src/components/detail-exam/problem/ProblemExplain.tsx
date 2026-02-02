@@ -1,4 +1,4 @@
-export default function ProblemExplain({ explain }: { explain: string }) {
+export function ProblemExplain({ explain }: { explain: string }) {
   return (
     <section className="bg-grey-50 rounded-xs px-9 py-5">
       <div className="flex flex-col gap-1">

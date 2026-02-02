@@ -1,14 +1,12 @@
-import {
-  FillBlankForm,
-  MultipleChoiceForm,
-  OXForm,
-  OrderingForm,
-  ShortAnswerForm,
-} from './index'
+import { FillBlankForm } from './FillBlankForm'
+import { MultipleChoiceForm } from './MultipleChoiceForm'
+import { OXForm } from './OXForm'
+import { OrderingForm } from './OrderingForm'
+import { ShortAnswerForm } from './ShortAnswerForm'
 
 import { useProblemFormStore } from '@/store/ProblemForm/useProblemFormStore'
 
-export const QuestionTypeForm = () => {
+export function QuestionTypeForm() {
   const { type } = useProblemFormStore()
 
   switch (type) {

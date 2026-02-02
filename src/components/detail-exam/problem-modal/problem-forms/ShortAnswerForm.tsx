@@ -1,7 +1,7 @@
-import { FormSectionLayout } from './CommonSections'
+import { FormSectionLayout } from './common-sections'
 import { useProblemFormStore } from '@/store/ProblemForm/useProblemFormStore'
 
-export const ShortAnswerForm = () => {
+export function ShortAnswerForm() {
   const { correctAnswers, setCorrectAnswers } = useProblemFormStore()
   const answerText = (correctAnswers as string) || ''
 

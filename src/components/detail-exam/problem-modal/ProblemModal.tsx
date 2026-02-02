@@ -7,8 +7,8 @@ import {
   QuestionInputSection,
   PointSection,
   ExplanationSection,
-} from './ProblemForms/CommonSections'
-import { QuestionTypeForm } from './ProblemForms/renderTypeForm'
+} from './problem-forms/common-sections'
+import { QuestionTypeForm } from './problem-forms/renderTypeForm'
 
 import { QUESTION_TYPES } from '@/constants/Question/question-types'
 import { useProblemFormStore } from '@/store/ProblemForm/useProblemFormStore'

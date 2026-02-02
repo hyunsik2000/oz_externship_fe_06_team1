@@ -9,11 +9,7 @@ interface ProblemOptionProps {
   answer: any
 }
 
-export default function ProblemOption({
-  type,
-  options,
-  answer,
-}: ProblemOptionProps) {
+export function ProblemOption({ type, options, answer }: ProblemOptionProps) {
   const renderOptions = () => {
     switch (type) {
       case 'multiple_choice':

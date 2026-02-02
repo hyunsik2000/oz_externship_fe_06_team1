@@ -1,11 +1,11 @@
 import { Input } from '@/components/common/Input'
 import { X } from 'lucide-react'
 import PlusSquare from '@/assets/icons/plusSquare.svg?react'
-import { FormSectionLayout } from './CommonSections'
+import { FormSectionLayout } from './common-sections'
 import { Dropdown } from '@/components/common/Dropdown'
 import { useProblemFormStore } from '@/store/ProblemForm/useProblemFormStore'
 
-export const OrderingForm = () => {
+export function OrderingForm() {
   const { options, setOptions, correctAnswers, setCorrectAnswers } =
     useProblemFormStore()
 

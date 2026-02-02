@@ -1,8 +1,8 @@
 import { Button, FilterButton, Input } from '@/components/common'
 import { ExamListLayout } from '@/components/layout'
-import ExamList from '@/components/table/examList'
+import ExamList from '@/components/table/ExamList'
 import { useState } from 'react'
-import ExamModal from '@/components/detail-exam/ExamModal/ExamModal'
+import ExamModal from '@/components/detail-exam/exam-modal/ExamModal'
 import { MOCK_EXAM_LIST_RESPONSE } from '@/mocks/data/table-data/ExamList'
 
 export function ExamListPage() {
