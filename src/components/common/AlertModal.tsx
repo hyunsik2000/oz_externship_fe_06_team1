@@ -11,6 +11,7 @@ type AlertModalProps = {
   description?: string
   confirmText?: string
   cancelText?: string
+  showCancel?: boolean
   onConfirm: () => void
 }
 
@@ -22,6 +23,7 @@ export function AlertModal({
   description,
   confirmText = '확인',
   cancelText = '취소',
+  showCancel,
   onConfirm,
 }: AlertModalProps) {
   const alertConfig = {
@@ -81,9 +83,10 @@ export function AlertModal({
   }
 
   const currentConfig = alertConfig[type]
+  const shouldShowCancel = showCancel ?? currentConfig.showCancel
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="sm" showCloseButton>
+    <Modal isOpen={isOpen} onClose={onClose} size="alert" showCloseButton>
       <Modal.Body className="flex flex-col items-center px-10 pt-12 pb-8 text-center">
         <div
           className={cn(
@@ -99,13 +102,13 @@ export function AlertModal({
           {title}
         </h3>
         {description && (
-          <p className="text-grey-600 mb-4 text-base leading-relaxed break-keep">
+          <p className="text-grey-600 mb-4 text-base leading-relaxed break-keep whitespace-pre-line">
             {description}
           </p>
         )}
 
         <div className="flex w-full justify-center gap-2">
-          {currentConfig.showCancel && (
+          {shouldShowCancel && (
             <Button
               variant="outline"
               className="rounded-sm font-normal"

@@ -1,7 +1,5 @@
 import { useEffect, useMemo } from 'react'
-import { Button } from '@/components/common/Button'
-import { Dropdown } from '@/components/common/Dropdown'
-import { Modal } from '@/components/common/Modal'
+import { Button, Dropdown, Modal } from '@/components/common'
 
 export type Option = { label: string; value: string }
 
@@ -11,7 +9,7 @@ export type FilterValue = {
   subject: string
 }
 
-export type Props = {
+export type CourseSubjectFilterModalProps = {
   open: boolean
   onClose: () => void
   courseOptions: Option[]
@@ -60,7 +58,7 @@ export default function CourseSubjectFilterModal({
   value,
   onChange,
   onSubmit,
-}: Props) {
+}: CourseSubjectFilterModalProps) {
   useEffect(() => {
     if (!open) return
 
@@ -94,13 +92,8 @@ export default function CourseSubjectFilterModal({
   const canSubmit = Boolean(value.course && value.cohort && value.subject)
 
   return (
-    <Modal
-      isOpen={open}
-      onClose={onClose}
-      showCloseButton
-      className="flex h-[400px] w-[509px] flex-col overflow-hidden"
-    >
-      <Modal.Header className="border-b-0 px-10 pt-8 pb-3">
+    <Modal isOpen={open} onClose={onClose} size="filter" showCloseButton>
+      <Modal.Header className="border-b-0 px-10 pt-8 pb-2">
         과정-과목별 필터링
         <p className="text-grey-500 mb-1 text-sm">
           필터를 적용할 과정-기수와 과목을 선택해주세요.

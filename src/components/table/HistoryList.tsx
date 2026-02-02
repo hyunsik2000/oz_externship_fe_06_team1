@@ -4,7 +4,7 @@ import { Pagination } from '@/components/common/Pagination'
 import { DataTable, type Column } from './data-table/DataTable'
 import { MOCK_HISTORY_LIST_RESPONSE } from '@/mocks/data/table-data/HistoryList'
 
-type Props = {
+type ExamHistoryListProps = {
   onClickTitle?: (item: HistoryItem) => void
 }
 
@@ -88,7 +88,7 @@ const COLUMNS = (
 
 const PAGE_SIZE = 10
 
-export default function HistoryList({ onClickTitle }: Props) {
+export default function HistoryList({ onClickTitle }: ExamHistoryListProps) {
   const [page, setPage] = useState(1)
   const submissions = MOCK_HISTORY_LIST_RESPONSE.submissions
   const totalPages = Math.max(1, Math.ceil(submissions.length / PAGE_SIZE))

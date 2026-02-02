@@ -3,9 +3,9 @@ import CourseSubjectFilterModal, {
   type FilterValue,
   type Option,
 } from '@/components/common/CourseSubjectFilterModal'
-import { FilterButton } from '@/components/common/FilterButton'
-import { ExamAttemptDetailModal } from '@/components/exam-attempt/ExamAttemptDetailModal'
-import { ExamHistoryLayout } from '@/components/layout/ExamHistoryLayout'
+import { FilterButton } from '@/components/common'
+import { ExamAttemptDetailModal } from '@/components/exam-attempt'
+import { ExamHistoryLayout } from '@/components/layout'
 import HistoryList from '@/components/table/HistoryList'
 import type { HistoryItem } from '@/types/history'
 

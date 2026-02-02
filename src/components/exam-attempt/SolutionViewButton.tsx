@@ -1,8 +1,8 @@
 import MagnifierIcon from '@/assets/icons/magnifier.svg?react'
-import { Button } from '@/components/common/Button'
+import { Button } from '@/components/common'
 import { cn } from '@/lib/cn'
 
-type Props = {
+type SolutionViewButtonProps = {
   onClick?: () => void
   disabled?: boolean
   className?: string
@@ -14,7 +14,7 @@ export function SolutionViewButton({
   disabled,
   className,
   label = '풀이 보기',
-}: Props) {
+}: SolutionViewButtonProps) {
   return (
     <Button
       type="button"
