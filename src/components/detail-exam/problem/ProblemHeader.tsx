@@ -18,7 +18,7 @@ interface ProblemHeaderProps {
   // onDelete?: () => void
 }
 
-export default function ProblemHeader({
+export function ProblemHeader({
   type,
   onAdd,
   onEdit,

@@ -7,13 +7,13 @@ import {
   ProblemHeader,
   ProblemOption,
   ProblemTitle,
-} from './problem'
-import { Button } from '@/components/common/Button'
+  EmptyProblems,
+} from '@/components/detail-exam/problem'
+import { Button } from '@/components/common'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import 'swiper/css'
-import EmptyProblems from './problem/EmptyProblems'
 import { useState } from 'react'
-import ProblemModal from '@/components/detail-exam/AddProblemModal/ProblemModal'
+import ProblemModal from '@/components/detail-exam/problem-modal/ProblemModal'
 
 interface QuestionListProps {
   data: QuestionListResponse
@@ -24,7 +24,7 @@ interface QuestionListProps {
   onPrev: () => void
 }
 
-export default function QuestionList({
+export function QuestionList({
   data,
   currentIndex,
   onSwiper,

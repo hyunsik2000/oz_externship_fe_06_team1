@@ -1,9 +1,9 @@
 import EmptyFace from '@/assets/icons/EmptyFace.svg?react'
-import ProblemHeader from './ProblemHeader'
-import ProblemModal from '@/components/detail-exam/AddProblemModal/ProblemModal'
+import { ProblemHeader } from '@/components/detail-exam/problem'
+import ProblemModal from '@/components/detail-exam/problem-modal/ProblemModal'
 import { useState } from 'react'
 
-export default function EmptyProblems() {
+export function EmptyProblems() {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   return (

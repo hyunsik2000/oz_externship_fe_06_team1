@@ -1,5 +1,5 @@
 import { Search } from 'lucide-react'
-import { Button } from './Button'
+import { Button } from '@/components/common'
 
 type FilterButtonProps = {
   onClick?: () => void

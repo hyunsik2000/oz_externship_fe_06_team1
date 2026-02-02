@@ -4,7 +4,7 @@ import { Modal, Button, Input, Dropdown } from '@/components/common'
 interface ExamModalProps {
   isOpen: boolean
   onClose: () => void
-  mode?: 'create' | 'edit'
+  mode: 'create' | 'edit'
   initialData?: {
     title: string
     subject_name: string
@@ -15,7 +15,7 @@ interface ExamModalProps {
 export default function ExamModal({
   isOpen,
   onClose,
-  mode = 'create',
+  mode,
   initialData,
 }: ExamModalProps) {
   const [title, setTitle] = useState<string>('')
@@ -28,7 +28,7 @@ export default function ExamModal({
       setSubject(initialData.subject_name)
       setLogo(initialData.logo_url)
     }
-  }, [])
+  }, [mode, initialData])
 
   const handleSubmit = () => {}
 

@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import type { ExamItem } from '@/types/exam'
-import { DataTable, type Column } from './data-table/DataTable'
+import { DataTable, type Column } from '@/components/table/data-table/DataTable'
 import { Link } from 'react-router-dom'
-import ExamDeployModal from './data-table/deploy-modal/ExamDeployModal'
+import ExamDeployModal from '@/components/table/data-table/deploy-modal/ExamDeployModal'
 import { Button } from '@/components/common'
 
 const StatusBadge = ({ onDeploy }: { onDeploy: () => void }) => (
