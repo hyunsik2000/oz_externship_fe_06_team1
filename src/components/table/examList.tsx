@@ -7,7 +7,7 @@ import ExamDeployModal from './data-table/deploy-modal/examDeployModal'
 const StatusBadge = ({ onDeploy }: { onDeploy: () => void }) => (
   <button
     type="button"
-    className="bg-success-400 hover:bg-success-500 flex h-[26px] w-[50px] items-center justify-center rounded text-xs font-semibold text-white transition-colors outline-none"
+    className="bg-success-400 flex h-[26px] w-[50px] cursor-pointer items-center justify-center rounded text-white hover:opacity-80"
     onClick={onDeploy}
   >
     배포
