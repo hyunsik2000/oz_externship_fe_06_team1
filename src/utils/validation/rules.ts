@@ -63,10 +63,16 @@ export const COMMON_RULES: ValidationRule = (data) => {
 // --- [유형별 개별 검증] ---
 export const TYPE_RULES: Record<QuestionType, ValidationRule> = {
   multiple_choice: (data) => {
-    if (data.options.some((opt) => !opt.trim()))
-      return required('options', '보기', '를', '는')
-    if (!Array.isArray(data.correctAnswers) || data.correctAnswers.length === 0)
+    const emptyIndex = data.options.findIndex((opt) => !opt.trim())
+    if (emptyIndex !== -1) {
+      return required(`options-${emptyIndex}`, `보기`, '를', '는')
+    }
+    if (
+      !Array.isArray(data.correctAnswers) ||
+      data.correctAnswers.length === 0
+    ) {
       return requiredSelect('correctAnswers', '정답')
+    }
     return []
   },
 
@@ -77,13 +83,16 @@ export const TYPE_RULES: Record<QuestionType, ValidationRule> = {
   },
 
   ordering: (data) => {
-    if (data.options.length < 2) return required('options', '보기', '를', '는')
-    if (data.options.some((opt) => !opt.trim())) {
+    if (data.options.length < 2) {
       return createError(
         'options',
         '보기를 입력 해주세요',
-        '모든 보기 내용을 입력해주세요.'
+        '보기를 2개 이상 등록해주세요.'
       )
+    }
+    const emptyIndex = data.options.findIndex((opt) => !opt.trim())
+    if (emptyIndex !== -1) {
+      return required(`options-${emptyIndex}`, `보기`, '를', '는')
     }
     return []
   },
@@ -96,13 +105,20 @@ export const TYPE_RULES: Record<QuestionType, ValidationRule> = {
 
   fill_blank: (data) => {
     if (!data.prompt.trim()) return required('prompt', '지문', '을', '은')
-    if (!Array.isArray(data.correctAnswers) || data.correctAnswers.length === 0)
+    if (
+      !Array.isArray(data.correctAnswers) ||
+      data.correctAnswers.length === 0
+    ) {
       return required('correctAnswers', '답안', '을', '은')
-    if (data.correctAnswers.some((ans: string) => !ans.trim())) {
+    }
+    const emptyIndex = data.correctAnswers.findIndex(
+      (ans: string) => !ans.trim()
+    )
+    if (emptyIndex !== -1) {
       return createError(
-        'correctAnswers',
+        `correctAnswers-${emptyIndex}`,
         '답안을 입력 해주세요',
-        '모든 빈칸에 답안을 입력해주세요.'
+        '빈칸의 답안을 입력해주세요.'
       )
     }
     return []

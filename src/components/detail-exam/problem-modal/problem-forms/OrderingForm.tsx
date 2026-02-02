@@ -63,6 +63,7 @@ export function OrderingForm() {
                 ({String.fromCharCode(65 + index)})
               </span>
               <Input
+                id={`options-${index}`}
                 className="h-[30px] flex-1"
                 value={option}
                 onChange={(e) => {
