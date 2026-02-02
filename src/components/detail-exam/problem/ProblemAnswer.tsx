@@ -1,8 +1,4 @@
-export default function ProblemAnswer({
-  answer,
-}: {
-  answer: string | string[]
-}) {
+export function ProblemAnswer({ answer }: { answer: string | string[] }) {
   const displayAnswer = Array.isArray(answer) ? answer.join(', ') : answer
   return (
     <section>

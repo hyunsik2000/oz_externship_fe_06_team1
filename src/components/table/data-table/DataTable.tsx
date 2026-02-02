@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { Table } from './index'
+import { Table } from '@/components/table/data-table'
 import { cn } from '@/lib/cn'
 
 export interface Column<T> {

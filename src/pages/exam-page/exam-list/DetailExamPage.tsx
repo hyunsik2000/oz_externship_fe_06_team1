@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { DetailExamContainer } from '@/components/detail-exam'
-import ExamModal from '@/components/detail-exam/ExamModal/ExamModal'
+import ExamModal from '@/components/detail-exam/exam-modal/ExamModal'
 import { AlertModal, Button } from '@/components/common'
 import { ExamHistoryLayout } from '@/components/layout'
 import { MOCK_QUESTION_LIST_RESPONSE } from '@/mocks/data/exam-data/QuestionList'

@@ -4,11 +4,10 @@ import {
   OXForm,
   OrderingForm,
   ShortAnswerForm,
-} from './index'
+} from '@/components/detail-exam/problem-modal/problem-forms'
+import { useProblemFormStore } from '@/store/problem-form/useProblemFormStore'
 
-import { useProblemFormStore } from '@/store/ProblemForm/useProblemFormStore'
-
-export const QuestionTypeForm = () => {
+export function QuestionTypeForm() {
   const { type } = useProblemFormStore()
 
   switch (type) {

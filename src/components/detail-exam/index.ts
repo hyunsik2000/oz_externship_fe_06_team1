@@ -1,2 +1,2 @@
-import DetailExamContainer from './DetailExamContainer'
-export { DetailExamContainer }
+export * from './DetailExamContainer'
+export * from './QuestionList'

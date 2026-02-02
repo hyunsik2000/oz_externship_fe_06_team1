@@ -1,13 +1,6 @@
-import ProblemAnswer from './ProblemAnswer'
-import ProblemExplain from './ProblemExplain'
-import ProblemHeader from './ProblemHeader'
-import ProblemOption from './ProblemOption'
-import ProblemTitle from './ProblemTitle'
-
-export {
-  ProblemAnswer,
-  ProblemExplain,
-  ProblemHeader,
-  ProblemOption,
-  ProblemTitle,
-}
+export * from './ProblemAnswer'
+export * from './ProblemExplain'
+export * from './ProblemHeader'
+export * from './ProblemOption'
+export * from './ProblemTitle'
+export * from './EmptyProblems'

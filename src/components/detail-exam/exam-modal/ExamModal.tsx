@@ -4,7 +4,7 @@ import { Modal, Button, Input, Dropdown } from '@/components/common'
 interface ExamModalProps {
   isOpen: boolean
   onClose: () => void
-  mode?: 'create' | 'edit'
+  mode: 'create' | 'edit'
   initialData?: {
     title: string
     subject_name: string
@@ -15,7 +15,7 @@ interface ExamModalProps {
 export default function ExamModal({
   isOpen,
   onClose,
-  mode = 'create',
+  mode,
   initialData,
 }: ExamModalProps) {
   const [title, setTitle] = useState<string>('')
@@ -23,26 +23,12 @@ export default function ExamModal({
   const [logo, setLogo] = useState<File | string | null>(null)
 
   useEffect(() => {
-    if (isOpen) {
-      if (mode === 'edit' && initialData) {
-        setTitle(initialData.title)
-        setSubject(initialData.subject_name)
-        setLogo(initialData.logo_url)
-      } else {
-        setTitle('')
-        setSubject('')
-        setLogo(null)
-      }
+    if (mode === 'edit' && initialData) {
+      setTitle(initialData.title)
+      setSubject(initialData.subject_name)
+      setLogo(initialData.logo_url)
     }
-  }, [isOpen, mode, initialData])
-
-  useEffect(() => {
-    return () => {
-      if (logo instanceof File) {
-        URL.revokeObjectURL(URL.createObjectURL(logo))
-      }
-    }
-  }, [logo])
+  }, [mode, initialData])
 
   const handleSubmit = () => {}
 
@@ -51,9 +37,9 @@ export default function ExamModal({
       <div className="flex h-full w-full flex-col">
         {/* 제목 */}
         <Modal.Header className="border-grey-100 flex flex-col gap-1 border-b px-8 pt-8 pb-4">
-          <h2 className="text-grey-800 text-lg font-semibold">
+          <span className="text-grey-800 text-lg font-semibold">
             {mode === 'edit' ? '쪽지시험 수정' : '쪽지시험 생성'}
-          </h2>
+          </span>
         </Modal.Header>
 
         {/* 폼 입력 영역 */}

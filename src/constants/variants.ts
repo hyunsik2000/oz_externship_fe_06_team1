@@ -157,7 +157,7 @@ export const modalVariants = cva(
       size: {
         sm: 'max-w-[426px] rounded-sm',
         md: 'max-w-[600px] rounded-xl',
-        ml: 'max-w-[790px] min-w-[550px] rounded-md ',
+        ml: 'max-w-[790px] min-w-[650px] rounded-md ',
         lg: 'max-w-[900px] rounded-xl',
         full: 'max-w-[95vw] h-[90vh] rounded-xl',
 
@@ -165,7 +165,7 @@ export const modalVariants = cva(
         attemptDetail:
           'w-[790px] h-[911px] rounded-[6px] border border-grey-200',
         solution: 'w-[1540px] h-[780px] rounded-[12px] border border-grey-200',
-        alert: 'w-[426px] min-h-[267px] rounded-sm border border-grey-200',
+        alert: 'w-[426px] min-h-[267px] rounded-sm',
       },
     },
     defaultVariants: {

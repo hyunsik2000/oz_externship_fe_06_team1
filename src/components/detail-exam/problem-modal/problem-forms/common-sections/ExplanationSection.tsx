@@ -3,14 +3,14 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { cn } from '@/lib/cn'
 
-// 4. 해설 등록 섹션
-export const ExplanationSection = ({
+// 해설 등록 섹션
+export function ExplanationSection({
   value,
   onChange,
 }: {
   value: string
   onChange: (v: string) => void
-}) => {
+}) {
   const [mode, setMode] = useState<'write' | 'preview'>('write')
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
