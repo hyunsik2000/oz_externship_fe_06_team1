@@ -3,9 +3,9 @@ import { Pagination } from '@/components/common/Pagination'
 import { MemberStatusBadge } from '@/components/common/Badge'
 import { DataTable, type Column } from './data-table/DataTable'
 import type { Member } from '@/types/member'
-import { MOCK_MEMBER_LIST } from '@/mocks/data/table-data/MemberList'
 
 type MemberListProps = {
+  data: Member[]
   onClickNickname?: (item: Member) => void
 }
 
@@ -86,24 +86,24 @@ const COLUMNS = (
 
 const PAGE_SIZE = 10
 
-export default function MemberList({ onClickNickname }: MemberListProps) {
+export default function MemberList({ data, onClickNickname }: MemberListProps) {
   const [page, setPage] = useState(1)
 
-  const members = MOCK_MEMBER_LIST
-  const totalPages = Math.max(1, Math.ceil(members.length / PAGE_SIZE))
+  const totalPages = Math.max(1, Math.ceil(data.length / PAGE_SIZE))
+  const safePage = Math.min(page, totalPages)
   const columns = COLUMNS(onClickNickname)
 
   const pagedMembers = useMemo(() => {
-    const start = (page - 1) * PAGE_SIZE
-    return members.slice(start, start + PAGE_SIZE)
-  }, [page, members])
+    const start = (safePage - 1) * PAGE_SIZE
+    return data.slice(start, start + PAGE_SIZE)
+  }, [data, safePage])
 
   return (
     <div className="w-full">
       <DataTable data={pagedMembers} columns={columns} />
 
       <Pagination
-        currentPage={page}
+        currentPage={safePage}
         totalPages={totalPages}
         onChange={setPage}
       />

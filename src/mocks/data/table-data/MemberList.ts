@@ -32,3 +32,7 @@ export const MOCK_MEMBER_LIST: Member[] = [
     joinedAt: '2025-10-07',
   },
 ]
+
+export const MOCK_MEMBER_LIST_RESPONSE = {
+  members: MOCK_MEMBER_LIST,
+}
