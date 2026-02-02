@@ -89,6 +89,7 @@ export function ProblemOption({ type, options, answer }: ProblemOptionProps) {
             type="text"
             className="border-grey-300 text-primary-700 h-[35px] w-2/3 rounded-lg border p-2 font-semibold outline-none"
             value="타입단언"
+            readOnly
           />
         )
       case 'fill_blank':
@@ -115,6 +116,7 @@ export function ProblemOption({ type, options, answer }: ProblemOptionProps) {
                   type="text"
                   className="border-grey-300 text-primary-700 h-[35px] w-full rounded-lg border p-2 font-semibold outline-none"
                   value="타입주석"
+                  readOnly
                 />
               </div>
               <div className="flex items-center gap-2">
@@ -125,6 +127,7 @@ export function ProblemOption({ type, options, answer }: ProblemOptionProps) {
                   type="text"
                   className="border-grey-300 text-primary-700 h-[35px] w-full rounded-lg border p-2 font-semibold outline-none"
                   value="사용자 정의 타입"
+                  readOnly
                 />
               </div>
             </div>
