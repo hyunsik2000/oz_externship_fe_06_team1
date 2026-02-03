@@ -16,7 +16,8 @@ interface DropdownProps {
   placeholder?: string
   className?: string
   disabled?: boolean
-  variant?: 'outline' | 'ghost'
+  variant?: 'outline' | 'memberFilter' | 'ghost'
+  size?: 'sm' | 'md'
 }
 
 export function Dropdown({
@@ -27,6 +28,7 @@ export function Dropdown({
   className,
   disabled,
   variant = 'outline',
+  size = 'md',
 }: DropdownProps) {
   const [isOpen, setIsOpen] = React.useState(false)
 
@@ -45,7 +47,7 @@ export function Dropdown({
     <div
       className={cn(
         'relative',
-        variant === 'outline' ? 'w-full' : 'w-fit',
+        variant !== 'ghost' ? 'w-full' : 'w-fit',
         className
       )}
       ref={dropdownRef}
@@ -59,6 +61,7 @@ export function Dropdown({
             disabled: !!disabled,
             open: isOpen,
             variant,
+            size,
           })
         )}
       >

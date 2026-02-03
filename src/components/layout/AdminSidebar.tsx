@@ -58,6 +58,11 @@ export function AdminSidebar() {
       return
     }
 
+    if (sectionKey === 'member' && text === '유저 관리') {
+      navigate('/members/management')
+      return
+    }
+
     if (sectionKey === 'member' && text === '대시보드') {
       navigate('/dashboard')
     }
@@ -105,13 +110,17 @@ export function AdminSidebar() {
                     (pathname === '/exam/history' &&
                       section.key === 'exam' &&
                       text === '응시 내역 관리') ||
+                    (pathname === '/members/management' &&
+                      section.key === 'member' &&
+                      text === '유저 관리') ||
                     (pathname === '/dashboard' &&
                       section.key === 'member' &&
                       text === '대시보드')
 
                   const isClickable =
                     (section.key === 'exam' && text === '응시 내역 관리') ||
-                    (section.key === 'member' && text === '대시보드')
+                    (section.key === 'member' &&
+                      (text === '유저 관리' || text === '대시보드'))
 
                   return (
                     <li
