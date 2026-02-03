@@ -48,6 +48,7 @@ export function FillBlankForm() {
               ({String.fromCharCode(65 + index)})
             </span>
             <Input
+              id={`correctAnswers-${index}`}
               className="border-grey-300 focus:border-primary-500 h-[30px] flex-1"
               value={answer}
               onChange={(e) => {

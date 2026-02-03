@@ -126,6 +126,7 @@ export function ExplanationSection({
             </div>
             <textarea
               ref={textareaRef}
+              id="explanation"
               className="placeholder:text-grey-600 h-44 w-full resize-none border-none p-2 text-sm outline-none"
               value={value}
               onChange={(e) => onChange(e.target.value)}

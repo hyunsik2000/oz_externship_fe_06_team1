@@ -1,9 +1,5 @@
 import { create } from 'zustand'
-import type {
-  QuestionType,
-  Question,
-  // QuestionRequestBody,
-} from '@/types/question'
+import type { QuestionType, Question } from '@/types/question'
 
 //  Constants
 const DEFAULT_PROBLEM_POINT = 5
@@ -100,23 +96,26 @@ export const useProblemFormStore = create<ProblemFormState>((set) => ({
     })
 
     switch (type) {
-      case 'multiple_choice':
-        // 다지선다형
-        // 객관식: "0,2" -> [0, 2]
+      case 'multiple_choice': {
+        const targetOptions = options ?? ['', '']
+        const answersArray = Array.isArray(correct_answer)
+          ? correct_answer
+          : [correct_answer]
+
+        // 텍스트 정답을 기반으로 해당 옵션의 인덱스들을 찾아냄
+        const targetAnswer = answersArray
+          .map((answer) => targetOptions.indexOf(String(answer)))
+          .filter((idx) => idx !== -1)
+
         set({
-          options: options ?? ['', ''],
-          correctAnswers:
-            typeof correct_answer === 'string'
-              ? correct_answer.split(',')
-              : Array.isArray(correct_answer)
-                ? correct_answer
-                : [0],
+          options: targetOptions,
+          correctAnswers: targetAnswer,
         })
         break
+      }
 
       case 'ox':
         // ox 형
-        // OX: "O" -> [0], "X" -> [1] 로 판단
         set({
           correctAnswers:
             correct_answer === 'O' ||
@@ -126,23 +125,25 @@ export const useProblemFormStore = create<ProblemFormState>((set) => ({
         })
         break
 
-      case 'ordering':
-        // 순서 정렬
-        // 순서정렬: "2,0,1" -> [2, 0, 1]
+      case 'ordering': {
+        const targetOptions = options ?? ['', '']
+        const answersArray = correct_answer as string[]
+
+        // 각 옵션이 정답 배열(answersArray)의 몇 번째 순서(Rank)인지를 찾아 배열 생성
+        const ranks = targetOptions.map((opt) => {
+          const rank = answersArray.indexOf(String(opt))
+          return rank !== -1 ? rank : 0
+        })
+
         set({
-          options: options ?? ['', ''],
-          correctAnswers:
-            typeof correct_answer === 'string'
-              ? correct_answer.split(',').map(Number)
-              : Array.isArray(correct_answer)
-                ? correct_answer.map(Number)
-                : [],
+          options: targetOptions,
+          correctAnswers: ranks,
         })
         break
+      }
 
       case 'short_answer':
         // 주관식 단답형
-        // 단답형: 그대로 사용
         set({
           correctAnswers: (correct_answer as string) ?? '',
         })
@@ -150,8 +151,8 @@ export const useProblemFormStore = create<ProblemFormState>((set) => ({
 
       case 'fill_blank':
         // 빈칸
-        // 빈칸: 배열 그대로 사용
         set({
+          options: options ?? ['', ''],
           correctAnswers: correct_answer,
           blankCount: Array.isArray(correct_answer)
             ? correct_answer.length
@@ -160,65 +161,4 @@ export const useProblemFormStore = create<ProblemFormState>((set) => ({
         break
     }
   },
-
-  // const NEEDS_OPTIONS: Record<QuestionType, boolean> = {
-  //   multiple_choice: true,
-  //   ordering: true,
-  //   ox: false,
-  //   short_answer: false,
-  //   fill_blank: false,
-  // }
-
-  // const shouldSendOptions = (type: QuestionType) => NEEDS_OPTIONS[type]
-
-  // // [변환] 백엔드 전송용 바디 생성
-  // toRequestBody: () => {
-  //   const state = get()
-  //   let submitCorrectAnswer: string | string[] = '' // 정답 초기화 변수
-  //   let submitBlankCount = 0 // 빈칸 초기화 변수
-
-  //   switch (state.type) {
-  //     case 'multiple_choice':
-  //       // [1, 3] -> "1,3" (오름차순 정렬) 나중에 받을 때 편하게
-  //       submitCorrectAnswer = [...state.correctAnswers]
-  //         .sort((a, b) => a - b)
-  //         .join(',')
-  //       break
-
-  //     case 'ox':
-  //       // [0] -> "O", [1] -> "X" 변환해서 전달
-  //       submitCorrectAnswer = state.correctAnswers[0] === 0 ? 'O' : 'X'
-  //       break
-
-  //     case 'ordering':
-  //       submitCorrectAnswer = state.correctAnswers.join(',')
-  //       break
-
-  //     case 'short_answer':
-  //       // "정답" -> "정답"
-  //       submitCorrectAnswer = state.correctAnswers
-  //       break
-
-  //     case 'fill_blank':
-  //       // ["답1", "답2"] -> ["답1", "답2"]
-  //       submitCorrectAnswer = state.correctAnswers
-  //       submitBlankCount = state.correctAnswers.length
-  //       break
-  //   }
-
-  //   // 다지선다랑 순서 정렬 빼고는 보기가 필요없음
-  //   const submitOptions = shouldSendOptions(state.type) ? state.options : null;
-
-  //   // 최종 requestBody 반환
-  //   return {
-  //     type: state.type,
-  //     question: state.question,
-  //     prompt: state.prompt,
-  //     options: submitOptions,
-  //     blank_count: submitBlankCount,
-  //     correct_answer: submitCorrectAnswer,
-  //     point: state.point,
-  //     explanation: state.explanation,
-  //   }
-  // },
 }))

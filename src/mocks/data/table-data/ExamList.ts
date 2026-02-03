@@ -5,7 +5,7 @@ const MOCK_EXAM_ITEM: ExamItem[] = [
     id: 1,
     title: 'React & Redux 데일리 쪽지시험',
     subject_name: 'React & Redux',
-    question_count: 133,
+    question_count: 20,
     submit_count: 10,
     created_at: '2025.02.01 11:22:28',
     updated_at: '2025.02.28 11:22:28',

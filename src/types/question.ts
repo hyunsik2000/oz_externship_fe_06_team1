@@ -5,22 +5,6 @@ export type QuestionType =
   | 'short_answer'
   | 'fill_blank'
 
-export interface Subject {
-  id: number
-  title: string
-}
-
-export interface QuestionRequestBody {
-  type: QuestionType
-  question: string
-  prompt: string
-  options: string[] | null
-  blank_count: number
-  correct_answer: string | string[]
-  point: number
-  explanation: string
-}
-
 export interface Question {
   id: number
   type: QuestionType
@@ -33,7 +17,12 @@ export interface Question {
   explanation: string
 }
 
-export interface QuestionListResponse {
+export interface Subject {
+  id: number
+  title: string
+}
+
+export interface QuestionsList {
   id: number
   title: string
   subject: Subject

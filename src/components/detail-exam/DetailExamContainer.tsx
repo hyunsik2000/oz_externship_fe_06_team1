@@ -3,10 +3,10 @@ import type { Swiper as SwiperClass } from 'swiper'
 import { QuestionList } from '@/components/detail-exam'
 import DetailExamFooter from '@/components/detail-exam/DetailExamFooter'
 import DetailExamHeader from '@/components/detail-exam/DetailExamHeader'
-import type { QuestionListResponse } from '@/types/question'
+import type { QuestionsList } from '@/types/question'
 
 interface DetailExamContainerProps {
-  data: QuestionListResponse
+  data: QuestionsList
 }
 
 export function DetailExamContainer({ data }: DetailExamContainerProps) {
