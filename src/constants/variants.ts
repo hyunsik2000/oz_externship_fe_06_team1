@@ -81,6 +81,10 @@ export const dropdownTriggerVariants = cva(
     },
     compoundVariants: [
       {
+        variant: 'ghost',
+        className: 'px-0',
+      },
+      {
         variant: 'outline',
         open: true,
         className: 'border-primary-500 ring-1 ring-primary-500',
