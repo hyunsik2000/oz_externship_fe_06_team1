@@ -40,9 +40,7 @@ export function ExamListLayout({
 
         <div className="w-full">{children}</div>
 
-        {footer && (
-          <div className="mt-20 flex w-full justify-end">{footer}</div>
-        )}
+        {footer && <div className="flex w-full">{footer}</div>}
       </div>
     </AdminContainer>
   )
