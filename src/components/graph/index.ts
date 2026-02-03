@@ -1,4 +1,4 @@
-export * from './ChartRenderer'
+export * from './ExamChartRenderer'
 export * from './ExamAverageLineChart'
 export * from './ExamScatterChart'
 export * from './StudentScoreBarChart'
