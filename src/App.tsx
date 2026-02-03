@@ -3,7 +3,7 @@ import { AdminLayout } from '@/components/layout'
 import { ExamDashboardPage, ExamHistoryPage, NotFoundPage } from '@/pages'
 import { ExamListPage } from './pages/exam-page/exam-list/ExamListPage'
 import { DetailExamPage } from './pages/exam-page/exam-list/DetailExamPage'
-// import { MemberDashboardPage } from './pages/member-management/MemberDashboardPage'
+import { MemberDashboardPage } from './pages/member-management/MemberDashboardPage'
 import MemberManagementPage from './pages/member-management/MemberManagementPage'
 
 export default function App() {
@@ -19,7 +19,7 @@ export default function App() {
           {/* <Route path="deployments" element={<DeploymentPage />} /> */}
         </Route>
         <Route path="/members">
-          {/* <Route path="/members/dashboard" element={<MemberDashboardPage />} /> */}
+          <Route path="/members/dashboard" element={<MemberDashboardPage />} />
           <Route
             path="/members/management"
             element={<MemberManagementPage />}

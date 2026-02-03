@@ -19,37 +19,37 @@ export type ExamChartResponseType =
   | { type: 'scatter'; data: ExamScatterChartDataType[] }
   | { type: 'none'; data: [] }
 
-// export type MemberChartConfig = {
-//   color: string
-//   hoverColor: string
-//   viewMode: string
-//   selectedYear: string
-//   onYearChange: (y: string) => void
-// }
+export type MemberChartConfig = {
+  color: string
+  hoverColor: string
+  viewMode: string
+  selectedYear: string
+  onYearChange: (y: string) => void
+}
 
-// type BaseStatDataType = {
-//   value: number
-// }
+type BaseStatDataType = {
+  value: number
+}
 
-// export type BarStatDataType = BaseStatDataType & {
-//   label: string
-// }
+export type BarStatDataType = BaseStatDataType & {
+  label: string
+}
 
-// export type PieStatDataType = BaseStatDataType & {
-//   name: string
-//   fill: string
-//   label?: string
-// }
+export type PieStatDataType = BaseStatDataType & {
+  name: string
+  fill: string
+  label?: string
+}
 
-// export type MemberChartResponseType =
-//   | {
-//       type: 'bar' | 'composed'
-//       data: BarStatDataType[]
-//       config: MemberChartConfig
-//     }
-//   | {
-//       type: 'pie'
-//       data: PieStatDataType[]
-//       config?: MemberChartConfig
-//     }
-//   | { type: 'none'; data: []; config?: never }
+export type MemberChartResponseType =
+  | {
+      type: 'bar' | 'composed'
+      data: BarStatDataType[]
+      config: MemberChartConfig
+    }
+  | {
+      type: 'pie'
+      data: PieStatDataType[]
+      config?: MemberChartConfig
+    }
+  | { type: 'none'; data: []; config?: never }
