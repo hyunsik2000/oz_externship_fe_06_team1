@@ -12,6 +12,7 @@ export function ShortAnswerForm() {
       noContainer
     >
       <textarea
+        id="correctAnswers"
         className="border-grey-300 text-grey-600 placeholder:text-grey-600 focus:border-primary-500 h-[70px] w-full resize-none border p-2 text-sm font-normal transition-colors outline-none"
         value={answerText}
         onChange={(e) => setCorrectAnswers(e.target.value)}

@@ -3,9 +3,9 @@ import {
   ExamAverageLineChart,
   ExamScatterChart,
 } from '@/components/graph'
-import type { ChartResponseType } from '@/types'
+import type { ExamChartResponseType } from '@/types'
 
-export function ChartRenderer({ type, data }: ChartResponseType) {
+export function ExamChartRenderer({ type, data }: ExamChartResponseType) {
   if (type === 'none' || data.length === 0) {
     return (
       <div className="text-grey-400 border-grey-100 flex h-full items-center justify-center rounded-lg border-2 border-dashed">

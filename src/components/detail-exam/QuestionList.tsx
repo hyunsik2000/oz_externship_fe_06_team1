@@ -1,4 +1,4 @@
-import type { QuestionListResponse, Question } from '@/types/question'
+import type { QuestionsList, Question } from '@/types/question'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import type { Swiper as SwiperClass } from 'swiper'
 import {
@@ -16,7 +16,7 @@ import { useState } from 'react'
 import ProblemModal from '@/components/detail-exam/problem-modal/ProblemModal'
 
 interface QuestionListProps {
-  data: QuestionListResponse
+  data: QuestionsList
   currentIndex: number
   onSwiper: (swiper: SwiperClass) => void
   onSlideChange: (swiper: SwiperClass) => void
@@ -32,7 +32,8 @@ export function QuestionList({
   onNext,
   onPrev,
 }: QuestionListProps) {
-  const totalQuestions = data.questions.length
+  const questionCount = data.questions.length
+  const totalScore = data.questions.reduce((sum, q) => sum + q.point, 0)
 
   // 모달 상태 관리
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -54,7 +55,7 @@ export function QuestionList({
     setIsModalOpen(true)
   }
 
-  if (totalQuestions === 0) {
+  if (questionCount === 0) {
     return <EmptyProblems />
   }
 
@@ -122,7 +123,7 @@ export function QuestionList({
         <Button
           size="icon"
           onClick={onNext}
-          disabled={currentIndex === totalQuestions - 1}
+          disabled={currentIndex === questionCount - 1}
           className="h-12 w-12 rounded-full border-transparent bg-transparent disabled:opacity-0"
         >
           <ChevronRight className="text-grey-600 h-10 w-10" />
@@ -135,6 +136,8 @@ export function QuestionList({
         onClose={() => setIsModalOpen(false)}
         mode={modalMode}
         initialData={selectedQuestion}
+        questionCount={questionCount}
+        totalScore={totalScore}
       />
     </>
   )

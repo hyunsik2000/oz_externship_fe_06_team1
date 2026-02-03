@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react'
 import { API_PATHS } from '@/constants/api'
 import { MOCK_STUDENTS_BY_TERM } from '@/mocks/data/graph-data'
-import type { ChartResponseType } from '@/types'
-import { DASHBOARD_VIEWS, type ViewType } from '@/constants/dashboardConfig'
+import type { ExamChartResponseType } from '@/types'
+import {
+  DASHBOARD_VIEWS,
+  type ViewType,
+} from '@/constants/dashboard/examDashboardConfig'
 
 export function useExamDashboard() {
   const [viewType, setViewType] = useState<ViewType>(DASHBOARD_VIEWS.SCORE)
@@ -14,7 +17,7 @@ export function useExamDashboard() {
     subject: '',
   })
 
-  const [chartResponse, setChartResponse] = useState<ChartResponseType>({
+  const [chartResponse, setChartResponse] = useState<ExamChartResponseType>({
     type: 'none',
     data: [],
   })
@@ -27,7 +30,7 @@ export function useExamDashboard() {
   }, [viewType])
 
   const fetchData = async () => {
-    type ActiveChartType = Exclude<ChartResponseType['type'], 'none'>
+    type ActiveChartType = Exclude<ExamChartResponseType['type'], 'none'>
     let requestConfig: { url: string; type: ActiveChartType } | null = null
 
     if (viewType === 'score') {
@@ -67,7 +70,7 @@ export function useExamDashboard() {
       setChartResponse({
         type: requestConfig.type,
         data: data,
-      } as ChartResponseType)
+      } as ExamChartResponseType)
     } catch (error) {
       console.error('데이터 로드 실패:', error)
     }

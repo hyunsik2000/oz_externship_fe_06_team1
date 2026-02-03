@@ -29,6 +29,7 @@ export const buttonVariants = cva(
       variant: {
         primary: 'bg-primary-700 text-white hover:opacity-90',
         secondary: 'bg-grey-400 text-white hover:opacity-90',
+        search: 'bg-grey-600 text-white hover:opacity-90',
         outline:
           'border border-grey-300 bg-white text-grey-600 hover:bg-grey-50',
         confirm: 'bg-primary-600 text-white hover:opacity-90',
@@ -42,6 +43,7 @@ export const buttonVariants = cva(
       size: {
         default: 'h-10 px-4 py-2.5',
         sm: 'h-9 px-4 text-xs',
+        search: 'h-9 w-[70px] px-0 rounded-[3px] text-sm',
         lg: 'h-14 px-10 text-base',
         icon: 'h-6 w-6 p-0',
       },
@@ -54,18 +56,23 @@ export const buttonVariants = cva(
 )
 
 export const dropdownTriggerVariants = cva(
-  'flex items-center justify-between transition-all outline-none',
+  'flex w-full items-center justify-between transition-all outline-none',
   {
     variants: {
       variant: {
-        outline:
-          'h-10 w-full rounded-md border border-grey-300 bg-white px-3 py-2 text-sm hover:bg-grey-50',
+        outline: 'border border-grey-300 bg-white text-sm hover:bg-grey-50',
+        memberFilter:
+          'border border-[#DDDDDD] bg-white text-sm hover:bg-grey-50',
         ghost:
-          'bg-transparent p-0 gap-1 text-xl font-bold text-grey-800 hover:bg-transparent',
+          'w-auto border-none bg-transparent p-0 gap-1 text-xl font-bold text-grey-800 hover:bg-transparent',
+      },
+      size: {
+        sm: 'h-9 rounded-[3px] px-3',
+        md: 'h-10 rounded-md px-3',
       },
       disabled: {
         true: 'bg-grey-50 text-grey-400 cursor-not-allowed',
-        false: 'border-grey-300 text-grey-800 cursor-pointer',
+        false: 'text-grey-800 cursor-pointer',
       },
       open: {
         true: '',
@@ -74,13 +81,23 @@ export const dropdownTriggerVariants = cva(
     },
     compoundVariants: [
       {
+        variant: 'ghost',
+        className: 'px-0',
+      },
+      {
         variant: 'outline',
+        open: true,
+        className: 'border-primary-500 ring-1 ring-primary-500',
+      },
+      {
+        variant: 'memberFilter',
         open: true,
         className: 'border-primary-500 ring-1 ring-primary-500',
       },
     ],
     defaultVariants: {
       variant: 'outline',
+      size: 'md',
       disabled: false,
       open: false,
     },
@@ -125,6 +142,7 @@ export const inputVariants = cva(
         error: 'border-error-400 focus:border-error-400',
       },
       size: {
+        sm: 'h-9',
         md: 'h-11',
         lg: 'h-12 text-base',
       },
@@ -147,7 +165,7 @@ export const modalVariants = cva(
         lg: 'max-w-[900px] rounded-xl',
         full: 'max-w-[95vw] h-[90vh] rounded-xl',
 
-        filter: 'w-[509px] h-[400px] rounded-xl border border-grey-200',
+        filter: 'w-[509px] rounded-md',
         attemptDetail:
           'w-[790px] h-[911px] rounded-[6px] border border-grey-200',
         solution: 'w-[1540px] h-[780px] rounded-[12px] border border-grey-200',

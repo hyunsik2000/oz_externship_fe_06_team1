@@ -14,6 +14,7 @@ export function PromptInputSection({
       additionalDescription="지문은 필수 입력값입니다."
     >
       <textarea
+        id="prompt"
         className="border-grey-300 text-grey-600 placeholder:text-grey-600 focus:border-primary-500 h-[70px] w-full resize-none rounded border bg-white p-2 text-sm font-normal outline-none"
         value={value}
         onChange={(e) => onChange(e.target.value)}

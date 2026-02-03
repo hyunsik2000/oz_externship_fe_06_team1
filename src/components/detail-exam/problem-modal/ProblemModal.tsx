@@ -1,5 +1,5 @@
-import { useEffect } from 'react'
-import { Modal, Button } from '@/components/common'
+import { useState, useEffect, useRef } from 'react'
+import { Modal, Button, AlertModal } from '@/components/common'
 import type { QuestionType, Question } from '@/types/question'
 import { cn } from '@/lib/cn'
 import { QuestionTypeForm } from '@/components/detail-exam/problem-modal/problem-forms'
@@ -11,12 +11,15 @@ import {
 
 import { QUESTION_TYPES } from '@/constants/Question/question-types'
 import { useProblemFormStore } from '@/store/problem-form/useProblemFormStore'
+import { validateProblemForm } from '@/utils/validation'
 
 interface ProblemModalProps {
   isOpen: boolean
   onClose: () => void
   mode?: 'create' | 'edit' // '추가' | '수정' 중 하나
   initialData?: Question // 수정 시 사용할 초기 데이터
+  totalScore: number
+  questionCount: number
 }
 
 export default function ProblemModal({
@@ -24,6 +27,8 @@ export default function ProblemModal({
   onClose,
   mode = 'create',
   initialData,
+  totalScore,
+  questionCount,
 }: ProblemModalProps) {
   // Store에서 상태와 초기화 함수 가져오기
   const {
@@ -38,7 +43,36 @@ export default function ProblemModal({
     setPoint,
     explanation,
     setExplanation,
+    prompt,
+    options,
+    correctAnswers,
   } = useProblemFormStore()
+
+  // 알림 모달 상태 및 검사를 통과하지 못한 필드로 돌아가는 포커스 관리를 위한 Ref
+  const [alertState, setAlertState] = useState({
+    isOpen: false,
+    title: '',
+    description: '',
+  })
+  const fieldToFocusRef = useRef<string | null>(null)
+
+  // 알림창이 닫힐 때 실행할 콜백 함수
+  const handleAlertClose = () => {
+    setAlertState((prev) => ({ ...prev, isOpen: false }))
+
+    // 모달이 완전히 닫히는 시점에 setTimeout
+    if (fieldToFocusRef.current) {
+      const fieldId = fieldToFocusRef.current
+      setTimeout(() => {
+        const element = document.getElementById(fieldId)
+        if (element) {
+          element.focus()
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        }
+      }, 0)
+      fieldToFocusRef.current = null
+    }
+  }
 
   // 모달 열릴 때 수정인지 추가인지에 따라 초기화 로직 수행
   useEffect(() => {
@@ -52,13 +86,36 @@ export default function ProblemModal({
     }
   }, [isOpen, mode, initialData, reset, initializeForEdit])
 
-  // 제출 로직에서 store 데이터를 조합하여 requestBody 생성
-  // const handleSubmit = () => {
-  //    const requestBody = useProblemFormStore.getState().toRequestBody()
-  //    console.log('Submission Data:', requestBody)
-  //    // TODO: API 호출 (create or put)
-  //    onClose()
-  // }
+  const handleSubmit = () => {
+    const formData = {
+      type,
+      question,
+      prompt,
+      options,
+      correctAnswers,
+      point,
+      explanation,
+      totalScore,
+      questionCount,
+      mode,
+      targetPoint: initialData?.point,
+    }
+
+    // 유효성 검사 실행
+    const result = validateProblemForm(formData)
+
+    // 에러가 존재하면 알림 모달 표시
+    if (!result.isValid) {
+      fieldToFocusRef.current = result.firstInvalidField || null
+      setAlertState({
+        isOpen: true,
+        title: result.title || '입력을 확인해주세요.',
+        description: result.description || '',
+      })
+      return
+    }
+    onClose()
+  }
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} showCloseButton size="ml">
@@ -129,13 +186,24 @@ export default function ProblemModal({
             <Button
               variant="primary"
               className="flex h-[36px] w-[55px] rounded-sm font-normal"
-              // onClick={handleSubmit}
+              onClick={handleSubmit}
             >
               {mode === 'edit' ? '수정' : '추가'}
             </Button>
           </div>
         </div>
       </div>
+
+      {/* 유효성 검사 모달 */}
+      <AlertModal
+        isOpen={alertState.isOpen}
+        onClose={handleAlertClose}
+        type="danger"
+        showCancel={false}
+        title={alertState.title}
+        description={alertState.description}
+        onConfirm={handleAlertClose}
+      />
     </Modal>
   )
 }

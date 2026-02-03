@@ -5,6 +5,7 @@ import { Button, Dropdown } from '@/components/common'
 import { AdminContainer } from '@/components/layout'
 import { exportToExcel, exportToPDF } from '@/lib/export'
 import type { DropdownOption } from '@/types'
+import { cn } from '@/lib/cn'
 
 interface FilterConfig {
   id: string
@@ -23,6 +24,8 @@ interface DashboardLayoutProps {
   chartTitle: string
   children: React.ReactNode
   exportData?: Record<string, unknown>[]
+  showSearchButton?: boolean
+  chartContainerClassName?: string
   onTitleChange: (value: string) => void
   onSearch?: () => void
 }
@@ -35,6 +38,8 @@ export function DashboardLayout({
   chartTitle,
   children,
   exportData,
+  showSearchButton = true,
+  chartContainerClassName,
   onTitleChange,
   onSearch,
 }: DashboardLayoutProps) {
@@ -46,6 +51,8 @@ export function DashboardLayout({
     if (!exportData) return
     exportToExcel(exportData, chartTitle)
   }
+
+  const hasFilterBar = filters.length > 0 || showSearchButton
 
   return (
     <AdminContainer>
@@ -72,27 +79,40 @@ export function DashboardLayout({
             <p className="text-grey-600 text-sm">{description}</p>
           </div>
 
-          <div className="mb-12 flex items-center gap-3">
-            {filters.map((filter) => (
-              <Dropdown
-                key={filter.id}
-                options={filter.options}
-                value={filter.value}
-                placeholder={filter.placeholder}
-                className={filter.className || 'w-48'}
-                onChange={filter.onChange}
-              />
-            ))}
-            <Button variant="secondary" onClick={onSearch}>
-              조회
-            </Button>
-          </div>
+          {hasFilterBar && (
+            <div className="mb-6 flex items-center gap-3">
+              {filters.map((filter) => (
+                <Dropdown
+                  key={filter.id}
+                  options={filter.options}
+                  value={filter.value}
+                  placeholder={filter.placeholder}
+                  className={filter.className || 'w-48'}
+                  onChange={filter.onChange}
+                />
+              ))}
+              {showSearchButton && (
+                <Button variant="secondary" onClick={onSearch}>
+                  조회
+                </Button>
+              )}
+            </div>
+          )}
 
           <div className="w-full">
-            <h3 className="text-grey-800 mb-8 text-sm font-bold">
-              {chartTitle}
-            </h3>
-            <div className="relative h-[500px] w-[1400px]">{children}</div>
+            {chartTitle && (
+              <h3 className="text-grey-800 mb-8 text-sm font-bold">
+                {chartTitle}
+              </h3>
+            )}
+            <div
+              className={cn(
+                'relative w-[1400px]',
+                chartContainerClassName || 'h-[500px]'
+              )}
+            >
+              {children}
+            </div>
           </div>
         </div>
       </div>

@@ -59,6 +59,7 @@ export function MultipleChoiceForm() {
           <div key={`choice-${index}`} className="flex items-center gap-3">
             <span className="text-grey-600 text-xs">{index + 1}.</span>
             <Input
+              id={`options-${index}`}
               className="h-[30px] flex-1"
               value={option}
               onChange={(e) => {

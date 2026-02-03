@@ -1,23 +1,21 @@
 import type { ReactNode } from 'react'
-import { AdminContainer } from '@/components/layout/AdminContainer'
+import { AdminContainer } from '@/components/layout'
 
-type ExamListLayoutProps = {
+type MemberManagementLayoutProps = {
   title: string
   description?: string
   headerRight?: ReactNode
   toolbar?: ReactNode
   children: ReactNode
-  footer?: ReactNode
 }
 
-export function ExamListLayout({
+export function MemberManagementLayout({
   title,
   description,
   headerRight,
   toolbar,
   children,
-  footer,
-}: ExamListLayoutProps) {
+}: MemberManagementLayoutProps) {
   return (
     <AdminContainer>
       <div className="bg-white p-10">
@@ -34,13 +32,9 @@ export function ExamListLayout({
           {headerRight && <div className="shrink-0">{headerRight}</div>}
         </div>
 
-        {toolbar && (
-          <div className="mb-6 flex items-center gap-3">{toolbar}</div>
-        )}
+        {toolbar && <div className="mb-6 flex items-end gap-4">{toolbar}</div>}
 
         <div className="w-full">{children}</div>
-
-        {footer && <div className="flex w-full">{footer}</div>}
       </div>
     </AdminContainer>
   )
