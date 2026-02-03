@@ -1,3 +1,4 @@
+import { cn } from '@/lib/cn'
 import {
   ChevronLeft,
   ChevronRight,
@@ -47,17 +48,17 @@ export function Pagination({
   const isLast = safeCurrent === safeTotal
 
   const iconBtnBase =
-    'text-gray-500 hover:text-gray-500 focus:text-gray-500 active:text-gray-500 disabled:text-gray-500 disabled:opacity-100 focus:outline-none'
+    'text-gray-500 hover:text-gray-500 focus:text-gray-500 active:text-gray-500 disabled:text-gray-500 disabled:opacity-100 focus:outline-none cursor-pointer disabled:cursor-default p-3'
 
   const containerClass = containerClassName || 'mt-[90px] flex justify-center'
 
   return (
     <div className={containerClass}>
       <nav
-        className="flex items-center justify-center gap-6"
+        className="flex items-center justify-center gap-3"
         aria-label="페이지네이션"
       >
-        <div className="flex items-center gap-1">
+        <div className="flex items-center">
           <button
             type="button"
             aria-label="첫 페이지"
@@ -65,7 +66,7 @@ export function Pagination({
             onClick={() => goTo(1)}
             disabled={isFirst}
           >
-            <ChevronsLeft size={28} />
+            <ChevronsLeft size={20} />
           </button>
 
           <button
@@ -75,11 +76,11 @@ export function Pagination({
             onClick={() => goTo(safeCurrent - 1)}
             disabled={isFirst}
           >
-            <ChevronLeft size={28} />
+            <ChevronLeft size={20} />
           </button>
         </div>
 
-        <div className="flex items-center gap-10">
+        <div className="flex items-center gap-2">
           {pageNumbers.map((p) => {
             const isActive = p === safeCurrent
 
@@ -89,11 +90,12 @@ export function Pagination({
                 type="button"
                 aria-current={isActive ? 'page' : undefined}
                 onClick={() => goTo(p)}
-                className={
+                className={cn(
+                  iconBtnBase,
                   isActive
-                    ? 'text-[22px] leading-none font-medium text-black underline underline-offset-[7px]'
-                    : 'text-[22px] leading-none font-medium text-gray-500'
-                }
+                    ? 'text-[16px] leading-none text-black underline underline-offset-[7px]'
+                    : 'text-[16px] leading-none text-gray-500'
+                )}
               >
                 {p}
               </button>
@@ -101,7 +103,7 @@ export function Pagination({
           })}
         </div>
 
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-2">
           <button
             type="button"
             aria-label="다음 페이지"
@@ -109,7 +111,7 @@ export function Pagination({
             onClick={() => goTo(safeCurrent + 1)}
             disabled={isLast}
           >
-            <ChevronRight size={28} />
+            <ChevronRight size={20} />
           </button>
 
           <button
@@ -119,7 +121,7 @@ export function Pagination({
             onClick={() => goTo(safeTotal)}
             disabled={isLast}
           >
-            <ChevronsRight size={28} />
+            <ChevronsRight size={20} />
           </button>
         </div>
       </nav>
