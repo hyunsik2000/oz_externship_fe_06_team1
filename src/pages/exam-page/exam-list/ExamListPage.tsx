@@ -1,4 +1,10 @@
-import { Button, FilterButton, FilterModal, Input } from '@/components/common'
+import {
+  Button,
+  FilterButton,
+  FilterModal,
+  Input,
+  Pagination,
+} from '@/components/common'
 import { ExamListLayout } from '@/components/layout'
 import ExamList from '@/components/table/ExamList'
 import { useState } from 'react'
@@ -9,11 +15,19 @@ import { COURSE_OPTIONS } from '@/constants/filtered-option'
 
 export function ExamListPage() {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [page, setPage] = useState(1)
+
+  const totalPages = Math.ceil(
+    MOCK_EXAM_LIST_RESPONSE.exams.length / MOCK_EXAM_LIST_RESPONSE.size
+  )
+  const paginatedData = MOCK_EXAM_LIST_RESPONSE.exams.slice(
+    (page - 1) * MOCK_EXAM_LIST_RESPONSE.size,
+    page * MOCK_EXAM_LIST_RESPONSE.size
+  )
 
   const filterConfigs: FilterOptionConfig[] = [
     {
       key: 'course',
-      label: '',
       placeholder: '과정을 선택해주세요',
       options: COURSE_OPTIONS,
     },
@@ -52,20 +66,28 @@ export function ExamListPage() {
           </div>
         }
         footer={
-          <div className="flex w-full justify-end gap-2">
-            <Button
-              variant="primary"
-              onClick={() => setIsModalOpen(true)}
-              className="h-[36px] w-[55px] rounded-sm text-sm font-normal"
-            >
-              생성
-            </Button>
+          <div className="mt-10 grid w-full grid-cols-3 items-center">
+            <div />
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              onChange={setPage}
+              containerClassName="flex justify-center"
+            />
+            <div className="flex justify-end">
+              <Button
+                variant="primary"
+                onClick={() => setIsModalOpen(true)}
+                className="h-[36px] w-[55px] rounded-sm text-sm font-normal"
+              >
+                생성
+              </Button>
+            </div>
           </div>
         }
       >
-        <ExamList data={MOCK_EXAM_LIST_RESPONSE.exams} />
+        <ExamList data={paginatedData} />
       </ExamListLayout>
-
       <FilterModal
         open={isFilterOpen}
         onClose={handleCloseFilter}
@@ -76,7 +98,6 @@ export function ExamListPage() {
         onSubmit={handleSubmitFilter}
         canSubmit={canSubmit}
       />
-
       <ExamModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
