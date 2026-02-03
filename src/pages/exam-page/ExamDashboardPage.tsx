@@ -1,7 +1,10 @@
 import { AlertModal } from '@/components/common'
 import { DashboardLayout } from '@/components/layout'
-import { ChartRenderer } from '@/components/graph'
-import { VIEW_METADATA, type ViewType } from '@/constants/dashboardConfig'
+import { ExamChartRenderer } from '@/components/graph'
+import {
+  VIEW_METADATA,
+  type ViewType,
+} from '@/constants/dashboard/examDashboardConfig'
 import { useExamDashboard } from '@/hooks/graph'
 import {
   MOCK_CAMP_OPTIONS,
@@ -90,7 +93,7 @@ export function ExamDashboardPage() {
         onSearch={fetchData}
       >
         <div className="h-full w-full">
-          <ChartRenderer {...chartResponse} />
+          <ExamChartRenderer {...chartResponse} />
         </div>
       </DashboardLayout>
 
