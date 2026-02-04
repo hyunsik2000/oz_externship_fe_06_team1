@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { api } from '@/api'
+import { apiClient } from '@/api'
 import type { AxiosRequestConfig } from 'axios'
 
 export function useAxios() {
@@ -8,7 +8,7 @@ export function useAxios() {
   const sendRequest = useCallback(async <T>(config: AxiosRequestConfig) => {
     setIsLoading(true)
     try {
-      const response = await api.request<T>(config)
+      const response = await apiClient.request<T>(config)
       return response.data
     } finally {
       setIsLoading(false)

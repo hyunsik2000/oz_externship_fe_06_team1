@@ -1,15 +1,15 @@
-import axios from 'axios'
-import { getCookie, removeCookie } from '@/utils'
+import { getCookie } from '@/utils'
 import { useAlertStore } from '@/store/useAlertStore'
+import { handle401Error } from '@/api/interceptors/handle401Error'
+import axios from 'axios'
 
-// 필요시 커스텀 타이틀 전달
 declare module 'axios' {
   export interface AxiosRequestConfig {
     errorTitle?: string
   }
 }
 
-export const api = axios.create({
+export const apiClient = axios.create({
   baseURL: '/',
   headers: {
     'Content-Type': 'application/json',
@@ -17,26 +17,29 @@ export const api = axios.create({
   withCredentials: true,
 })
 
-api.interceptors.request.use(
+apiClient.interceptors.request.use(
   (config) => {
-    // 쿠키에서 토큰을 가져오기
     const token = getCookie('accessToken')
-    // 토큰이 있으면 요청 헤더에 실어주기
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
     return config
   },
-  (error) => Promise.reject(error)
+  (err) => Promise.reject(err)
 )
 
-api.interceptors.response.use(
+apiClient.interceptors.response.use(
   (response) => response,
-  (error) => {
+  async (error) => {
     const status = error.response?.status
     const errorData = error.response?.data
     const errorDetail = errorData?.error_detail
-    const customTitle = error.config?.errorTitle // 목적에 따라 커스텀 타이틀 전달
+    const customTitle = error.config?.errorTitle
+
+    // 401 에러는 별도 핸들러에서 처리
+    if (status === 401) {
+      return handle401Error(error)
+    }
 
     let message = ''
 
@@ -49,11 +52,8 @@ api.interceptors.response.use(
         })
         .join('\n')
     } else {
-      // error_detail이 없을 때
       message =
         (typeof errorDetail === 'string' ? errorDetail : null) ||
-        errorData?.message ||
-        error.message ||
         '오류가 발생했습니다.'
     }
 
@@ -64,11 +64,6 @@ api.interceptors.response.use(
     if (status >= 500) {
       title = customTitle || '서버 내부 오류'
       type = 'danger'
-    } else if (status === 401) {
-      title = '로그인 세션이 만료되었습니다.'
-      removeCookie('accessToken')
-      window.location.href = '/login'
-      return Promise.reject(error) // 리다이렉트 시 알림 생략 가능
     } else if (status === 403) {
       title = customTitle || '권한이 없습니다.'
     } else if (status === 400) {
