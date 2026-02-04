@@ -1,6 +1,10 @@
-import { useEffect, useMemo, useState, useRef, type ReactNode } from 'react'
-import { AlertModal, Button, MemberStatusBadge } from '@/components/common'
-import { Modal } from '@/components/common/Modal'
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import {
+  AlertModal,
+  Button,
+  MemberStatusBadge,
+  Modal,
+} from '@/components/common'
 import ModifyPermissionModal, {
   type Option,
   type PermissionValue,
@@ -15,6 +19,7 @@ type MemberDetailModalProps = {
   open: boolean
   onClose: () => void
   member: Member | null
+  onDeleteConfirm?: (member: Member) => void
 }
 
 const TABLE_COLUMNS = '141px 120px minmax(0,1fr) 100px minmax(0,1fr)'
@@ -107,9 +112,11 @@ export function MemberDetailModal({
   open,
   onClose,
   member,
+  onDeleteConfirm,
 }: MemberDetailModalProps) {
-  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false)
   const [permissionModalOpen, setPermissionModalOpen] = useState(false)
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false)
+
   const permissionModalRootRef = useRef<HTMLDivElement | null>(null)
 
   const [permissionValue, setPermissionValue] = useState<PermissionValue>({
@@ -120,6 +127,7 @@ export function MemberDetailModal({
 
   const detail = useMemo<MemberDetail | null>(() => {
     if (!member) return null
+
     return (
       MOCK_MEMBER_DETAIL_MAP[member.id] ?? {
         ...member,
@@ -133,16 +141,16 @@ export function MemberDetailModal({
 
   useEffect(() => {
     if (!open) {
-      setDeleteConfirmOpen(false)
       setPermissionModalOpen(false)
+      setDeleteConfirmOpen(false)
     }
   }, [open])
 
   if (!member || !detail) return null
 
   const handleCloseDetail = () => {
-    setDeleteConfirmOpen(false)
     setPermissionModalOpen(false)
+    setDeleteConfirmOpen(false)
     onClose()
   }
 
@@ -273,6 +281,7 @@ export function MemberDetailModal({
               >
                 권한 변경
               </Button>
+
               <div className="flex gap-2">
                 <Button
                   type="button"
@@ -281,6 +290,7 @@ export function MemberDetailModal({
                 >
                   수정
                 </Button>
+
                 <Button
                   type="button"
                   variant="danger"
@@ -299,11 +309,16 @@ export function MemberDetailModal({
         isOpen={deleteConfirmOpen}
         onClose={() => setDeleteConfirmOpen(false)}
         type="danger"
-        title="해당 회원을 정말 삭제하시겠습니까?"
-        description={`회원 삭제 시 되돌릴 수 없습니다.`}
-        confirmText="확인"
+        title="해당 회원 정보를 정말 삭제하시겠습니까?"
+        description="회원 정보를 삭제하면 다시 되돌릴 수 없습니다."
+        confirmText="삭제"
         showCancel
-        onConfirm={() => {}}
+        onConfirm={() => {
+          if (!member) return
+          onDeleteConfirm?.(member)
+          setDeleteConfirmOpen(false)
+          handleCloseDetail()
+        }}
       />
 
       <ModifyPermissionModal
