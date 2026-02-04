@@ -1,12 +1,21 @@
 import type { BadgeProps } from '@/components/common/Badge'
 import { Badge } from '@/components/common'
 
-export type MemberStatus = 'Activated' | 'Disabled' | 'Withdraw'
+export type MemberStatus =
+  | 'Activated'
+  | 'Disabled'
+  | 'Withdraw'
+  | 'Submitted'
+  | 'Accepted'
+  | 'Rejected'
 
 const STATUS_TO_VARIANT = {
-  Activated: 'memberActivated',
-  Disabled: 'memberDisabled',
-  Withdraw: 'memberWithdraw',
+  Activated: 'primary',
+  Disabled: 'danger',
+  Withdraw: 'success',
+  Submitted: 'success',
+  Accepted: 'primary',
+  Rejected: 'danger',
 } as const
 
 type MemberStatusBadgeProps = {

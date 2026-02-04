@@ -59,16 +59,16 @@ const COLUMNS = (
     cell: (item) => item.email,
   },
   {
-    key: 'birthDate',
-    title: '생년월일',
-    size: 'xl',
-    cell: (item) => item.birthDate,
-  },
-  {
     key: 'role',
     title: '권한',
     size: 'xl',
     cell: (item) => item.role,
+  },
+  {
+    key: 'birthDate',
+    title: '생년월일',
+    size: 'xl',
+    cell: (item) => item.birthDate,
   },
   {
     key: 'status',
