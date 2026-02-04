@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Pagination } from '@/components/common/Pagination'
-import { MemberStatusBadge } from '@/components/common/Badge'
+import { MemberStatusBadge } from '@/components/common'
 import { DataTable, type Column } from './data-table/DataTable'
 import type { Member } from '@/types/member'
 
