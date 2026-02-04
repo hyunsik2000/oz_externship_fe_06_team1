@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ReactNode } from 'react'
+import { useEffect, useMemo, useState, useRef, type ReactNode } from 'react'
 import { AlertModal, Button, MemberStatusBadge } from '@/components/common'
 import { Modal } from '@/components/common/Modal'
 import ModifyPermissionModal, {
@@ -110,6 +110,7 @@ export function MemberDetailModal({
 }: MemberDetailModalProps) {
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false)
   const [permissionModalOpen, setPermissionModalOpen] = useState(false)
+  const permissionModalRootRef = useRef<HTMLDivElement | null>(null)
 
   const [permissionValue, setPermissionValue] = useState<PermissionValue>({
     role: '',
@@ -165,14 +166,10 @@ export function MemberDetailModal({
   ]
 
   const openPermissionModal = () => {
-    const initialCourse = courseOptions[0]?.value ?? ''
-    const initialRole = detail.role || roleOptions[0].value
-    const initialCohort = cohortOptions[0].value
-
     setPermissionValue({
-      role: initialRole,
-      course: initialCourse,
-      cohort: initialCohort,
+      role: '',
+      course: '',
+      cohort: '',
     })
     setPermissionModalOpen(true)
   }
@@ -190,6 +187,8 @@ export function MemberDetailModal({
         onClose={handleCloseDetail}
         className="border-grey-200 h-[871px] w-[850px] max-w-none rounded-[6px] border"
         showCloseButton
+        ignoreRefs={[permissionModalRootRef]}
+        outsideCloseEnabled={!permissionModalOpen}
       >
         <Modal.Body className="flex h-full flex-col px-8 pt-8 pb-6">
           <div className="mb-6">
@@ -316,6 +315,7 @@ export function MemberDetailModal({
         value={permissionValue}
         onChange={setPermissionValue}
         onSubmit={submitPermissionModal}
+        rootRef={permissionModalRootRef}
       />
     </>
   )
