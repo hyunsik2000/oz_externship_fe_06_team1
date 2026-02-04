@@ -61,7 +61,7 @@ interface MemberPieChartProps {
 
 export function MemberPieChart({ data }: MemberPieChartProps) {
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center rounded-xl border border-gray-100 bg-white p-10 shadow-sm">
+    <div className="border-grey-100 flex h-full w-full flex-col items-center justify-center rounded-xl border bg-white p-10 shadow-sm">
       <h4 className="text-grey-800 mb-4 text-center font-bold">
         회원 탈퇴 사유 그래프
       </h4>

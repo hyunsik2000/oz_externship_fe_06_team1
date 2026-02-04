@@ -1,2 +1,2 @@
-// export * from './MemberDashboardPage'
 export * from './MemberManagementPage'
+export * from './MemberDashboardPage'

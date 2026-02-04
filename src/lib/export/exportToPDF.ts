@@ -5,6 +5,8 @@ export const exportToPDF = async (elementId: string, fileName: string) => {
   const element = document.getElementById(elementId)
   if (!element) return
 
+  const finalFileName = fileName.trim() || `export_${new Date().getTime()}`
+
   const canvas = await html2canvas(element, {
     scale: 2,
     useCORS: true,
@@ -18,5 +20,5 @@ export const exportToPDF = async (elementId: string, fileName: string) => {
   const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width
 
   pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight)
-  pdf.save(`${fileName}.pdf`)
+  pdf.save(`${finalFileName}.pdf`)
 }

@@ -3,10 +3,10 @@ import type { Member } from '@/types/member'
 export const MOCK_MEMBER_LIST: Member[] = [
   {
     id: 1,
-    nickname: 'shera',
-    name: '세라',
-    email: 'shera@example.com',
-    birthDate: '1994-03-21',
+    nickname: 'teddy',
+    name: '권테디',
+    email: 'teddy519@example.com',
+    birthDate: '2021-05-19',
     role: 'Admin',
     status: 'Activated',
     joinedAt: '2025-12-01',

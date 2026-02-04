@@ -4,27 +4,35 @@ import { X } from 'lucide-react'
 import { modalVariants } from '@/constants/variants'
 import { cn } from '@/lib/cn'
 import { useOutsideClick } from '@/hooks/useOutsideClick'
-import { useRef } from 'react'
 
 interface ModalProps extends VariantProps<typeof modalVariants> {
   isOpen: boolean
   onClose: () => void
+  ignoreRefs?: Array<React.RefObject<HTMLElement | null>>
   children: React.ReactNode
-  showCloseButton: boolean
+  showCloseButton?: boolean
   className?: string
+  outsideCloseEnabled?: boolean
 }
 
 export function Modal({
   isOpen,
   onClose,
+  ignoreRefs,
+  outsideCloseEnabled = true,
   children,
   size,
   showCloseButton = true,
   className,
 }: ModalProps) {
-  const modalRef = useRef<HTMLDivElement>(null)
+  const modalRef = React.useRef<HTMLDivElement>(null)
 
-  useOutsideClick(modalRef, onClose, isOpen)
+  useOutsideClick(
+    modalRef,
+    onClose,
+    isOpen && outsideCloseEnabled,
+    ignoreRefs ?? []
+  )
 
   if (!isOpen) return null
 

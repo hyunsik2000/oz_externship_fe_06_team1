@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Button, Dropdown, Input } from '@/components/common'
+import { MemberDetailModal } from '@/components/member-management/MemberDetailModal'
 import { MemberManagementLayout } from '@/components/layout'
 import MemberList from '@/components/table/MemberList'
 import type { Member, MemberRole } from '@/types/member'
@@ -27,6 +28,9 @@ export default function MemberManagementPage() {
   const [status, setStatus] = useState<'ALL' | Member['status']>('ALL')
   const [keyword, setKeyword] = useState('')
 
+  const [detailOpen, setDetailOpen] = useState(false)
+  const [selectedMember, setSelectedMember] = useState<Member | null>(null)
+
   const members = MOCK_MEMBER_LIST_RESPONSE.members
 
   const handleSearch = () => {
@@ -50,53 +54,71 @@ export default function MemberManagementPage() {
     })
   }, [members, role, status, keyword])
 
+  const handleOpenDetail = (item: Member) => {
+    setSelectedMember(item)
+    setDetailOpen(true)
+  }
+
+  const handleCloseDetail = () => {
+    setDetailOpen(false)
+    setSelectedMember(null)
+  }
+
   return (
-    <MemberManagementLayout
-      title="회원관리"
-      toolbar={
-        <>
-          <div className="w-[140px]">
-            <Dropdown
-              variant="memberFilter"
-              size="sm"
-              placeholder="권한"
-              options={ROLE_OPTIONS}
-              value={roleInput}
-              onChange={(v) => setRoleInput(v as MemberRole)}
-            />
-          </div>
+    <>
+      <MemberManagementLayout
+        title="회원관리"
+        toolbar={
+          <>
+            <div className="w-[140px]">
+              <Dropdown
+                variant="memberFilter"
+                size="sm"
+                placeholder="권한"
+                options={ROLE_OPTIONS}
+                value={roleInput}
+                onChange={(v) => setRoleInput(v as MemberRole)}
+              />
+            </div>
 
-          <div className="w-[171px]">
-            <Dropdown
-              variant="memberFilter"
-              size="sm"
-              placeholder="회원 상태"
-              options={STATUS_OPTIONS}
-              value={statusInput}
-              onChange={(v) => setStatusInput(v as Member['status'])}
-            />
-          </div>
+            <div className="w-[171px]">
+              <Dropdown
+                variant="memberFilter"
+                size="sm"
+                placeholder="회원 상태"
+                options={STATUS_OPTIONS}
+                value={statusInput}
+                onChange={(v) => setStatusInput(v as Member['status'])}
+              />
+            </div>
 
-          <div className="w-[340px]">
-            <Input
-              size="sm"
-              placeholder="검색어를 입력하세요."
-              className="rounded-[3px] border-[#DDDDDD]"
-              value={keywordInput}
-              onChange={(e) => setKeywordInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') handleSearch()
-              }}
-            />
-          </div>
+            <div className="w-[340px]">
+              <Input
+                size="sm"
+                placeholder="검색어를 입력하세요."
+                className="rounded-[3px] border-[#DDDDDD]"
+                value={keywordInput}
+                onChange={(e) => setKeywordInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') handleSearch()
+                }}
+              />
+            </div>
 
-          <Button variant="search" size="search">
-            조회
-          </Button>
-        </>
-      }
-    >
-      <MemberList data={filtered} />
-    </MemberManagementLayout>
+            <Button variant="search" size="search" onClick={handleSearch}>
+              조회
+            </Button>
+          </>
+        }
+      >
+        <MemberList data={filtered} onClickNickname={handleOpenDetail} />
+      </MemberManagementLayout>
+
+      <MemberDetailModal
+        open={detailOpen}
+        onClose={handleCloseDetail}
+        member={selectedMember}
+      />
+    </>
   )
 }
