@@ -152,8 +152,8 @@ export default function CourseSubjectFilterModal({
 
       <Modal.Footer className="bg-white px-10 pb-6">
         <Button
-          variant="confirm"
-          className="h-10 w-20"
+          variant="primary"
+          className="h-[36px] w-[55px] rounded-[3px]"
           disabled={!canSubmit}
           onClick={onSubmit}
         >
