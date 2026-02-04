@@ -43,13 +43,18 @@ export function DashboardLayout({
   onTitleChange,
   onSearch,
 }: DashboardLayoutProps) {
+  const safeFileName =
+    chartTitle ||
+    titleOptions.find((opt) => opt.value === currentTitleValue)?.label ||
+    'dashboard_export'
+
   const handlePDFDownload = () => {
-    exportToPDF('chart-report', chartTitle)
+    exportToPDF('chart-report', safeFileName)
   }
 
   const handleExcelDownload = () => {
     if (!exportData) return
-    exportToExcel(exportData, chartTitle)
+    exportToExcel(exportData, safeFileName)
   }
 
   const hasFilterBar = filters.length > 0 || showSearchButton
