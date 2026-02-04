@@ -15,31 +15,3 @@ export function Badge({ className, variant, size, ...props }: BadgeProps) {
     />
   )
 }
-
-export type MemberStatus = 'Activated' | 'Disabled' | 'Withdraw'
-
-const MEMBER_STATUS_TO_VARIANT = {
-  Activated: 'memberActivated',
-  Disabled: 'memberDisabled',
-  Withdraw: 'memberWithdraw',
-} as const
-
-type MemberStatusBadgeProps = {
-  status: MemberStatus
-  className?: string
-}
-
-export function MemberStatusBadge({
-  status,
-  className,
-}: MemberStatusBadgeProps) {
-  return (
-    <Badge
-      variant={MEMBER_STATUS_TO_VARIANT[status]}
-      size="status"
-      className={className}
-    >
-      {status}
-    </Badge>
-  )
-}
