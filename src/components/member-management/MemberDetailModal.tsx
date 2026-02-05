@@ -318,7 +318,6 @@ export function MemberDetailModal({
           onConfirm={() => {
             if (!member) return
             onDeleteConfirm?.(member)
-            setDeleteConfirmOpen(false)
             handleCloseDetail()
           }}
         />
