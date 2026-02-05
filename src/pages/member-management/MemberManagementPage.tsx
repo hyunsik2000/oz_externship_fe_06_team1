@@ -1,9 +1,9 @@
-import { useMemo, useState } from 'react'
-import { Button, Dropdown, Input } from '@/components/common'
+import { useEffect, useMemo, useState } from 'react'
+import { Button, Dropdown, Input, Toast } from '@/components/common'
 import { MemberDetailModal } from '@/components/member-management/MemberDetailModal'
 import { MemberManagementLayout } from '@/components/layout'
 import MemberList from '@/components/table/MemberList'
-import type { Member, MemberRole } from '@/types/member'
+import type { Member, MemberRole } from '@/types'
 import { MOCK_MEMBER_LIST_RESPONSE } from '@/mocks/data/table-data/MemberList'
 import type { DropdownOption } from '@/types/commonComponents'
 
@@ -18,20 +18,27 @@ const STATUS_OPTIONS: DropdownOption[] = [
   { label: 'Disabled', value: 'Disabled' },
   { label: 'Withdraw', value: 'Withdraw' },
 ]
+/* API 연동 시 필요
+type ToastState = {
+  open: boolean
+  variant: 'success' | 'error'
+  message: string
+} */
 
 export default function MemberManagementPage() {
   const [roleInput, setRoleInput] = useState<MemberRole | undefined>()
   const [statusInput, setStatusInput] = useState<Member['status'] | undefined>()
   const [keywordInput, setKeywordInput] = useState('')
-
   const [role, setRole] = useState<'ALL' | MemberRole>('ALL')
   const [status, setStatus] = useState<'ALL' | Member['status']>('ALL')
   const [keyword, setKeyword] = useState('')
-
   const [detailOpen, setDetailOpen] = useState(false)
   const [selectedMember, setSelectedMember] = useState<Member | null>(null)
+  const [memberList, setMemberList] = useState(
+    MOCK_MEMBER_LIST_RESPONSE.members
+  )
 
-  const members = MOCK_MEMBER_LIST_RESPONSE.members
+  const [isToastOpen, setToastOpen] = useState<boolean>(false)
 
   const handleSearch = () => {
     setRole(roleInput ?? 'ALL')
@@ -42,7 +49,7 @@ export default function MemberManagementPage() {
   const filtered = useMemo(() => {
     const kw = keyword.trim().toLowerCase()
 
-    return members.filter((m: Member) => {
+    return memberList.filter((m: Member) => {
       const roleMatch = role === 'ALL' ? true : m.role === role
       const statusMatch = status === 'ALL' ? true : m.status === status
 
@@ -52,16 +59,34 @@ export default function MemberManagementPage() {
 
       return roleMatch && statusMatch && keywordMatch
     })
-  }, [members, role, status, keyword])
+  }, [memberList, role, status, keyword])
 
-  const handleOpenDetail = (item: Member) => {
-    setSelectedMember(item)
+  useEffect(() => {
+    if (!isToastOpen) return
+
+    const timer = setTimeout(() => {
+      setToastOpen(false)
+    }, 3000)
+
+    return () => clearTimeout(timer)
+  }, [isToastOpen])
+
+  const openMemberDetail = (member: Member) => {
+    setSelectedMember(member)
     setDetailOpen(true)
   }
 
-  const handleCloseDetail = () => {
+  const closeMemberDetail = () => {
     setDetailOpen(false)
     setSelectedMember(null)
+  }
+
+  const handleDeleteConfirm = (member: Member) => {
+    closeMemberDetail()
+
+    setMemberList((prev) => prev.filter((m) => m.id !== member.id))
+
+    setToastOpen(true)
   }
 
   return (
@@ -111,14 +136,25 @@ export default function MemberManagementPage() {
           </>
         }
       >
-        <MemberList data={filtered} onClickNickname={handleOpenDetail} />
+        <MemberList data={filtered} onClickNickname={openMemberDetail} />
       </MemberManagementLayout>
 
       <MemberDetailModal
         open={detailOpen}
-        onClose={handleCloseDetail}
+        onClose={closeMemberDetail}
         member={selectedMember}
+        onDeleteConfirm={handleDeleteConfirm}
       />
+
+      {isToastOpen && (
+        <div className="fixed right-[30px] bottom-[30px] z-[9999]">
+          <Toast
+            variant={'success'}
+            message={'성공적으로 삭제가 완료되었습니다.'}
+            onClose={() => setToastOpen(false)}
+          />
+        </div>
+      )}
     </>
   )
 }

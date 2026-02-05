@@ -180,7 +180,7 @@ export const modalVariants = cva(
 )
 
 export const toastVariants = cva(
-  'relative flex items-center w-full max-w-[400px] bg-white rounded-2xl p-4 shadow-[0_8px_30px_rgb(0,0,0,0.12)] overflow-hidden transition-all animate-in slide-in-from-right-5',
+  'relative flex items-center w-full max-w-[350px] h-[42px] px-4 py-2 bg-white rounded-2xl p-4 shadow-[0_8px_30px_rgb(0,0,0,0.12)] overflow-hidden transition-all animate-in slide-in-from-right-5',
   {
     variants: {
       variant: {
