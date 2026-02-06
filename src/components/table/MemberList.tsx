@@ -6,29 +6,33 @@ import type { Member } from '@/types/member'
 
 type MemberListProps = {
   data: Member[]
-  onClickNickname?: (item: Member) => void
+  onClickName?: (item: Member) => void
 }
 
-const NicknameCell = ({
-  nickname,
+const NicknameCell = ({ nickname }: { nickname: string }) => (
+  <span className="block w-full truncate" title={nickname}>
+    {nickname}
+  </span>
+)
+
+const NameCell = ({
+  name,
   onClick,
 }: {
-  nickname: string
+  name: string
   onClick?: () => void
 }) => (
   <button
     type="button"
     onClick={onClick}
     className="block w-full cursor-pointer truncate font-medium underline"
-    title={nickname}
+    title={name}
   >
-    {nickname}
+    {name}
   </button>
 )
 
-const COLUMNS = (
-  onClickNickname?: (item: Member) => void
-): Column<Member>[] => [
+const COLUMNS = (onClickName?: (item: Member) => void): Column<Member>[] => [
   {
     key: 'id',
     title: 'ID',
@@ -39,18 +43,15 @@ const COLUMNS = (
     key: 'nickname',
     title: '닉네임',
     size: 'xl',
-    cell: (item) => (
-      <NicknameCell
-        nickname={item.nickname}
-        onClick={() => onClickNickname?.(item)}
-      />
-    ),
+    cell: (item) => <NicknameCell nickname={item.nickname} />,
   },
   {
     key: 'name',
     title: '이름',
     size: 'lg',
-    cell: (item) => item.name,
+    cell: (item) => (
+      <NameCell name={item.name} onClick={() => onClickName?.(item)} />
+    ),
   },
   {
     key: 'email',
@@ -86,12 +87,12 @@ const COLUMNS = (
 
 const PAGE_SIZE = 10
 
-export default function MemberList({ data, onClickNickname }: MemberListProps) {
+export default function MemberList({ data, onClickName }: MemberListProps) {
   const [page, setPage] = useState(1)
 
   const totalPages = Math.max(1, Math.ceil(data.length / PAGE_SIZE))
   const safePage = Math.min(page, totalPages)
-  const columns = COLUMNS(onClickNickname)
+  const columns = COLUMNS(onClickName)
 
   const pagedMembers = useMemo(() => {
     const start = (safePage - 1) * PAGE_SIZE
