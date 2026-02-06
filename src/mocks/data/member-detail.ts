@@ -1,46 +1,8 @@
+import { MOCK_MEMBER_LIST } from '@/mocks/data/table-data/MemberList'
 import type { MemberDetail } from '@/types'
 
-export const MOCK_MEMBER_DETAIL_MAP: Record<number, MemberDetail> = {
-  1: {
-    id: 123,
-    nickname: 'Teddy',
-    name: '권테디',
-    email: 'teddy@example.com',
-    birthDate: '2021-05-19',
-    role: 'Admin',
-    status: 'Activated',
-    joinedAt: '2025-12-01',
-    gender: '남',
-    phone: '010-1111-2222',
-    ongoingCourses: ['초격차 프론트엔드 부트캠프'],
-    cohorts: ['15기'],
-  },
-  2: {
-    id: 234,
-    nickname: 'oz-user',
-    name: '홍길동',
-    email: 'hong@example.com',
-    birthDate: '1998-11-02',
-    role: 'Staff (TA)',
-    status: 'Disabled',
-    joinedAt: '2025-11-14',
-    gender: '남',
-    phone: '010-0000-0000',
-    ongoingCourses: ['초격차 백엔드 부트캠프'],
-    cohorts: ['14기'],
-  },
-  3: {
-    id: 345,
-    nickname: 'tester',
-    name: '김테스트',
-    email: 'test@example.com',
-    birthDate: '2000-01-09',
-    role: 'General',
-    status: 'Withdraw',
-    joinedAt: '2025-10-07',
-    gender: '미설정',
-    phone: '-',
-    ongoingCourses: ['디자이너 부트캠프'],
-    cohorts: ['16기'],
-  },
-}
+export const MOCK_MEMBER_DETAIL_MAP: Record<number, MemberDetail> =
+  MOCK_MEMBER_LIST.reduce<Record<number, MemberDetail>>((acc, member) => {
+    acc[member.id] = member
+    return acc
+  }, {})
