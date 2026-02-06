@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { AdminLayout } from '@/components/layout'
-import { GlobalAlertModal } from '@/components/common'
+import { GlobalAlertModal, ErrorCatcher } from '@/components/common'
 import { ExamDashboardPage, ExamHistoryPage, NotFoundPage } from '@/pages'
 import { ExamListPage } from './pages/exam-page/exam-list/ExamListPage'
 import { DetailExamPage } from './pages/exam-page/exam-list/DetailExamPage'
@@ -36,6 +36,7 @@ export default function App() {
         </Route>
       </Routes>
       <GlobalAlertModal />
+      <ErrorCatcher />
     </>
   )
 }

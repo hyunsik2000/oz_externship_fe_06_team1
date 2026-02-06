@@ -19,20 +19,15 @@ export function LoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    try {
-      const data = await sendRequest<LoginResponse>({
-        method: 'POST',
-        url: API_PATHS.AUTH.LOGIN,
-        data: { email, password },
-        errorTitle: '로그인 실패',
-      })
+    const data = await sendRequest<LoginResponse>({
+      method: 'POST',
+      url: API_PATHS.AUTH.LOGIN,
+      data: { email, password },
+    })
 
-      if (data && data.access_token) {
-        setCookie('accessToken', data.access_token)
-        navigate('/exam/dashboard')
-      }
-    } catch (error) {
-      console.error('Login Error:', error)
+    if (data && data.access_token) {
+      setCookie('accessToken', data.access_token)
+      navigate('/exam/dashboard')
     }
   }
 
@@ -56,7 +51,6 @@ export function LoginPage() {
               onChange={(e) => setEmail(e.target.value)}
               required
               className="h-12"
-              disabled={isLoading}
             />
             <Input
               type="password"
@@ -65,14 +59,12 @@ export function LoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               required
               className="h-12"
-              disabled={isLoading}
             />
 
             <Button
               variant="primary"
               className="h-13 w-full rounded-sm text-base font-normal"
               type="submit"
-              disabled={isLoading}
             >
               {isLoading ? '로그인 중...' : '로그인'}
             </Button>

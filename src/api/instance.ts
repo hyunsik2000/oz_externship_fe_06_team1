@@ -1,11 +1,13 @@
 import { getCookie } from '@/utils'
-import { useAlertStore } from '@/store/useAlertStore'
 import { handle401Error } from '@/api/interceptors/handle401Error'
 import axios from 'axios'
+import { RequestError, type ApiErrorMode } from '@/types'
+import { errorParser } from '@/utils'
 
 declare module 'axios' {
   export interface AxiosRequestConfig {
     errorTitle?: string
+    errorMode?: ApiErrorMode
   }
 }
 
@@ -32,53 +34,22 @@ apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
     const status = error.response?.status
-    const errorData = error.response?.data
-    const errorDetail = errorData?.error_detail
-    const customTitle = error.config?.errorTitle
+    const config = error.config
 
-    // 401 에러는 별도 핸들러에서 처리
+    // 401은 인증 흐름이므로 별도 처리 유지
     if (status === 401) {
       return handle401Error(error)
     }
 
-    let message = ''
+    const { status: errorStatus, message } = errorParser(error)
 
-    if (errorDetail && typeof errorDetail === 'object') {
-      // { field: [msg1, msg2] } 형태의 에러 상세 처리
-      message = Object.entries(errorDetail)
-        .map(([field, messages]) => {
-          const msg = Array.isArray(messages) ? messages.join(', ') : messages
-          return `${field}: ${msg}`
-        })
-        .join('\n')
-    } else {
-      message =
-        (typeof errorDetail === 'string' ? errorDetail : null) ||
-        '오류가 발생했습니다.'
-    }
-
-    // 상태 코드별 기본 타이틀 및 타입 설정
-    let title = customTitle || '오류 발생'
-    let type: 'warning' | 'danger' = 'warning'
-
-    if (status >= 500) {
-      title = customTitle || '서버 내부 오류'
-      type = 'danger'
-    } else if (status === 403) {
-      title = customTitle || '권한이 없습니다.'
-    } else if (status === 400) {
-      title = customTitle || '유효성 검사 실패'
-    } else if (status === 404) {
-      title = customTitle || '정보를 찾을 수 없습니다.'
-    }
-
-    // 전역 알림 모달 띄우기
-    useAlertStore.getState().showAlert({
-      type: type,
-      title: title,
-      description: message,
+    const requestError = new RequestError({
+      status: errorStatus,
+      message: message,
+      title: config?.errorTitle,
+      mode: config?.errorMode || 'modal',
     })
 
-    return Promise.reject(error)
+    return Promise.reject(requestError)
   }
 )
