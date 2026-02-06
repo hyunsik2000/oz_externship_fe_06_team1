@@ -1,6 +1,12 @@
 import type { MemberStatus } from '@/components/common'
 
-export type MemberRole = 'Admin' | 'Manager' | 'User'
+export type MemberRole =
+  | 'Admin'
+  | 'Staff (TA)'
+  | 'Student'
+  | 'General'
+  | 'Staff (LC)'
+  | 'Staff (OM)'
 
 export type MemberGender = '남' | '여' | '미설정'
 
@@ -9,6 +15,9 @@ export type Member = {
   nickname: string
   name: string
   email: string
+  phone?: string
+  course?: string
+  cohort?: string
   birthDate: string
   role: MemberRole
   status: MemberStatus
