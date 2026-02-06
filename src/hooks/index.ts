@@ -1,3 +1,4 @@
 export * from './useAxios'
-export * from './useOutsideClick'
 export * from './useFilter'
+export * from './useOutsideClick'
+export * from './useStudentRegistration'

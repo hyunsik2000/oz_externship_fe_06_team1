@@ -22,3 +22,16 @@ export type MemberDetail = Member & {
   ongoingCourses?: string[]
   completedCourses?: string[]
 }
+
+export type MemberRegistrationStatus = 'Accepted' | 'Rejected' | 'Submitted'
+
+export type MemberRegistrationItemType = {
+  id: number
+  course_name: string
+  cohort: number
+  user_name: string
+  email: string
+  birth_date: string
+  status: MemberRegistrationStatus
+  requested_at: string
+}
