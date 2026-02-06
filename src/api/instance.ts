@@ -1,8 +1,8 @@
-import { getCookie } from '@/utils'
 import { handle401Error } from '@/api/interceptors/handle401Error'
 import axios from 'axios'
 import { RequestError, type ApiErrorMode } from '@/types'
 import { errorParser } from '@/utils'
+import { useAuthStore } from '@/store'
 
 declare module 'axios' {
   export interface AxiosRequestConfig {
@@ -21,7 +21,7 @@ export const apiClient = axios.create({
 
 apiClient.interceptors.request.use(
   (config) => {
-    const token = getCookie('accessToken')
+    const token = useAuthStore.getState().accessToken
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
