@@ -27,7 +27,7 @@ type ToastState = {
   message: string
 } */
 
-export default function MemberManagementPage() {
+export function MemberManagementPage() {
   const [roleInput, setRoleInput] = useState<MemberRole | undefined>()
   const [statusInput, setStatusInput] = useState<Member['status'] | undefined>()
   const [keywordInput, setKeywordInput] = useState('')
