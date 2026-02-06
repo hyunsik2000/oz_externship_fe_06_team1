@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Button, Dropdown, Input, Toast } from '@/components/common'
 import { MemberDetailModal } from '@/components/member-management/MemberDetailModal'
+import { MemberEditModal } from '@/components/member-management/MemberEditModal'
 import { MemberManagementLayout } from '@/components/layout'
 import MemberList from '@/components/table/MemberList'
 import type { Member, MemberRole } from '@/types'
 import { MOCK_MEMBER_LIST_RESPONSE } from '@/mocks/data/table-data/MemberList'
+import { MOCK_MEMBER_DETAIL_MAP } from '@/mocks/data/member-detail'
 import type { DropdownOption } from '@/types/commonComponents'
 
 const ROLE_OPTIONS: DropdownOption[] = [
@@ -25,7 +27,7 @@ type ToastState = {
   message: string
 } */
 
-export default function MemberManagementPage() {
+export function MemberManagementPage() {
   const [roleInput, setRoleInput] = useState<MemberRole | undefined>()
   const [statusInput, setStatusInput] = useState<Member['status'] | undefined>()
   const [keywordInput, setKeywordInput] = useState('')
@@ -33,6 +35,7 @@ export default function MemberManagementPage() {
   const [status, setStatus] = useState<'ALL' | Member['status']>('ALL')
   const [keyword, setKeyword] = useState('')
   const [detailOpen, setDetailOpen] = useState(false)
+  const [editOpen, setEditOpen] = useState(false)
   const [selectedMember, setSelectedMember] = useState<Member | null>(null)
   const [memberList, setMemberList] = useState(
     MOCK_MEMBER_LIST_RESPONSE.members
@@ -81,6 +84,16 @@ export default function MemberManagementPage() {
     setSelectedMember(null)
   }
 
+  const openMemberEdit = () => {
+    if (!selectedMember) return
+    setDetailOpen(false)
+    setEditOpen(true)
+  }
+
+  const closeMemberEdit = () => {
+    setEditOpen(false)
+  }
+
   const handleDeleteConfirm = (member: Member) => {
     closeMemberDetail()
 
@@ -88,6 +101,39 @@ export default function MemberManagementPage() {
 
     setToastOpen(true)
   }
+
+  const selectedDetail = useMemo(() => {
+    if (!selectedMember) return null
+    return (
+      MOCK_MEMBER_DETAIL_MAP[selectedMember.id] ?? {
+        ...selectedMember,
+        gender: '미설정',
+        phone: '-',
+        ongoingCourses: [],
+        cohorts: [],
+      }
+    )
+  }, [selectedMember])
+
+  const courseOptions = useMemo(() => {
+    const allCourses = Object.values(MOCK_MEMBER_DETAIL_MAP)
+      .flatMap((detail) => detail.ongoingCourses ?? [])
+      .filter(Boolean)
+    return Array.from(new Set(allCourses)).map((course) => ({
+      label: course,
+      value: course,
+    }))
+  }, [])
+
+  const cohortOptions = useMemo(() => {
+    const allCohorts = Object.values(MOCK_MEMBER_DETAIL_MAP)
+      .flatMap((detail) => detail.cohorts ?? [])
+      .filter(Boolean)
+    return Array.from(new Set(allCohorts)).map((cohort) => ({
+      label: cohort,
+      value: cohort,
+    }))
+  }, [])
 
   return (
     <>
@@ -136,7 +182,7 @@ export default function MemberManagementPage() {
           </>
         }
       >
-        <MemberList data={filtered} onClickNickname={openMemberDetail} />
+        <MemberList data={filtered} onClickName={openMemberDetail} />
       </MemberManagementLayout>
 
       <MemberDetailModal
@@ -144,6 +190,15 @@ export default function MemberManagementPage() {
         onClose={closeMemberDetail}
         member={selectedMember}
         onDeleteConfirm={handleDeleteConfirm}
+        onEdit={openMemberEdit}
+      />
+
+      <MemberEditModal
+        open={editOpen}
+        onClose={closeMemberEdit}
+        detail={selectedDetail}
+        courseOptions={courseOptions}
+        cohortOptions={cohortOptions}
       />
 
       {isToastOpen && (

@@ -4,7 +4,7 @@ import { cn } from '@/lib/cn'
 
 export interface Column<T> {
   key: string
-  title: string
+  title: ReactNode
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
   className?: string
   cell: (item: T) => ReactNode

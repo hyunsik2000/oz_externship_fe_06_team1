@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   AlertModal,
   Button,
@@ -12,86 +12,26 @@ import ModifyPermissionModal, {
 import { MOCK_MEMBER_DETAIL_MAP } from '@/mocks/data/member-detail'
 import type { Member, MemberDetail } from '@/types'
 import memberImg from '@/assets/MemberImg.jpeg'
+import {
+  TableWrap,
+  TableRow,
+  ThCell,
+  TdCell,
+  ProfileImageCell,
+  RoleLabel,
+} from './MemberDetailTable'
 
 const DEFAULT_MEMBER_IMAGE_URL = memberImg
+const DETAIL_TABLE_COLUMNS = '141px 130px minmax(0,1fr) 100px minmax(0,1fr)'
+const META_TABLE_COLUMNS =
+  '141px minmax(0,1fr) minmax(0,1fr) 100px minmax(0,1fr)'
 
 type MemberDetailModalProps = {
   open: boolean
   onClose: () => void
   member: Member | null
   onDeleteConfirm?: (member: Member) => void
-}
-
-const TABLE_COLUMNS = '141px 120px minmax(0,1fr) 100px minmax(0,1fr)'
-
-function TableWrap({ children, rows }: { children: ReactNode; rows: number }) {
-  return (
-    <div
-      className="border-grey-300 grid w-full border-t border-l bg-white"
-      style={{
-        gridTemplateColumns: TABLE_COLUMNS,
-        gridTemplateRows: `repeat(${rows}, minmax(0, auto))`,
-      }}
-    >
-      {children}
-    </div>
-  )
-}
-
-function TableRow({ children }: { children: ReactNode }) {
-  return <div className="contents">{children}</div>
-}
-
-function ThCell({
-  children,
-  rowSpan,
-  colSpan,
-  className,
-}: {
-  children: ReactNode
-  rowSpan?: number
-  colSpan?: number
-  className?: string
-}) {
-  return (
-    <div
-      className={`border-grey-300 bg-grey-50 text-grey-600 flex items-center px-4 py-3 text-sm font-medium ${
-        className ?? ''
-      } border-r border-b`}
-      style={{
-        gridRow: rowSpan ? `span ${rowSpan}` : undefined,
-        gridColumn: colSpan ? `span ${colSpan}` : undefined,
-      }}
-    >
-      {children}
-    </div>
-  )
-}
-
-function TdCell({
-  children,
-  rowSpan,
-  colSpan,
-  className,
-}: {
-  children: ReactNode
-  rowSpan?: number
-  colSpan?: number
-  className?: string
-}) {
-  return (
-    <div
-      className={`border-grey-300 text-grey-600 px-4 py-3 text-sm break-keep ${
-        className ?? ''
-      } border-r border-b`}
-      style={{
-        gridRow: rowSpan ? `span ${rowSpan}` : undefined,
-        gridColumn: colSpan ? `span ${colSpan}` : undefined,
-      }}
-    >
-      {children}
-    </div>
-  )
+  onEdit?: () => void
 }
 
 function CourseList({ items }: { items?: string[] }) {
@@ -113,6 +53,7 @@ export function MemberDetailModal({
   onClose,
   member,
   onDeleteConfirm,
+  onEdit,
 }: MemberDetailModalProps) {
   const [permissionModalOpen, setPermissionModalOpen] = useState(false)
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false)
@@ -134,8 +75,8 @@ export function MemberDetailModal({
         ...member,
         gender: '미설정',
         phone: '-',
-        ongoingCourses: [],
-        completedCourses: [],
+        Courses: [],
+        cohorts: [],
       }
     )
   }, [member])
@@ -162,10 +103,7 @@ export function MemberDetailModal({
   ]
 
   const courseOptions: Option[] = Array.from(
-    new Set([
-      ...(detail.ongoingCourses ?? []),
-      ...(detail.completedCourses ?? []),
-    ])
+    new Set([...(detail.ongoingCourses ?? []), ...(detail.cohorts ?? [])])
   ).map((c) => ({ label: c, value: c }))
 
   const cohortOptions: Option[] = [
@@ -194,7 +132,7 @@ export function MemberDetailModal({
       <Modal
         isOpen={open}
         onClose={handleCloseDetail}
-        className="border-grey-200 h-[871px] w-[850px] max-w-none rounded-[6px] border"
+        size="memberDetail"
         showCloseButton
         ignoreRefs={[permissionModalRootRef]}
         outsideCloseEnabled={!permissionModalOpen && !deleteConfirmOpen}
@@ -206,17 +144,14 @@ export function MemberDetailModal({
 
           <div className="flex flex-grow flex-col space-y-6">
             <section className="space-y-12">
-              <TableWrap rows={4}>
+              <TableWrap rows={4} columns={DETAIL_TABLE_COLUMNS}>
                 <TableRow>
-                  <TdCell rowSpan={4} className="overflow-hidden !p-0">
-                    <div className="bg-grey-100 h-[197px] w-[141px] overflow-hidden">
-                      <img
-                        src={detail.profileImageUrl ?? DEFAULT_MEMBER_IMAGE_URL}
-                        alt={`${detail.nickname} 프로필`}
-                        className="block h-[197px] w-[141px] object-cover"
-                      />
-                    </div>
-                  </TdCell>
+                  <ProfileImageCell
+                    imageUrl={
+                      detail.profileImageUrl ?? DEFAULT_MEMBER_IMAGE_URL
+                    }
+                    alt={`${detail.nickname} 프로필`}
+                  />
                   <ThCell>ID</ThCell>
                   <TdCell colSpan={3}>{detail.id}</TdCell>
                 </TableRow>
@@ -243,18 +178,14 @@ export function MemberDetailModal({
                 </TableRow>
               </TableWrap>
 
-              <TableWrap rows={5}>
+              <TableWrap rows={4} columns={META_TABLE_COLUMNS}>
                 <TableRow>
-                  <ThCell>진행중인 과정</ThCell>
-                  <TdCell colSpan={4}>
+                  <ThCell>과정</ThCell>
+                  <TdCell colSpan={2}>
                     <CourseList items={detail.ongoingCourses} />
                   </TdCell>
-                </TableRow>
-                <TableRow>
-                  <ThCell>종료된 과정</ThCell>
-                  <TdCell colSpan={4}>
-                    <CourseList items={detail.completedCourses} />
-                  </TdCell>
+                  <ThCell>기수</ThCell>
+                  <TdCell>{detail.cohorts?.join(', ') ?? '-'}</TdCell>
                 </TableRow>
                 <TableRow>
                   <ThCell>가입일</ThCell>
@@ -262,7 +193,9 @@ export function MemberDetailModal({
                 </TableRow>
                 <TableRow>
                   <ThCell>권한</ThCell>
-                  <TdCell colSpan={4}>{detail.role}</TdCell>
+                  <TdCell colSpan={4}>
+                    <RoleLabel role={detail.role} />
+                  </TdCell>
                 </TableRow>
                 <TableRow>
                   <ThCell>회원상태</ThCell>
@@ -288,6 +221,7 @@ export function MemberDetailModal({
                   type="button"
                   variant="primary"
                   className="h-[36px] w-[55.13px] rounded-[3px]"
+                  onClick={onEdit}
                 >
                   수정
                 </Button>
