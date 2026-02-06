@@ -167,6 +167,8 @@ export const modalVariants = cva(
         full: 'max-w-[95vw] h-[90vh] rounded-xl',
 
         filter: 'w-[509px] rounded-md',
+        memberDetail:
+          'w-[850px] h-[871px] max-w-none rounded-[6px] border border-grey-200',
         attemptDetail:
           'w-[790px] h-[911px] rounded-[6px] border border-grey-200',
         solution: 'w-[1540px] h-[780px] rounded-[12px] border border-grey-200',

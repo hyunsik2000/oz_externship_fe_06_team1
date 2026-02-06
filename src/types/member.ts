@@ -20,7 +20,7 @@ export type MemberDetail = Member & {
   phone?: string
   profileImageUrl?: string
   ongoingCourses?: string[]
-  completedCourses?: string[]
+  cohorts?: string[]
 }
 
 export type MemberRegistrationStatus = 'Accepted' | 'Rejected' | 'Submitted'
