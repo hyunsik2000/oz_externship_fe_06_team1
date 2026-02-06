@@ -24,7 +24,7 @@ export const badgeVariants = cva(
 )
 
 export const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-semibold transition-all remove-focus-outline disabled:pointer-events-none disabled:opacity-50 cursor-pointer active:scale-[0.98]',
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-[3px] text-sm font-semibold transition-all remove-focus-outline disabled:pointer-events-none disabled:opacity-50 cursor-pointer active:scale-[0.98]',
   {
     variants: {
       variant: {
@@ -44,7 +44,7 @@ export const buttonVariants = cva(
       size: {
         default: 'h-10 px-4 py-2.5',
         sm: 'h-9 px-4 text-xs',
-        search: 'h-9 w-[70px] px-0 rounded-[3px] text-sm',
+        search: 'h-9 w-[70px] px-0 text-sm',
         lg: 'h-14 px-10 text-base',
         icon: 'h-6 w-6 p-0',
       },
@@ -135,7 +135,7 @@ export const dropdownItemVariants = cva(
 )
 
 export const inputVariants = cva(
-  'flex w-full rounded-md border bg-white px-3 py-2 text-sm transition-all outline-none placeholder:text-grey-400 disabled:cursor-not-allowed disabled:bg-grey-50 disabled:text-grey-400',
+  'flex w-full rounded-[3px] border bg-white px-3 py-2 text-sm transition-all outline-none placeholder:text-grey-400 disabled:cursor-not-allowed disabled:bg-grey-50 disabled:text-grey-400',
   {
     variants: {
       status: {

@@ -1,19 +1,28 @@
-import { useState, useCallback } from 'react'
+import { useCallback } from 'react'
+import { useMutation } from '@tanstack/react-query'
 import { apiClient } from '@/api'
 import type { AxiosRequestConfig } from 'axios'
 
+//React Quer를 사용하는 커스텀 Axios 훅
+
 export function useAxios() {
-  const [isLoading, setIsLoading] = useState(false)
-
-  const sendRequest = useCallback(async <T>(config: AxiosRequestConfig) => {
-    setIsLoading(true)
-    try {
-      const response = await apiClient.request<T>(config)
+  // 리액트 쿼리의 useMutation을 사용하여 API 호출하여 Error 발생시 전역 에러 핸들링을 할 수 있도록
+  const mutation = useMutation<any, any, AxiosRequestConfig>({
+    mutationFn: async (config: AxiosRequestConfig) => {
+      const response = await apiClient.request(config)
       return response.data
-    } finally {
-      setIsLoading(false)
-    }
-  }, [])
+    },
+  })
 
-  return { sendRequest, isLoading }
+  const sendRequest = useCallback(
+    async <T>(config: AxiosRequestConfig): Promise<T> => {
+      return mutation.mutateAsync(config)
+    },
+    [mutation]
+  )
+
+  return {
+    sendRequest,
+    isLoading: mutation.isPending,
+  }
 }

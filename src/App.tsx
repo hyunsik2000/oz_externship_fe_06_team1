@@ -1,12 +1,13 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { AdminLayout } from '@/components/layout'
-import { GlobalAlertModal } from '@/components/common'
+import { GlobalAlertModal, ErrorCatcher } from '@/components/common'
 import { ExamDashboardPage, ExamHistoryPage, NotFoundPage } from '@/pages'
 import { ExamListPage } from './pages/exam-page/exam-list/ExamListPage'
 import { DetailExamPage } from './pages/exam-page/exam-list/DetailExamPage'
 import { MemberDashboardPage } from './pages/member-management/MemberDashboardPage'
 import MemberManagementPage from './pages/member-management/MemberManagementPage'
 import { LoginPage } from './pages/login/LoginPage'
+import { StudentRegistrationPage } from './pages/member-management/StudentRegistrationPage'
 
 export default function App() {
   return (
@@ -30,12 +31,17 @@ export default function App() {
               path="/members/management"
               element={<MemberManagementPage />}
             />
+            <Route
+              path="/members/student-registration"
+              element={<StudentRegistrationPage />}
+            />
           </Route>
           <Route path="*" element={<Navigate to="/404" replace />} />
           <Route path="/404" element={<NotFoundPage />} />
         </Route>
       </Routes>
       <GlobalAlertModal />
+      <ErrorCatcher />
     </>
   )
 }

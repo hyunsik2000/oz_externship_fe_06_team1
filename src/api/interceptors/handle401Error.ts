@@ -1,7 +1,8 @@
 import type { AxiosError } from 'axios'
 import { API_PATHS } from '@/constants/api'
-import { setCookie, logout } from '@/utils'
+import { logout } from '@/utils'
 import { apiClient } from '@/api'
+import { useAuthStore } from '@/store'
 
 // 토큰 재발급을 시도하고 성공하면 원래 요청을 재시도합니다.
 export async function handle401Error(error: AxiosError) {
@@ -23,7 +24,7 @@ export async function handle401Error(error: AxiosError) {
 
     const newAccessToken = response.data.access_token
     if (newAccessToken) {
-      setCookie('accessToken', newAccessToken)
+      useAuthStore.getState().setAccessToken(newAccessToken)
 
       // 실패한 요청의 헤더를 새 토큰으로 교체
       if (originalRequest.headers) {

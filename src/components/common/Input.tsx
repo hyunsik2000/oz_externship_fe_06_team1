@@ -21,7 +21,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const currentStatus = error ? 'error' : status || 'default'
 
     return (
-      <div className="w-full space-y-1.5 text-left">
+      <div className="space-y-1.5 text-left">
         {label && (
           <label
             className={cn(
@@ -34,7 +34,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           </label>
         )}
 
-        <div className="group relative">
+        <div className="relative">
           {icon && (
             <div className="text-grey-400 absolute top-1/2 left-3 -translate-y-1/2">
               {icon}
