@@ -1,6 +1,10 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { AdminLayout } from '@/components/layout'
-import { GlobalAlertModal, ErrorCatcher } from '@/components/common'
+import {
+  GlobalAlertModal,
+  GlobalToast,
+  ErrorCatcher,
+} from '@/components/common'
 import { LoginPage } from '@/pages/login'
 import {
   DetailExamPage,
@@ -57,6 +61,7 @@ export default function App() {
         </Route>
       </Routes>
       <GlobalAlertModal />
+      <GlobalToast />
       <ErrorCatcher />
     </>
   )
