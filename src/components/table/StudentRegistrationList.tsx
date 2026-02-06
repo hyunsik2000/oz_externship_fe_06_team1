@@ -5,10 +5,10 @@ import {
   Pagination,
 } from '@/components/common'
 import { DataTable, type Column } from '@/components/table/data-table/DataTable'
-import type { MemberRegistrationItemType } from '@/types'
+import type { StudentRegistrationItemType } from '@/types'
 
 type StudentRegistrationListProps = {
-  data: MemberRegistrationItemType[]
+  data: StudentRegistrationItemType[]
   selectedIds: number[]
   onToggleOne: (id: number) => void
   onToggleAll: () => void
@@ -27,7 +27,7 @@ export function StudentRegistrationList({
   const totalPages = Math.max(1, Math.ceil(data.length / PAGE_SIZE))
   const safePage = Math.min(page, totalPages)
 
-  const columns: Column<MemberRegistrationItemType>[] = useMemo(
+  const columns: Column<StudentRegistrationItemType>[] = useMemo(
     () => [
       {
         key: 'select',

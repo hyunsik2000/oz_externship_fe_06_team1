@@ -19,7 +19,6 @@ export function ErrorCatcher() {
         type: 'danger',
         title: title || '시스템 오류',
         description: message || '서버와의 통신이 원활하지 않습니다.',
-        onClose: () => clearError(),
       })
     } else {
       if (mode === 'modal') {

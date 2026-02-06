@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { useState } from 'react'
 import {
   QueryClient,
   MutationCache,
@@ -16,11 +17,15 @@ interface QueryClientBoundaryProps {
 export const QueryClientBoundary = ({ children }: QueryClientBoundaryProps) => {
   const setError = useErrorStore((state) => state.setError) // store에서 setError 함수만 가져오기
 
-  const queryClient = new QueryClient({
-    mutationCache: new MutationCache({
-      onError: (error) => setError(error as RequestError),
-    }),
-  })
+  // 리렌더링 시 새로 생성안되도록 useState로 관리
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        mutationCache: new MutationCache({
+          onError: (error) => setError(error as RequestError),
+        }),
+      })
+  )
 
   return (
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>

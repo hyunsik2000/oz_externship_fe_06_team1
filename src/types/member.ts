@@ -32,15 +32,25 @@ export type MemberDetail = Member & {
   cohorts?: string[]
 }
 
-export type MemberRegistrationStatus = 'Accepted' | 'Rejected' | 'Submitted'
+export type StudentRegistrationStatus = 'Accepted' | 'Rejected' | 'Submitted'
 
-export type MemberRegistrationItemType = {
+export type StudentRegistrationItemType = {
   id: number
   course_name: string
   cohort: number
   user_name: string
   email: string
   birth_date: string
-  status: MemberRegistrationStatus
+  status: StudentRegistrationStatus
   requested_at: string
+}
+
+export type MemberWithdrawalItemType = {
+  id: number
+  email: string
+  user_name: string
+  birth_date: string
+  role: 'General' | 'Student' | 'Staff' | 'Admin'
+  reason: string
+  withdrawn_at: string
 }

@@ -8,6 +8,10 @@ export type MemberStatus =
   | 'Submitted'
   | 'Accepted'
   | 'Rejected'
+  | 'General'
+  | 'Student'
+  | 'Staff'
+  | 'Admin'
 
 const STATUS_TO_VARIANT = {
   Activated: 'primary',
@@ -16,6 +20,10 @@ const STATUS_TO_VARIANT = {
   Submitted: 'success',
   Accepted: 'primary',
   Rejected: 'danger',
+  General: 'default',
+  Student: 'success',
+  Staff: 'primary',
+  Admin: 'danger',
 } as const
 
 type MemberStatusBadgeProps = {

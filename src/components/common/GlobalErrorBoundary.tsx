@@ -31,7 +31,7 @@ export class GlobalErrorBoundary extends Component<Props, State> {
     } else {
       setError(
         new RequestError({
-          status: 502,
+          status: 600, // Client Error임을 두기 위한 아무 숫자
           mode: 'modal',
           title: '애플리케이션 오류',
           message: error.message ?? '예상치 못한 오류가 발생했습니다.',

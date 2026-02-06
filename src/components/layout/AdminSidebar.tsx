@@ -76,6 +76,10 @@ export function AdminSidebar() {
       navigate('/members/student-registration')
     }
 
+    if (sectionKey === 'member' && text === '회원 탈퇴 관리') {
+      navigate('/members/withdrawal')
+    }
+
     if (sectionKey === 'member' && text === '대시보드') {
       navigate('/members/dashboard')
     }
@@ -135,6 +139,9 @@ export function AdminSidebar() {
                     (pathname === '/members/student-registration' &&
                       section.key === 'member' &&
                       text === '수강생 등록 신청') ||
+                    (pathname === '/members/withdrawal' &&
+                      section.key === 'member' &&
+                      text === '회원 탈퇴 관리') ||
                     (pathname === '/members/dashboard' &&
                       section.key === 'member' &&
                       text === '대시보드')
@@ -147,6 +154,7 @@ export function AdminSidebar() {
                       (text === '유저 관리' ||
                         text === '수강생 관리' ||
                         text === '수강생 등록 신청' ||
+                        text === '회원 탈퇴 관리' ||
                         text === '대시보드'))
 
                   return (

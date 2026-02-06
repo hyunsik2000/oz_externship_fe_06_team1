@@ -1,4 +1,4 @@
-export type ApiErrorMode = 'none' | 'toast' | 'modal'
+export type ApiErrorMode = 'toast' | 'modal' // | 'none'
 
 export interface RequestErrorParams {
   status: number

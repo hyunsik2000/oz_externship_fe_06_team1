@@ -1,4 +1,5 @@
-export * from './MemberManagementPage'
+export { default as MemberManagementPage } from './MemberManagementPage'
 export * from './MemberDashboardPage'
-export * from './StudentManagementPage'
+export * from './MemberWithdrawalPage'
+export { default as StudentManagementPage } from './StudentManagementPage'
 export * from './StudentRegistrationPage'

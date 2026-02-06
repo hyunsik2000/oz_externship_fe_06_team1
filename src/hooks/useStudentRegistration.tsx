@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react'
-import type { MemberRegistrationItemType } from '@/types'
+import type { StudentRegistrationItemType } from '@/types'
 
 export function useStudentRegistration(
-  initialData: MemberRegistrationItemType[]
+  initialData: StudentRegistrationItemType[]
 ) {
   const [items, setItems] = useState(initialData)
 
@@ -69,7 +69,7 @@ export function useStudentRegistration(
 
   const closeModal = () => setModalConfig((p) => ({ ...p, isOpen: false }))
 
-  const updateStatus = (newStatus: MemberRegistrationItemType['status']) => {
+  const updateStatus = (newStatus: StudentRegistrationItemType['status']) => {
     setItems((prev) =>
       prev.map((item) =>
         selectedIds.includes(item.id) && item.status === 'Submitted'
