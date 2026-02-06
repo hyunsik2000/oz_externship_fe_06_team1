@@ -4,8 +4,8 @@ import { StudentRegistrationList } from '@/components/table/StudentRegistrationL
 import { useStudentRegistration } from '@/hooks'
 import type {
   DropdownOption,
-  MemberRegistrationItemType,
-  MemberRegistrationStatus,
+  StudentRegistrationItemType,
+  StudentRegistrationStatus,
 } from '@/types'
 
 const REGISTRATION_STATUS_OPTIONS: DropdownOption[] = [
@@ -15,7 +15,7 @@ const REGISTRATION_STATUS_OPTIONS: DropdownOption[] = [
   { label: '반려(Rejected)', value: 'Rejected' },
 ]
 
-const MOCK_INITIAL_DATA: MemberRegistrationItemType[] = [
+const MOCK_INITIAL_DATA: StudentRegistrationItemType[] = [
   {
     id: 1,
     course_name: '웹 개발 초격차 프론트엔드 부트캠프',
@@ -23,7 +23,7 @@ const MOCK_INITIAL_DATA: MemberRegistrationItemType[] = [
     user_name: '김오즈',
     email: 'ozkim@gmail.com',
     birth_date: '2000.08.03',
-    status: 'Submitted' as MemberRegistrationStatus,
+    status: 'Submitted' as StudentRegistrationStatus,
     requested_at: '2025.02.01 11:22:28',
   },
   {
@@ -33,7 +33,7 @@ const MOCK_INITIAL_DATA: MemberRegistrationItemType[] = [
     user_name: '홍길동',
     email: 'oz-user@gmail.com',
     birth_date: '1998-11-02',
-    status: 'Submitted' as MemberRegistrationStatus,
+    status: 'Submitted' as StudentRegistrationStatus,
     requested_at: '2025.02.01 11:30:28',
   },
   {
@@ -43,7 +43,7 @@ const MOCK_INITIAL_DATA: MemberRegistrationItemType[] = [
     user_name: '박성수',
     email: 'parkseongsu@gmail.com',
     birth_date: '2000-10-30',
-    status: 'Submitted' as MemberRegistrationStatus,
+    status: 'Submitted' as StudentRegistrationStatus,
     requested_at: '2025.06.11 05:36:12',
   },
 ]
