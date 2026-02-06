@@ -12,11 +12,8 @@ export const MOCK_MEMBER_DETAIL_MAP: Record<number, MemberDetail> = {
     joinedAt: '2025-12-01',
     gender: '남',
     phone: '010-1111-2222',
-    ongoingCourses: ['디자이너 부트캠프 3기 (2025.10.30 ~ 2026.04.28)'],
-    completedCourses: [
-      '초격차 프론트엔드 부트캠프 8기',
-      '풀스택 부트캠프 5기 (2030.10.30 ~ 2031.04.28)',
-    ],
+    ongoingCourses: ['초격차 프론트엔드 부트캠프'],
+    cohorts: ['15기'],
   },
   2: {
     id: 234,
@@ -29,8 +26,8 @@ export const MOCK_MEMBER_DETAIL_MAP: Record<number, MemberDetail> = {
     joinedAt: '2025-11-14',
     gender: '남',
     phone: '010-0000-0000',
-    ongoingCourses: [],
-    completedCourses: ['디자이너 부트캠프 3기 (2025.10.30 ~ 2026.04.28)'],
+    ongoingCourses: ['초격차 백엔드 부트캠프'],
+    cohorts: ['14기'],
   },
   3: {
     id: 345,
@@ -43,7 +40,7 @@ export const MOCK_MEMBER_DETAIL_MAP: Record<number, MemberDetail> = {
     joinedAt: '2025-10-07',
     gender: '미설정',
     phone: '-',
-    ongoingCourses: [],
-    completedCourses: [],
+    ongoingCourses: ['디자이너 부트캠프'],
+    cohorts: ['16기'],
   },
 }
