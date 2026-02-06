@@ -110,6 +110,15 @@ export function MemberManagementPage() {
     })
   }
 
+  const handleEditSave = () => {
+    setEditOpen(false)
+    setDetailOpen(true)
+    showToast({
+      variant: 'success',
+      message: '성공적으로 수정이 완료되었습니다.',
+    })
+  }
+
   const selectedDetail = useMemo(() => {
     if (!selectedMember) return null
     return (
@@ -205,6 +214,7 @@ export function MemberManagementPage() {
       <MemberEditModal
         open={editOpen}
         onClose={closeMemberEdit}
+        onSave={handleEditSave}
         detail={selectedDetail}
         courseOptions={courseOptions}
         cohortOptions={cohortOptions}

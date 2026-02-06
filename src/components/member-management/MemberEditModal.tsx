@@ -26,6 +26,7 @@ type Option = { label: string; value: string }
 type MemberEditModalProps = {
   open: boolean
   onClose: () => void
+  onSave?: () => void
   detail: MemberDetail | null
   courseOptions: Option[]
   cohortOptions: Option[]
@@ -61,6 +62,7 @@ const normalizeDateValue = (value?: string) => {
 export function MemberEditModal({
   open,
   onClose,
+  onSave,
   detail,
   courseOptions,
   cohortOptions,
@@ -324,7 +326,7 @@ export function MemberEditModal({
           size="search"
           className="h-[36px] w-[55px] rounded-[3px]"
           disabled={!canSubmit}
-          onClick={onClose}
+          onClick={onSave}
         >
           저장
         </Button>
