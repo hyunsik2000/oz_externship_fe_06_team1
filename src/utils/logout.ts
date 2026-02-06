@@ -1,6 +1,6 @@
-import { removeCookie } from './cookie'
 import { apiClient } from '@/api'
 import { API_PATHS } from '@/constants/api'
+import { useAuthStore } from '@/store'
 
 // 로그아웃 처리
 export const logout = async () => {
@@ -11,7 +11,7 @@ export const logout = async () => {
       { errorTitle: '로그아웃 실패' }
     )
   } finally {
-    removeCookie('accessToken')
+    useAuthStore.getState().clearAuth()
     window.location.href = '/login'
   }
 }

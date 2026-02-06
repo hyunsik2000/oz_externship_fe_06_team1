@@ -3,8 +3,8 @@ import { useState } from 'react'
 import OZLogo from '@/assets/icons/OZLogo.svg?react'
 import { useNavigate } from 'react-router-dom'
 import { API_PATHS } from '@/constants/api'
-import { setCookie } from '@/utils'
 import { useAxios } from '@/hooks'
+import { useAuthStore } from '@/store'
 
 interface LoginResponse {
   access_token: string
@@ -15,6 +15,7 @@ export function LoginPage() {
   const [password, setPassword] = useState('')
   const navigate = useNavigate()
   const { sendRequest, isLoading } = useAxios()
+  const setAccessToken = useAuthStore((state) => state.setAccessToken)
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -26,7 +27,7 @@ export function LoginPage() {
     })
 
     if (data && data.access_token) {
-      setCookie('accessToken', data.access_token)
+      setAccessToken(data.access_token)
       navigate('/exam/dashboard')
     }
   }
