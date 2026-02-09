@@ -53,6 +53,10 @@ export function AdminSidebar() {
     sectionKey: Exclude<SectionKey, null>,
     text: string
   ) => {
+    if (sectionKey === 'exam' && text === '쪽지시험 관리') {
+      navigate('/exam/list')
+      return
+    }
     if (sectionKey === 'exam' && text === '응시 내역 관리') {
       navigate('/exam/history')
       return
@@ -130,6 +134,9 @@ export function AdminSidebar() {
                     (pathname === '/exam/dashboard' &&
                       section.key === 'exam' &&
                       text === '쪽지시험 대시보드') ||
+                    (pathname === '/exam/list' &&
+                      section.key === 'exam' &&
+                      text === '쪽지시험 관리') ||
                     (pathname === '/members/management' &&
                       section.key === 'member' &&
                       text === '유저 관리') ||
@@ -149,7 +156,8 @@ export function AdminSidebar() {
                   const isClickable =
                     (section.key === 'exam' &&
                       (text === '응시 내역 관리' ||
-                        text === '쪽지시험 대시보드')) ||
+                        text === '쪽지시험 대시보드' ||
+                        text === '쪽지시험 관리')) ||
                     (section.key === 'member' &&
                       (text === '유저 관리' ||
                         text === '수강생 관리' ||

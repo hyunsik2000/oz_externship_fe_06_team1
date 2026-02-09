@@ -20,7 +20,7 @@ export const formatCorrectTime = (date: string, time: string): string => {
 /**
  * ISO 형식의 날짜 문자열을 YYYY-MM-DD HH:mm:ss 형식으로 변환
  * @param dateString - 2026-02-05T14:25:58.373052+09:00 형식이라면
- * @returns 2026-02-05 14:25:58 형식으로 반환
+ * @returns 2026.02.05 14:25:58 형식으로 반환
  */
 export const formatDateTime = (dateString: string): string => {
   if (!dateString || dateString === '-') return dateString
