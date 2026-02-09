@@ -224,3 +224,15 @@ export const sidebarSubmenuItemVariants = cva('py-2', {
     active: false,
   },
 })
+
+export const skeletonVariants = cva('skeleton', {
+  variants: {
+    tone: {
+      default: '',
+      subtle: 'opacity-70',
+    },
+  },
+  defaultVariants: {
+    tone: 'default',
+  },
+})

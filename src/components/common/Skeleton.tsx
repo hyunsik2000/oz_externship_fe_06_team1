@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react'
+import { skeletonVariants } from '@/constants/variants'
 
 type SkeletonVariant = 'text' | 'rect' | 'circle'
 type SkeletonRadius = 'none' | 'sm' | 'md' | 'lg' | 'full'
@@ -10,6 +11,7 @@ type SkeletonProps = {
   variant?: SkeletonVariant
   radius?: SkeletonRadius
   style?: CSSProperties
+  tone?: 'default' | 'subtle'
 }
 
 const radiusClassName: Record<SkeletonRadius, string> = {
@@ -27,13 +29,14 @@ export function Skeleton({
   variant = 'rect',
   radius,
   style,
+  tone = 'default',
 }: SkeletonProps) {
   const resolvedRadius = radius ?? (variant === 'circle' ? 'full' : 'md')
   const mergedStyle: CSSProperties = { width, height, ...style }
 
   return (
     <div
-      className={`skeleton ${radiusClassName[resolvedRadius]} ${className}`.trim()}
+      className={`${skeletonVariants({ tone })} ${radiusClassName[resolvedRadius]} ${className}`.trim()}
       style={mergedStyle}
       aria-hidden="true"
     />
