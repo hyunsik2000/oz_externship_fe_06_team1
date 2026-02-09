@@ -1,5 +1,4 @@
 import { useState, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useAxios } from '@/hooks'
 import { API_PATHS } from '@/constants/api'
 import axios from 'axios'
@@ -23,7 +22,6 @@ export function useExamUpload({
   onSuccess,
   onClose,
 }: UseExamUploadProps) {
-  const navigate = useNavigate()
   const { sendRequest, isLoading: isSubmitting } = useAxios()
   const [logoUrl, setLogoUrl] = useState<string | null>(null)
   const [isUploading, setIsUploading] = useState(false)
@@ -82,7 +80,6 @@ export function useExamUpload({
       if (response) {
         onSuccess?.()
         onClose()
-        navigate('/exam/list')
       }
     },
     [id, logoUrl, mode, onClose, onSuccess, sendRequest]
