@@ -18,7 +18,7 @@ export function GlobalToast() {
   if (!isOpen) return null
 
   return (
-    <div className="fixed right-[30px] bottom-[30px] z-[9999]">
+    <div className="fixed right-8 bottom-8 z-9999">
       <Toast variant={variant} message={message} onClose={hideToast} />
     </div>
   )
