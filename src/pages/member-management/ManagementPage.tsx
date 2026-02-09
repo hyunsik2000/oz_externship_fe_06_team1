@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react'
-import { Button, Dropdown, Input } from '@/components/common'
+import { useEffect, useMemo, useState } from 'react'
+import { Button, Dropdown, Input, TableSkeleton } from '@/components/common'
 import { MemberDetailModal } from '@/components/member-management/MemberDetailModal'
 import { MemberEditModal } from '@/components/member-management/MemberEditModal'
 import { MemberManagementLayout } from '@/components/layout'
@@ -49,6 +49,15 @@ export default function ManagementPage({
   const [selectedMember, setSelectedMember] = useState<Member | null>(null)
   const [memberList, setMemberList] = useState(listData)
   const showToast = useToastStore((state) => state.showToast)
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false)
+    }, 3000)
+
+    return () => clearTimeout(timer)
+  }, [])
 
   const handleSearch = () => {
     setRole(roleInput ?? 'ALL')
@@ -195,11 +204,15 @@ export default function ManagementPage({
           </>
         }
       >
-        <MemberList
-          data={filtered}
-          onClickName={enableDetail ? openMemberDetail : undefined}
-          variant={listVariant}
-        />
+        {isLoading ? (
+          <TableSkeleton rows={10} />
+        ) : (
+          <MemberList
+            data={filtered}
+            onClickName={enableDetail ? openMemberDetail : undefined}
+            variant={listVariant}
+          />
+        )}
       </MemberManagementLayout>
 
       {enableDetail && (
