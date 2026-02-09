@@ -12,4 +12,9 @@ export const API_PATHS = {
     SUBJECT_SCATTER: (subjectId: number | string) =>
       `api/v1/admin/subjects/${subjectId}/scatter`,
   },
+  EXAM: {
+    LIST: '/api/v1/admin/exams',
+    DETAIL: (examId: number | string) => `/api/v1/admin/exams/${examId}`,
+    PRESIGNED_URL: '/api/v1/admin/exams/presigned-url/thumbnail',
+  },
 }

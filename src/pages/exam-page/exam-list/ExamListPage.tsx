@@ -7,23 +7,40 @@ import {
 } from '@/components/common'
 import { ExamListLayout } from '@/components/layout'
 import ExamList from '@/components/table/ExamList'
-import { useState } from 'react'
+import { useAxios, useFilter, type FilterOptionConfig } from '@/hooks'
+import { API_PATHS } from '@/constants/api'
+import type { ExamListResponse } from '@/types/exam'
+import { useEffect, useState } from 'react'
 import ExamModal from '@/components/detail-exam/exam-modal/ExamModal'
-import { MOCK_EXAM_LIST_RESPONSE } from '@/mocks/data/table-data/ExamList'
-import { useFilter, type FilterOptionConfig } from '@/hooks/useFilter'
 import { COURSE_OPTIONS } from '@/constants/filtered-option'
 
 export function ExamListPage() {
+  const [data, setData] = useState<ExamListResponse | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [page, setPage] = useState(1)
 
-  const totalPages = Math.ceil(
-    MOCK_EXAM_LIST_RESPONSE.exams.length / MOCK_EXAM_LIST_RESPONSE.size
-  )
-  const paginatedData = MOCK_EXAM_LIST_RESPONSE.exams.slice(
-    (page - 1) * MOCK_EXAM_LIST_RESPONSE.size,
-    page * MOCK_EXAM_LIST_RESPONSE.size
-  )
+  const { sendRequest, isLoading } = useAxios()
+
+  useEffect(() => {
+    const fetchExams = async () => {
+      const response = await sendRequest<ExamListResponse>({
+        method: 'GET',
+        url: API_PATHS.EXAM.LIST,
+        params: {
+          page,
+          size: 10,
+        },
+      })
+      if (response) {
+        console.log(response)
+        setData(response)
+      }
+    }
+    fetchExams()
+  }, [page, sendRequest])
+
+  const totalPages = data ? Math.ceil(data.total_count / data.size) : 0
+  const paginatedData = data?.exams || []
 
   const filterConfigs: FilterOptionConfig[] = [
     {
@@ -86,7 +103,13 @@ export function ExamListPage() {
           </div>
         }
       >
-        <ExamList data={paginatedData} />
+        {isLoading ? (
+          <div className="text-grey-500 flex h-60 items-center justify-center">
+            데이터를 불러오는 중입니다...
+          </div>
+        ) : (
+          <ExamList data={paginatedData} />
+        )}
       </ExamListLayout>
       <FilterModal
         open={isFilterOpen}
