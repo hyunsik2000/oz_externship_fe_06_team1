@@ -4,6 +4,7 @@ import { DataTable, type Column } from '@/components/table/data-table/DataTable'
 import { Link } from 'react-router-dom'
 import ExamDeployModal from '@/components/table/data-table/deploy-modal/ExamDeployModal'
 import { Button } from '@/components/common'
+import { formatDateTime } from '@/utils'
 
 const StatusBadge = ({ onDeploy }: { onDeploy: () => void }) => (
   <Button
@@ -67,13 +68,13 @@ export default function ExamList({ data }: { data: ExamItem[] }) {
       key: 'created_at',
       title: '등록 일시',
       size: 'xl',
-      cell: (item) => item.created_at,
+      cell: (item) => formatDateTime(item.created_at),
     },
     {
       key: 'updated_at',
       title: '수정 일시',
       size: 'xl',
-      cell: (item) => item.updated_at,
+      cell: (item) => formatDateTime(item.updated_at),
     },
     {
       key: 'is_deployed',

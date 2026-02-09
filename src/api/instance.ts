@@ -3,6 +3,7 @@ import axios from 'axios'
 import { RequestError, type ApiErrorMode } from '@/types'
 import { errorParser } from '@/utils'
 import { useAuthStore } from '@/store'
+import { API_PATHS } from '@/constants/api'
 
 declare module 'axios' {
   export interface AxiosRequestConfig {
@@ -12,7 +13,7 @@ declare module 'axios' {
 }
 
 export const apiClient = axios.create({
-  baseURL: '/',
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -21,6 +22,13 @@ export const apiClient = axios.create({
 
 apiClient.interceptors.request.use(
   (config) => {
+    const isAuthRequest =
+      config.url?.includes(API_PATHS.AUTH.LOGIN) ||
+      config.url?.includes(API_PATHS.AUTH.REFRESH_TOKEN)
+
+    if (isAuthRequest) {
+      return config
+    }
     const token = useAuthStore.getState().accessToken
     if (token) {
       config.headers.Authorization = `Bearer ${token}`

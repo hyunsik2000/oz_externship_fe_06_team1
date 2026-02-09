@@ -1,11 +1,10 @@
-import type { ReactNode } from 'react'
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import {
   QueryClient,
   MutationCache,
   QueryClientProvider,
 } from '@tanstack/react-query'
-import { useErrorStore } from '@/store/useErrorStore'
+import { useErrorStore } from '@/store'
 import { RequestError } from '@/types'
 
 interface QueryClientBoundaryProps {

@@ -83,9 +83,12 @@ export function TdCell({
 }
 
 const ROLE_LABEL_MAP: Record<MemberRole, string> = {
-  Admin: '어드민',
-  Manager: '매니저',
-  User: '수강생',
+  Admin: 'Admin',
+  'Staff (TA)': 'Staff (TA)',
+  Student: '수강생',
+  General: 'General',
+  'Staff (LC)': 'Staff (LC)',
+  'Staff (OM)': 'Staff (OM)',
 }
 
 export function RoleLabel({ role }: { role: MemberRole }) {

@@ -25,10 +25,9 @@ export function LoginPage() {
       url: API_PATHS.AUTH.LOGIN,
       data: { email, password },
     })
-
     if (data && data.access_token) {
       setAccessToken(data.access_token)
-      navigate('/exam/dashboard')
+      navigate('/exam/list')
     }
   }
 

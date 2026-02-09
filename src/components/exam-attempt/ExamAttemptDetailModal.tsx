@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ReactNode } from 'react'
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { AlertModal, Button, Modal } from '@/components/common'
 import type { HistoryItem } from '@/types/history'
 import { SolutionViewTrigger } from '@/components/exam-attempt/solution-view'
@@ -7,6 +7,7 @@ type ExamAttemptDetailModalProps = {
   open: boolean
   onClose: () => void
   item: HistoryItem | null
+  onDeleteConfirm?: (item: HistoryItem) => void
 }
 
 function TableWrap({ children }: { children: ReactNode }) {
@@ -58,8 +59,10 @@ export function ExamAttemptDetailModal({
   open,
   onClose,
   item,
+  onDeleteConfirm,
 }: ExamAttemptDetailModalProps) {
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false)
+  const deleteConfirmRootRef = useRef<HTMLDivElement | null>(null)
 
   const cohortText = useMemo(() => {
     if (!item) return ''
@@ -86,6 +89,8 @@ export function ExamAttemptDetailModal({
         onClose={handleCloseDetail}
         size="attemptDetail"
         showCloseButton
+        ignoreRefs={[deleteConfirmRootRef]}
+        outsideCloseEnabled={!deleteConfirmOpen}
       >
         <Modal.Body className="flex h-full flex-col px-8 pt-8 pb-6">
           <div className="mb-6">
@@ -158,16 +163,21 @@ export function ExamAttemptDetailModal({
         </Modal.Body>
       </Modal>
 
-      <AlertModal
-        isOpen={deleteConfirmOpen}
-        onClose={() => setDeleteConfirmOpen(false)}
-        type="danger"
-        title="해당 응시 내역을 정말 삭제하시겠습니까?"
-        description={`응시내역 삭제시 되돌릴 수 없으며,\n응시 수강생은 해당 시험을 재응시할 수 있습니다.`}
-        confirmText="확인"
-        showCancel={false}
-        onConfirm={() => {}}
-      />
+      <div ref={deleteConfirmRootRef}>
+        <AlertModal
+          isOpen={deleteConfirmOpen}
+          onClose={() => setDeleteConfirmOpen(false)}
+          type="danger"
+          title="해당 응시 내역을 정말 삭제하시겠습니까?"
+          description={`응시내역 삭제시 되돌릴 수 없으며,\n응시 수강생은 해당 시험을 재응시할 수 있습니다.`}
+          confirmText="확인"
+          showCancel={false}
+          onConfirm={() => {
+            onDeleteConfirm?.(item)
+            handleCloseDetail()
+          }}
+        />
+      </div>
     </>
   )
 }

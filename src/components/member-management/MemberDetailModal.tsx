@@ -32,6 +32,7 @@ type MemberDetailModalProps = {
   member: Member | null
   onDeleteConfirm?: (member: Member) => void
   onEdit?: () => void
+  onPermissionConfirm?: () => void
 }
 
 function CourseList({ items }: { items?: string[] }) {
@@ -54,6 +55,7 @@ export function MemberDetailModal({
   member,
   onDeleteConfirm,
   onEdit,
+  onPermissionConfirm,
 }: MemberDetailModalProps) {
   const [permissionModalOpen, setPermissionModalOpen] = useState(false)
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false)
@@ -124,7 +126,8 @@ export function MemberDetailModal({
   const closePermissionModal = () => setPermissionModalOpen(false)
 
   const submitPermissionModal = () => {
-    setPermissionModalOpen(false)
+    onPermissionConfirm?.()
+    handleCloseDetail()
   }
 
   return (

@@ -1,7 +1,5 @@
 import { useEffect } from 'react'
-import { useErrorStore } from '@/store'
-import { useAlertStore } from '@/store'
-
+import { useErrorStore, useAlertStore } from '@/store'
 // 전역 에러 상태를 감시하여 UI를 트리거
 
 export function ErrorCatcher() {

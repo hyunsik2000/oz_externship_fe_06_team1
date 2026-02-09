@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { useToastStore } from '@/store/useToastStore'
 import type { StudentRegistrationItemType } from '@/types'
 
 export function useStudentRegistration(
@@ -69,15 +70,30 @@ export function useStudentRegistration(
 
   const closeModal = () => setModalConfig((p) => ({ ...p, isOpen: false }))
 
+  const showToast = useToastStore((state) => state.showToast)
+
   const updateStatus = (newStatus: StudentRegistrationItemType['status']) => {
-    setItems((prev) =>
-      prev.map((item) =>
-        selectedIds.includes(item.id) && item.status === 'Submitted'
-          ? { ...item, status: newStatus }
-          : item
+    try {
+      setItems((prev) =>
+        prev.map((item) =>
+          selectedIds.includes(item.id) && item.status === 'Submitted'
+            ? { ...item, status: newStatus }
+            : item
+        )
       )
-    )
-    setSelectedIds([])
+      setSelectedIds([])
+
+      showToast({
+        variant: 'success',
+        message: '성공적으로 상태 처리가 완료되었습니다.',
+      })
+    } catch (error) {
+      console.error(error)
+      showToast({
+        variant: 'error',
+        message: '해당 과정을 진행하는 중 오류가 발생하였습니다.',
+      })
+    }
   }
 
   const handleOpenModal = (targetStatus: 'Accepted' | 'Rejected') => {
