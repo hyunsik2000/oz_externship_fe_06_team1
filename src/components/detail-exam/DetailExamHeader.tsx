@@ -1,11 +1,8 @@
 import reactLogo from '@/assets/react.svg'
-import type { QuestionListResponse } from '@/types/question'
+import type { QuestionsList } from '@/types/question'
+import { formatDateTime } from '@/utils/dateUtils'
 
-export default function DetailExamHeader({
-  data,
-}: {
-  data: QuestionListResponse
-}) {
+export default function DetailExamHeader({ data }: { data: QuestionsList }) {
   return (
     <div className="flex justify-between">
       <div className="flex items-center gap-2 pt-6 pl-6">
@@ -17,10 +14,10 @@ export default function DetailExamHeader({
       </div>
       <div className="flex shrink-0 flex-col">
         <span className="text-grey-600 text-sm">
-          등록일시: {data.created_at}
+          등록일시: {formatDateTime(data.created_at)}
         </span>
         <span className="text-grey-600 text-sm">
-          수정일시: {data.updated_at}
+          수정일시: {formatDateTime(data.updated_at)}
         </span>
       </div>
     </div>
