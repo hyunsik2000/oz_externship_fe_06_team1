@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import CourseSubjectFilterModal, {
   type FilterValue,
   type Option,
@@ -7,9 +8,12 @@ import { FilterButton } from '@/components/common'
 import { ExamAttemptDetailModal } from '@/components/exam-attempt'
 import { ExamHistoryLayout } from '@/components/layout'
 import HistoryList from '@/components/table/HistoryList'
+import { MOCK_HISTORY_LIST_RESPONSE } from '@/mocks/data/table-data/HistoryList'
 import type { HistoryItem } from '@/types/history'
+import { useToastStore } from '@/store'
 
 export function ExamHistoryPage() {
+  const navigate = useNavigate()
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const [filter, setFilter] = useState<FilterValue>({
     course: '',
@@ -19,10 +23,48 @@ export function ExamHistoryPage() {
 
   const [detailOpen, setDetailOpen] = useState(false)
   const [selectedItem, setSelectedItem] = useState<HistoryItem | null>(null)
+  const showToast = useToastStore((state) => state.showToast)
 
-  const courseOptions: Option[] = []
-  const cohortOptions: Option[] = []
-  const subjectOptions: Option[] = []
+  const submissions = MOCK_HISTORY_LIST_RESPONSE.submissions
+
+  const courseOptions = useMemo<Option[]>(() => {
+    const seen = new Set<string>()
+    return submissions.reduce<Option[]>((acc, item) => {
+      if (seen.has(item.course_name)) return acc
+      seen.add(item.course_name)
+      acc.push({ label: item.course_name, value: item.course_name })
+      return acc
+    }, [])
+  }, [submissions])
+
+  const cohortOptions = useMemo<Option[]>(() => {
+    if (!filter.course) return []
+    const seen = new Set<number>()
+    return submissions.reduce<Option[]>((acc, item) => {
+      if (item.course_name !== filter.course) return acc
+      if (seen.has(item.cohort_number)) return acc
+      seen.add(item.cohort_number)
+      acc.push({
+        label: `${item.cohort_number}기`,
+        value: String(item.cohort_number),
+      })
+      return acc
+    }, [])
+  }, [filter.course, submissions])
+
+  const subjectOptions = useMemo<Option[]>(() => {
+    if (!filter.course || !filter.cohort) return []
+    const cohortNumber = Number(filter.cohort)
+    const seen = new Set<string>()
+    return submissions.reduce<Option[]>((acc, item) => {
+      if (item.course_name !== filter.course) return acc
+      if (item.cohort_number !== cohortNumber) return acc
+      if (seen.has(item.subject_name)) return acc
+      seen.add(item.subject_name)
+      acc.push({ label: item.subject_name, value: item.subject_name })
+      return acc
+    }, [])
+  }, [filter.course, filter.cohort, submissions])
 
   const handleOpenFilter = () => setIsFilterOpen(true)
   const handleCloseFilter = () => setIsFilterOpen(false)
@@ -31,6 +73,7 @@ export function ExamHistoryPage() {
 
   const handleSubmitFilter = () => {
     setIsFilterOpen(false)
+    navigate('/exam/history/filtered', { state: { filter } })
   }
 
   const handleOpenDetail = (item: HistoryItem) => {
@@ -43,13 +86,23 @@ export function ExamHistoryPage() {
     setSelectedItem(null)
   }
 
+  const handleDeleteConfirm = () => {
+    showToast({
+      variant: 'success',
+      message: '응시 내역 삭제가 완료되었습니다.',
+    })
+  }
+
   return (
     <>
       <ExamHistoryLayout
-        title="쪽지시험 응시 내역 조회"
+        title={<span className="text-base">쪽지시험 응시 내역 조회</span>}
         headerRight={<FilterButton onClick={handleOpenFilter} />}
       >
-        <HistoryList onClickTitle={handleOpenDetail} />
+        <HistoryList
+          onClickTitle={handleOpenDetail}
+          submissions={submissions}
+        />
       </ExamHistoryLayout>
 
       <CourseSubjectFilterModal
@@ -67,6 +120,7 @@ export function ExamHistoryPage() {
         open={detailOpen}
         onClose={handleCloseDetail}
         item={selectedItem}
+        onDeleteConfirm={handleDeleteConfirm}
       />
     </>
   )

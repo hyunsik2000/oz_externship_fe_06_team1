@@ -1,4 +1,6 @@
 export * from './MemberManagementPage'
 export * from './MemberDashboardPage'
 export * from './MemberWithdrawalPage'
+export * from './StudentManagementPage'
 export * from './StudentRegistrationPage'
+export * from './MemberWithdrawalPage'

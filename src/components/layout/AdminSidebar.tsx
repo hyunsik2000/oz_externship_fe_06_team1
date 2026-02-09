@@ -67,6 +67,11 @@ export function AdminSidebar() {
       return
     }
 
+    if (sectionKey === 'member' && text === '수강생 관리') {
+      navigate('/members/student-management')
+      return
+    }
+
     if (sectionKey === 'member' && text === '수강생 등록 신청') {
       navigate('/members/student-registration')
     }
@@ -119,7 +124,7 @@ export function AdminSidebar() {
               <ul className="text-grey-700 px-8 pb-3 text-sm">
                 {section.items.map((text) => {
                   const isActive =
-                    (pathname === '/exam/history' &&
+                    (pathname.startsWith('/exam/history') &&
                       section.key === 'exam' &&
                       text === '응시 내역 관리') ||
                     (pathname === '/exam/dashboard' &&
@@ -128,6 +133,9 @@ export function AdminSidebar() {
                     (pathname === '/members/management' &&
                       section.key === 'member' &&
                       text === '유저 관리') ||
+                    (pathname === '/members/student-management' &&
+                      section.key === 'member' &&
+                      text === '수강생 관리') ||
                     (pathname === '/members/student-registration' &&
                       section.key === 'member' &&
                       text === '수강생 등록 신청') ||
@@ -144,6 +152,7 @@ export function AdminSidebar() {
                         text === '쪽지시험 대시보드')) ||
                     (section.key === 'member' &&
                       (text === '유저 관리' ||
+                        text === '수강생 관리' ||
                         text === '수강생 등록 신청' ||
                         text === '회원 탈퇴 관리' ||
                         text === '대시보드'))

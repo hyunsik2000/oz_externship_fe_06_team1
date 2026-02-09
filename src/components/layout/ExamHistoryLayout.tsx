@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { AdminContainer } from '@/components/layout'
 
 type ExamHistoryLayoutProps = {
-  title: string
+  title: ReactNode
   description?: string
   headerRight?: ReactNode
   toolbar?: ReactNode

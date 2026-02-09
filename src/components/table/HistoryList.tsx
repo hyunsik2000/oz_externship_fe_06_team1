@@ -1,11 +1,11 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { HistoryItem } from '@/types/history'
 import { Pagination } from '@/components/common/Pagination'
 import { DataTable, type Column } from './data-table/DataTable'
-import { MOCK_HISTORY_LIST_RESPONSE } from '@/mocks/data/table-data/HistoryList'
 
-type ExamHistoryListProps = {
+export type ExamHistoryListProps = {
   onClickTitle?: (item: HistoryItem) => void
+  submissions: HistoryItem[]
 }
 
 const TitleCell = ({
@@ -51,13 +51,15 @@ const COLUMNS = (
   {
     key: 'nickname',
     title: '닉네임',
-    size: 'lg',
+    size: 'xl',
+    className: 'min-w-[220px]',
     cell: (item) => item.nickname,
   },
   {
     key: 'cohort',
     title: '과정/기수',
     size: 'xl',
+    className: 'whitespace-nowrap',
     cell: (item) => `${item.course_name} ${item.cohort_number}기`,
   },
   {
@@ -88,15 +90,21 @@ const COLUMNS = (
 
 const PAGE_SIZE = 10
 
-export default function HistoryList({ onClickTitle }: ExamHistoryListProps) {
+export default function HistoryList({
+  onClickTitle,
+  submissions,
+}: ExamHistoryListProps) {
   const [page, setPage] = useState(1)
-  const submissions = MOCK_HISTORY_LIST_RESPONSE.submissions
   const totalPages = Math.max(1, Math.ceil(submissions.length / PAGE_SIZE))
   const columns = COLUMNS(onClickTitle)
   const pagedSubmissions = useMemo(() => {
     const start = (page - 1) * PAGE_SIZE
     return submissions.slice(start, start + PAGE_SIZE)
   }, [page, submissions])
+
+  useEffect(() => {
+    setPage(1)
+  }, [submissions])
 
   return (
     <div className="w-full">
