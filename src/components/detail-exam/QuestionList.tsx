@@ -9,11 +9,12 @@ import {
   ProblemTitle,
   EmptyProblems,
 } from '@/components/detail-exam/problem'
-import { Button } from '@/components/common'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
 import 'swiper/css'
 import { useState } from 'react'
 import ProblemModal from '@/components/detail-exam/problem-modal/ProblemModal'
+import { AlertModal, Button } from '@/components/common'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { useQuestionActions } from '@/hooks/problem-form/useQuestionActions'
 
 interface QuestionListProps {
   data: QuestionsList
@@ -22,6 +23,7 @@ interface QuestionListProps {
   onSlideChange: (swiper: SwiperClass) => void
   onNext: () => void
   onPrev: () => void
+  onSuccess?: () => void
 }
 
 export function QuestionList({
@@ -31,6 +33,7 @@ export function QuestionList({
   onSlideChange,
   onNext,
   onPrev,
+  onSuccess,
 }: QuestionListProps) {
   const questionCount = data.questions.length
   const totalScore = data.questions.reduce((sum, q) => sum + q.point, 0)
@@ -41,6 +44,11 @@ export function QuestionList({
   const [selectedQuestion, setSelectedQuestion] = useState<
     Question | undefined
   >(undefined)
+
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const [questionToDelete, setQuestionToDelete] = useState<number | null>(null)
+
+  const { deleteQuestion, isLoading: isDeleting } = useQuestionActions()
 
   // 문제 추가 모달 열기
   const handleOpenAddModal = () => {
@@ -55,8 +63,25 @@ export function QuestionList({
     setIsModalOpen(true)
   }
 
+  // 문제 삭제 확인 모달 열기
+  const handleOpenDeleteModal = (id: number) => {
+    setQuestionToDelete(id)
+    setIsDeleteModalOpen(true)
+  }
+
+  // 문제 삭제 처리
+  const handleConfirmDelete = async () => {
+    if (questionToDelete) {
+      const success = await deleteQuestion(questionToDelete)
+      if (success) {
+        setIsDeleteModalOpen(false)
+        onSuccess?.()
+      }
+    }
+  }
+
   if (questionCount === 0) {
-    return <EmptyProblems />
+    return <EmptyProblems examId={data.id} onSuccess={onSuccess} />
   }
 
   return (
@@ -83,14 +108,14 @@ export function QuestionList({
             className="h-full"
           >
             {data.questions.map((question, i) => (
-              <SwiperSlide key={question.id}>
+              <SwiperSlide key={question.question_id}>
                 <div className="text-grey-800 flex h-full flex-col gap-2 rounded-xl border border-[#D9D9D9] bg-white p-7 font-semibold">
                   {/* 1. 문제 헤더 영역 */}
                   <ProblemHeader
                     type={question.type}
                     onAdd={handleOpenAddModal}
                     onEdit={() => handleOpenEditModal(question)}
-                    // onDelete={} 삭제 로직 필요 시 추가
+                    onDelete={() => handleOpenDeleteModal(question.question_id)}
                   />
 
                   <div className="flex flex-1 flex-col gap-2 overflow-y-auto px-3">
@@ -108,6 +133,7 @@ export function QuestionList({
                       type={question.type}
                       options={question.options}
                       answer={question.correct_answer}
+                      prompt={question.prompt}
                     />
 
                     {/* 5. 문제 해설 영역 */}
@@ -138,6 +164,20 @@ export function QuestionList({
         initialData={selectedQuestion}
         questionCount={questionCount}
         totalScore={totalScore}
+        examId={data.id}
+        onSuccess={onSuccess}
+      />
+
+      {/* 문제 삭제 확인 모달 */}
+      <AlertModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        type="danger"
+        title="문제를 삭제하시겠습니까?"
+        description="삭제된 문제는 복구할 수 없습니다."
+        onConfirm={handleConfirmDelete}
+        confirmText={isDeleting ? '삭제 중...' : '삭제'}
+        cancelText="취소"
       />
     </>
   )

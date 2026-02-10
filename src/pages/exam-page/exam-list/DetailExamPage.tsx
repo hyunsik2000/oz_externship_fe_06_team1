@@ -83,7 +83,7 @@ export function DetailExamPage() {
           </div>
         }
       >
-        <DetailExamContainer data={data} />
+        <DetailExamContainer data={data} onSuccess={fetchDetail} />
       </ExamHistoryLayout>
 
       <ExamModal
