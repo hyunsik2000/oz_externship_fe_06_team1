@@ -61,7 +61,7 @@ export function useExamUpload({
     async (title: string, subjectId: number, imgUrl?: string | null) => {
       const targetImgUrl = imgUrl !== undefined ? imgUrl : logoUrl
 
-      const payload: Record<string, any> = {
+      const payload: Record<string, string | number> = {
         title,
         subject_id: subjectId,
       }

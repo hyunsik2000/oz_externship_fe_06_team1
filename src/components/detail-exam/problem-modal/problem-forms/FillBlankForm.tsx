@@ -47,17 +47,19 @@ export function FillBlankForm() {
             <span className="text-grey-600 text-sm">
               ({String.fromCharCode(65 + index)})
             </span>
-            <Input
-              id={`correctAnswers-${index}`}
-              className="border-grey-300 focus:border-primary-500 h-[30px] flex-1"
-              value={answer}
-              onChange={(e) => {
-                const newAnswers = [...answers]
-                newAnswers[index] = e.target.value
-                setCorrectAnswers(newAnswers)
-              }}
-              placeholder="정답을 입력하세요"
-            />
+            <div className="flex-1">
+              <Input
+                id={`correctAnswers-${index}`}
+                className="h-[30px]"
+                value={answer}
+                onChange={(e) => {
+                  const newAnswers = [...answers]
+                  newAnswers[index] = e.target.value
+                  setCorrectAnswers(newAnswers)
+                }}
+                placeholder="정답을 입력하세요"
+              />
+            </div>
             {/* 삭제 버튼 */}
             <button
               onClick={() => handleRemoveAnswer(index)}

@@ -25,7 +25,7 @@ export function ErrorCatcher() {
 
     // 출력 후 스토어 비우기
     clearError()
-  }, [error])
+  }, [error, clearError, showAlert])
 
   return null
 }

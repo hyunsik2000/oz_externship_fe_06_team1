@@ -6,10 +6,10 @@ export interface ProblemValidationData {
   question: string
   prompt: string
   options: string[]
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   correctAnswers: any
   point: number
   explanation: string
-
   totalScore?: number
   questionCount?: number
   mode?: 'create' | 'edit'

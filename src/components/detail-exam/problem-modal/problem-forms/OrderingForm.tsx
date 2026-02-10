@@ -62,18 +62,19 @@ export function OrderingForm() {
               <span className="text-grey-600 w-6">
                 ({String.fromCharCode(65 + index)})
               </span>
-              <Input
-                id={`options-${index}`}
-                className="h-[30px] flex-1"
-                value={option}
-                onChange={(e) => {
-                  const newOps = [...options]
-                  newOps[index] = e.target.value
-                  setOptions(newOps)
-                }}
-                placeholder="보기 내용을 입력하세요"
-              />
-
+              <div className="flex-1">
+                <Input
+                  id={`options-${index}`}
+                  className="h-[30px]"
+                  value={option}
+                  onChange={(e) => {
+                    const newOps = [...options]
+                    newOps[index] = e.target.value
+                    setOptions(newOps)
+                  }}
+                  placeholder="보기 내용을 입력하세요"
+                />
+              </div>
               {/* 순서 선택 Dropdown*/}
               <Dropdown
                 options={options.map((_, i) => ({

@@ -16,7 +16,7 @@ export async function handle401Error(error: AxiosError) {
     await apiClient.post(API_PATHS.AUTH.REFRESH_TOKEN)
 
     return apiClient(originalRequest)
-  } catch (refreshError) {
+  } catch {
     alert('다시 로그인 해주세요')
     window.location.href = '/login'
     return new Promise(() => {})

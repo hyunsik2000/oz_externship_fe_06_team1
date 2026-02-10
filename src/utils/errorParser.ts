@@ -8,17 +8,16 @@ export interface ParsedErrorInfo {
 
 // error의 에러 정보를 반환하는 함수
 
+interface ErrorResponse {
+  detail?: string | string[]
+  error_detail?: string | Record<string, string[]>
+}
+
 export const errorParser = (error: AxiosError): ParsedErrorInfo => {
   const status = error.response?.status || 500
-  const errorData = error.response?.data as any
+  const errorData = (error.response?.data || {}) as ErrorResponse
 
-  // 상태코드에 따른 title 설정
-  const errorDetail =
-    errorData?.error_detail ||
-    errorData?.detail ||
-    errorData?.message ||
-    errorData?.msg
-  const nonFieldErrors = errorData?.non_field_errors
+  const errorDetail = errorData?.error_detail || errorData?.detail
 
   let title = ''
   if (status >= 500) title = '서버 오류'
@@ -39,7 +38,7 @@ export const errorParser = (error: AxiosError): ParsedErrorInfo => {
   } else {
     message =
       (typeof errorDetail === 'string' ? errorDetail : null) ||
-      (Array.isArray(nonFieldErrors) ? nonFieldErrors.join(', ') : null) ||
+      (Array.isArray(errorDetail) ? errorDetail.join(', ') : null) ||
       '오류가 발생했습니다.'
   }
 
