@@ -3,7 +3,8 @@ import { AlertModal, Button, Modal } from '@/components/common'
 import type { HistoryItem } from '@/types/history'
 import { SolutionViewTrigger } from '@/components/exam-attempt/solution-view'
 import { API_PATHS } from '@/constants/api'
-import { useAxios } from '@/hooks'
+import { useAxios, useExamHistoryDetail } from '@/hooks'
+import { formatDateTime } from '@/utils'
 
 type ExamAttemptDetailModalProps = {
   open: boolean
@@ -67,10 +68,15 @@ export function ExamAttemptDetailModal({
   const deleteConfirmRootRef = useRef<HTMLDivElement | null>(null)
   const { sendRequest } = useAxios()
 
+  const submissionId = item?.submission_id ?? null
+  const { detail, isLoading } = useExamHistoryDetail(submissionId)
+
+  const target = detail ?? item
+
   const cohortText = useMemo(() => {
-    if (!item) return ''
-    return `${item.cohort_number}기`
-  }, [item])
+    if (!target) return ''
+    return `${target.cohort_number}기`
+  }, [target])
 
   const correctText = useMemo(() => '-', [])
 
@@ -115,6 +121,11 @@ export function ExamAttemptDetailModal({
             <h2 className="text-grey-800 text-lg font-bold">
               쪽지시험 응시 상세 조회
             </h2>
+            {isLoading && (
+              <p className="text-grey-500 mt-1 text-xs">
+                상세 정보를 불러오는 중입니다...
+              </p>
+            )}
           </div>
 
           <div className="flex flex-grow flex-col space-y-8">
@@ -127,11 +138,23 @@ export function ExamAttemptDetailModal({
               </div>
 
               <TableWrap>
-                <Row2 label="쪽지시험 명" value={item.exam_title} />
-                <Row2 label="과목" value={item.subject_name} />
+                <Row2 label="쪽지시험 명" value={target?.exam_title ?? '-'} />
+                <Row2 label="과목" value={target?.subject_name ?? '-'} />
                 <Row2 label="시험시간" value="-" />
-                <Row2 label="쪽지시험 오픈 시간" value="-" />
-                <Row2 label="쪽지시험 마감 시간" value="-" />
+                <Row2
+                  label="쪽지시험 오픈 시간"
+                  value={
+                    target?.started_at ? formatDateTime(target.started_at) : '-'
+                  }
+                />
+                <Row2
+                  label="쪽지시험 마감 시간"
+                  value={
+                    target?.finished_at
+                      ? formatDateTime(target.finished_at)
+                      : '-'
+                  }
+                />
               </TableWrap>
             </section>
 
@@ -144,26 +167,38 @@ export function ExamAttemptDetailModal({
               </div>
 
               <TableWrap>
-                <Row2 label="응시 ID" value={item.submission_id} />
-                <Row2 label="닉네임" value={item.nickname} />
-                <Row2 label="이름" value="-" />
+                <Row2 label="응시 ID" value={target?.submission_id ?? '-'} />
+                <Row2 label="닉네임" value={target?.nickname ?? '-'} />
+                <Row2 label="이름" value={target?.name ?? '-'} />
 
                 <Row4
                   leftLabel="과정"
-                  leftValue={item.course_name}
+                  leftValue={target?.course_name ?? '-'}
                   rightLabel="기수"
                   rightValue={cohortText}
                 />
 
                 <Row4
                   leftLabel="점수"
-                  leftValue={`${item.score}점`}
+                  leftValue={target ? `${target.score}점` : '-'}
                   rightLabel="정답수 / 총 문제 수"
                   rightValue={correctText}
                 />
 
-                <Row2 label="응시 시간" value="-" />
-                <Row2 label="부정행위 수" value={item.cheating_count} />
+                <Row2
+                  label="응시 시간"
+                  value={
+                    target
+                      ? `${formatDateTime(target.started_at)} ~ ${formatDateTime(
+                          target.finished_at
+                        )}`
+                      : '-'
+                  }
+                />
+                <Row2
+                  label="부정행위 수"
+                  value={target?.cheating_count ?? '-'}
+                />
               </TableWrap>
             </section>
 
