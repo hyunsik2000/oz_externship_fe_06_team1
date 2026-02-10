@@ -12,7 +12,7 @@ import {
 import { QUESTION_TYPES } from '@/constants/Question/question-types'
 import { useProblemFormStore } from '@/store/problem-form/useProblemFormStore'
 import { validateProblemForm } from '@/utils/validation'
-import { useQuestionActions } from '@/hooks/problem-form/useQuestionActions'
+// import { useQuestionActions } from '@/hooks/problem-form/useQuestionActions'
 
 interface ProblemModalProps {
   isOpen: boolean
@@ -53,11 +53,11 @@ export default function ProblemModal({
     correctAnswers,
   } = useProblemFormStore()
 
-  const {
-    createQuestion,
-    updateQuestion,
-    isLoading: isSubmitting,
-  } = useQuestionActions()
+  // const {
+  //   createQuestion,
+  //   updateQuestion,
+  //   isLoading: isSubmitting,
+  // } = useQuestionActions()
 
   // 알림 모달 상태 및 검사를 통과하지 못한 필드로 돌아가는 포커스 관리를 위한 Ref
   const [alertState, setAlertState] = useState({
@@ -132,12 +132,12 @@ export default function ProblemModal({
 
   const handleApiRequest = async () => {
     try {
-      let result = null
-      if (mode === 'edit' && initialData) {
-        result = await updateQuestion(initialData.question_id)
-      } else if (mode === 'create' && examId) {
-        result = await createQuestion(examId)
-      }
+      const result = null
+      // if (mode === 'edit' && initialData) {
+      //   result = await updateQuestion(initialData.question_id)
+      // } else if (mode === 'create' && examId) {
+      //   result = await createQuestion(examId)
+      // }
       if (result) {
         onSuccess?.()
         onClose()
@@ -213,7 +213,7 @@ export default function ProblemModal({
 
           {/* 푸터: 등록 버튼 */}
           <div className="flex justify-end pt-4 pr-8 pb-8">
-            <Button
+            {/* <Button
               variant="primary"
               className="flex h-[36px] min-w-[55px] rounded-sm font-normal"
               onClick={handleSubmit}
@@ -226,7 +226,7 @@ export default function ProblemModal({
                 : mode === 'edit'
                   ? '수정'
                   : '추가'}
-            </Button>
+            </Button> */}
           </div>
         </div>
       </div>
