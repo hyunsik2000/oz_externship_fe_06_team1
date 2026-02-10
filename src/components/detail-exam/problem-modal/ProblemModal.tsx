@@ -16,7 +16,7 @@ import { validateProblemForm } from '@/utils/validation'
 interface ProblemModalProps {
   isOpen: boolean
   onClose: () => void
-  examId?: number // 문제 추가 시 필요
+  examId?: number // 문제 추가 시 필요 (현재 미사용)
   mode?: 'create' | 'edit' // '추가' | '수정' 중 하나
   initialData?: Question // 수정 시 사용할 초기 데이터
   totalScore: number
