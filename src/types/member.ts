@@ -105,12 +105,45 @@ export type StudentRegistrationActionResponse = {
   detail: string
 }
 
+export type WithdrawalUserInfoType = {
+  id: number
+  name: string
+  nickname: string
+  email: string
+  phone: string
+  birth_date: string
+  gender: string
+  role: string
+  joined_at: string
+  profile_image_url?: string
+  status: string
+}
+
 export type MemberWithdrawalItemType = {
   id: number
-  email: string
-  user_name: string
-  birth_date: string
-  role: 'General' | 'Student' | 'Staff' | 'Admin'
+  user: WithdrawalUserInfoType
   reason: string
+  reason_display: string
   withdrawn_at: string
+}
+
+export type MemberWithdrawalDetailType = {
+  id: number
+  user: WithdrawalUserInfoType
+  assigned_courses: {
+    course_name: string
+    cohort?: number
+  }[]
+  reason: string
+  reason_display: string
+  reason_detail: string
+  due_date: string
+  withdrawn_at: string
+}
+
+export interface PaginatedWithdrawalResponse<T> {
+  count: number
+  next: string | null
+  previous: string | null
+  results: T[]
 }

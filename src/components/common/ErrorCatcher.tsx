@@ -7,32 +7,25 @@ export function ErrorCatcher() {
   const { showAlert } = useAlertStore()
 
   useEffect(() => {
-    // 등록된 store의 에러를 출력 (모달이나 toast)
     if (!error) return
 
     const { status, message, mode, title } = error
 
-    if (status >= 500) {
+    const alertType = status >= 500 ? 'danger' : 'warning'
+
+    if (mode === 'modal') {
       showAlert({
-        type: 'danger',
-        title: title || '시스템 오류',
-        description: message || '서버와의 통신이 원활하지 않습니다.',
+        type: alertType,
+        title: title || '오류',
+        description: message || '',
       })
-    } else {
-      if (mode === 'modal') {
-        showAlert({
-          type: 'warning',
-          title: title ?? '경고',
-          description: message ?? '알 수 없는 오류가 발생했습니다.',
-        })
-      } else if (mode === 'toast') {
-        // 토스트 연동 시 여기에 추가 예정
-      }
+    } else if (mode === 'toast') {
+      // toast 기능 구현 시 연동
     }
 
     // 출력 후 스토어 비우기
     clearError()
-  }, [error])
+  }, [error, clearError, showAlert])
 
   return null
 }

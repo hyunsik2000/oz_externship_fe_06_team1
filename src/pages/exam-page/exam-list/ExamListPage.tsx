@@ -54,7 +54,6 @@ export function ExamListPage() {
     isOpen: isFilterOpen,
     openFilter: handleOpenFilter,
     closeFilter: handleCloseFilter,
-    values: filter, // 필터 값
     rows, // 필터 행
     summary, // 필터 요약
     canSubmit, // 필터 제출 가능 여부

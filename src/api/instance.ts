@@ -9,6 +9,7 @@ declare module 'axios' {
   export interface AxiosRequestConfig {
     errorTitle?: string
     errorMode?: ApiErrorMode
+    _retry?: boolean
   }
 }
 
@@ -44,17 +45,23 @@ apiClient.interceptors.response.use(
     const status = error.response?.status
     const config = error.config
 
-    // 401은 인증 흐름이므로 별도 처리 유지
-    if (status === 401) {
+    const isRefreshRequest = config?.url?.includes(API_PATHS.AUTH.REFRESH_TOKEN)
+
+    // 401은 인증 흐름이므로 별도 처리 유지 + 리프레시 요청이 401 에러 나면 즉시 error
+    if (status === 401 && !isRefreshRequest) {
       return handle401Error(error)
     }
 
-    const { status: errorStatus, message } = errorParser(error)
+    const {
+      status: errorStatus,
+      title: errorTitle,
+      message,
+    } = errorParser(error)
 
     const requestError = new RequestError({
       status: errorStatus,
       message: message,
-      title: config?.errorTitle,
+      title: config?.errorTitle || errorTitle,
       mode: config?.errorMode || 'modal',
     })
 

@@ -9,6 +9,11 @@ export const API_PATHS = {
     STUDENT_REGISTRATION_ACCEPT: '/api/v1/admin/student-enrollments/accept',
     STUDENT_REGISTRATION_REJECT: '/api/v1/admin/student-enrollments/reject',
   },
+  EXAM: {
+    LIST: '/api/v1/admin/exams',
+    DETAIL: (examId: number | string) => `/api/v1/admin/exams/${examId}`,
+    PRESIGNED_URL: '/api/v1/admin/exams/presigned-url/thumbnail',
+  },
   GRAPH: {
     STUDENT_SCORES: (studentId: number | string) =>
       `api/v1/admin/students/${studentId}/scores`,
@@ -17,9 +22,9 @@ export const API_PATHS = {
     SUBJECT_SCATTER: (subjectId: number | string) =>
       `api/v1/admin/subjects/${subjectId}/scatter`,
   },
-  EXAM: {
-    LIST: '/api/v1/admin/exams',
-    DETAIL: (examId: number | string) => `/api/v1/admin/exams/${examId}`,
-    PRESIGNED_URL: '/api/v1/admin/exams/presigned-url/thumbnail',
+  WITHDRAWAL: {
+    LIST: '/api/v1/admin/withdrawals/',
+    DETAIL: (withdrawalId: number | string) =>
+      `/api/v1/admin/withdrawals/${withdrawalId}/`,
   },
 }

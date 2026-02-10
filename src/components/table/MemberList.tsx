@@ -18,7 +18,7 @@ const NicknameCell = ({ nickname }: { nickname: string }) => (
   </span>
 )
 
-const NameCell = ({
+export const NameCell = ({
   name,
   onClick,
   className,

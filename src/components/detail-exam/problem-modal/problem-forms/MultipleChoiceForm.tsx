@@ -58,17 +58,19 @@ export function MultipleChoiceForm() {
         return (
           <div key={`choice-${index}`} className="flex items-center gap-3">
             <span className="text-grey-600 text-xs">{index + 1}.</span>
-            <Input
-              id={`options-${index}`}
-              className="h-[30px] flex-1"
-              value={option}
-              onChange={(e) => {
-                const newOps = [...options]
-                newOps[index] = e.target.value
-                setOptions(newOps)
-              }}
-              placeholder="보기 내용을 입력하세요"
-            />
+            <div className="flex-1">
+              <Input
+                id={`options-${index}`}
+                className="h-[30px]"
+                value={option}
+                onChange={(e) => {
+                  const newOps = [...options]
+                  newOps[index] = e.target.value
+                  setOptions(newOps)
+                }}
+                placeholder="보기 내용을 입력하세요"
+              />
+            </div>
             {/* 정답 체크 */}
             <button
               type="button"
