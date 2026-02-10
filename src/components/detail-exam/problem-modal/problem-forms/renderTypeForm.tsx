@@ -11,15 +11,16 @@ export function QuestionTypeForm() {
   const { type } = useProblemFormStore()
 
   switch (type) {
-    case 'multiple_choice':
+    case 'SINGLE_CHOICE':
+    case 'MULTI_SELECT':
       return <MultipleChoiceForm />
-    case 'ox':
+    case 'OX':
       return <OXForm />
-    case 'ordering':
+    case 'ORDERING':
       return <OrderingForm />
-    case 'short_answer':
+    case 'SHORT_ANSWER':
       return <ShortAnswerForm />
-    case 'fill_blank':
+    case 'FILL_IN_BLANK':
       return <FillBlankForm />
     default:
       return (

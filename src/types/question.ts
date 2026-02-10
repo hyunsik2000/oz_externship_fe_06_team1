@@ -1,12 +1,13 @@
 export type QuestionType =
-  | 'multiple_choice'
-  | 'ox'
-  | 'ordering'
-  | 'short_answer'
-  | 'fill_blank'
+  | 'SINGLE_CHOICE'
+  | 'MULTI_SELECT'
+  | 'OX'
+  | 'ORDERING'
+  | 'SHORT_ANSWER'
+  | 'FILL_IN_BLANK'
 
 export interface Question {
-  id: number
+  question_id: number
   type: QuestionType
   question: string
   prompt: string

@@ -60,29 +60,35 @@ export const COMMON_RULES: ValidationRule = (data) => {
   return []
 }
 
+const validateMultiSelect: ValidationRule = (data) => {
+  const emptyIndex = data.options.findIndex((opt) => !opt.trim())
+  if (emptyIndex !== -1) {
+    return required(`options-${emptyIndex}`, `보기`, '를', '는')
+  }
+  const answers = Array.isArray(data.correctAnswers)
+    ? data.correctAnswers
+    : [data.correctAnswers]
+  const filteredAnswers = answers.filter(
+    (ans: unknown) => ans !== '' && ans !== undefined
+  )
+  if (filteredAnswers.length === 0) {
+    return requiredSelect('correctAnswers', '정답')
+  }
+  return []
+}
+
 // --- [유형별 개별 검증] ---
 export const TYPE_RULES: Record<QuestionType, ValidationRule> = {
-  multiple_choice: (data) => {
-    const emptyIndex = data.options.findIndex((opt) => !opt.trim())
-    if (emptyIndex !== -1) {
-      return required(`options-${emptyIndex}`, `보기`, '를', '는')
-    }
-    if (
-      !Array.isArray(data.correctAnswers) ||
-      data.correctAnswers.length === 0
-    ) {
-      return requiredSelect('correctAnswers', '정답')
-    }
-    return []
-  },
+  MULTI_SELECT: validateMultiSelect,
+  SINGLE_CHOICE: validateMultiSelect,
 
-  ox: (data) => {
+  OX: (data) => {
     return data.correctAnswers === 'O' || data.correctAnswers === 'X'
       ? []
       : requiredSelect('correctAnswers', '정답')
   },
 
-  ordering: (data) => {
+  ORDERING: (data) => {
     if (data.options.length < 2) {
       return createError(
         'options',
@@ -97,13 +103,13 @@ export const TYPE_RULES: Record<QuestionType, ValidationRule> = {
     return []
   },
 
-  short_answer: (data) => {
+  SHORT_ANSWER: (data) => {
     const answer =
       typeof data.correctAnswers === 'string' ? data.correctAnswers.trim() : ''
     return !answer ? required('correctAnswers', '답안', '을', '은') : []
   },
 
-  fill_blank: (data) => {
+  FILL_IN_BLANK: (data) => {
     if (!data.prompt.trim()) return required('prompt', '지문', '을', '은')
     if (
       !Array.isArray(data.correctAnswers) ||
