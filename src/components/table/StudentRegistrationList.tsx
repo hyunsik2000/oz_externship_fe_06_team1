@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import {
   CustomCheckbox,
   MemberStatusBadge,
@@ -9,24 +9,23 @@ import type { StudentRegistrationItemType } from '@/types'
 
 type StudentRegistrationListProps = {
   data: StudentRegistrationItemType[]
+  currentPage: number
+  totalPages: number
   selectedIds: number[]
+  onPageChange: (page: number) => void
   onToggleOne: (id: number) => void
   onToggleAll: () => void
 }
 
-const PAGE_SIZE = 10
-
 export function StudentRegistrationList({
   data,
+  currentPage,
+  totalPages,
   selectedIds,
+  onPageChange,
   onToggleOne,
   onToggleAll,
 }: StudentRegistrationListProps) {
-  const [page, setPage] = useState(1)
-
-  const totalPages = Math.max(1, Math.ceil(data.length / PAGE_SIZE))
-  const safePage = Math.min(page, totalPages)
-
   const columns: Column<StudentRegistrationItemType>[] = useMemo(
     () => [
       {
@@ -93,22 +92,17 @@ export function StudentRegistrationList({
     [data, onToggleAll, selectedIds, onToggleOne]
   )
 
-  const pagedItems = useMemo(() => {
-    const start = (safePage - 1) * PAGE_SIZE
-    return data.slice(start, start + PAGE_SIZE)
-  }, [data, safePage])
-
   return (
     <div className="flex flex-1 flex-col overflow-hidden">
       <div className="flex-1 overflow-hidden">
-        <DataTable data={pagedItems} columns={columns} />
+        <DataTable data={data} columns={columns} />
       </div>
 
       <div className="mt-8 flex justify-center">
         <Pagination
-          currentPage={safePage}
+          currentPage={currentPage}
           totalPages={totalPages}
-          onChange={setPage}
+          onChange={onPageChange}
         />
       </div>
     </div>

@@ -1,19 +1,84 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { API_PATHS } from '@/constants/api'
+import { useAxios } from '@/hooks/useAxios'
 import { useToastStore } from '@/store/useToastStore'
-import type { StudentRegistrationItemType } from '@/types'
+import type {
+  StudentRegistrationApiQueryStatus,
+  StudentRegistrationApiStatus,
+  StudentRegistrationItemType,
+  StudentRegistrationListQuery,
+  StudentRegistrationListResponse,
+} from '@/types'
 
-export function useStudentRegistration(
-  initialData: StudentRegistrationItemType[]
-) {
-  const [items, setItems] = useState(initialData)
+const PAGE_SIZE = 10
+
+const API_TO_UI_STATUS: Record<
+  StudentRegistrationApiStatus,
+  StudentRegistrationItemType['status']
+> = {
+  PENDING: 'Submitted',
+  ACCEPTED: 'Accepted',
+  REJECTED: 'Rejected',
+  CANCELED: 'Canceled',
+}
+
+const UI_TO_API_QUERY_STATUS: Partial<
+  Record<
+    StudentRegistrationItemType['status'] | 'all',
+    StudentRegistrationApiQueryStatus
+  >
+> = {
+  Submitted: 'pending',
+  Accepted: 'accepted',
+  Rejected: 'rejected',
+  Canceled: 'canceled',
+}
+
+function formatDateTime(value: string) {
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return value
+
+  return new Intl.DateTimeFormat('ko-KR', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  }).format(date)
+}
+
+function mapApiResultToItem(
+  result: StudentRegistrationListResponse['results'][number]
+): StudentRegistrationItemType {
+  return {
+    id: result.id,
+    course_name: result.course.name,
+    cohort: result.cohort.number,
+    user_name: result.user.name,
+    email: result.user.email,
+    birth_date: result.user.birthday,
+    status: API_TO_UI_STATUS[result.status],
+    requested_at: formatDateTime(result.created_at),
+  }
+}
+
+export function useStudentRegistration() {
+  const { sendRequest } = useAxios()
+  const showToast = useToastStore((state) => state.showToast)
+  const [items, setItems] = useState<StudentRegistrationItemType[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [totalCount, setTotalCount] = useState(0)
+  const [currentPage, setCurrentPage] = useState(1)
 
   const [filters, setFilters] = useState({
-    status: 'all',
+    status: 'all' as StudentRegistrationItemType['status'] | 'all',
     keyword: '',
   })
 
   const [appliedFilters, setAppliedFilters] = useState({
-    status: 'all',
+    status: 'all' as StudentRegistrationItemType['status'] | 'all',
     keyword: '',
   })
 
@@ -33,29 +98,62 @@ export function useStudentRegistration(
     )
   }
 
-  const filteredItems = useMemo(() => {
-    return items.filter((item) => {
-      const matchStatus =
-        appliedFilters.status === 'all' || item.status === appliedFilters.status
+  const fetchList = useCallback(async () => {
+    setIsLoading(true)
+    try {
+      const status = UI_TO_API_QUERY_STATUS[appliedFilters.status]
+      const params: StudentRegistrationListQuery = {
+        page: currentPage,
+        page_size: PAGE_SIZE,
+      }
 
-      const matchKeyword =
-        item.user_name.includes(appliedFilters.keyword) ||
-        item.course_name.includes(appliedFilters.keyword) ||
-        item.email.includes(appliedFilters.keyword)
+      if (appliedFilters.keyword.trim()) {
+        params.search = appliedFilters.keyword.trim()
+      }
 
-      return matchStatus && matchKeyword
-    })
-  }, [items, appliedFilters])
+      if (status) {
+        params.status = status
+      }
+
+      const response = await sendRequest<StudentRegistrationListResponse>({
+        method: 'GET',
+        url: API_PATHS.MEMBER.STUDENT_REGISTRATION,
+        params,
+        errorTitle: '수강생 등록 신청 목록 조회 실패',
+      })
+
+      setItems(response.results.map(mapApiResultToItem))
+      setTotalCount(response.count)
+      setSelectedIds([])
+    } catch (error) {
+      console.error(error)
+      showToast({
+        variant: 'error',
+        message: '수강생 등록 신청 목록을 불러오지 못했습니다.',
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }, [
+    appliedFilters.keyword,
+    appliedFilters.status,
+    currentPage,
+    sendRequest,
+    showToast,
+  ])
+
+  useEffect(() => {
+    fetchList()
+  }, [fetchList])
 
   const applyFilters = () => {
     setAppliedFilters(filters)
+    setCurrentPage(1)
     setSelectedIds([])
   }
 
   const toggleAll = () => {
-    const submittableItems = filteredItems.filter(
-      (i) => i.status === 'Submitted'
-    )
+    const submittableItems = items.filter((i) => i.status === 'Submitted')
     const submittableIds = submittableItems.map((i) => i.id)
 
     if (
@@ -70,8 +168,6 @@ export function useStudentRegistration(
 
   const closeModal = () => setModalConfig((p) => ({ ...p, isOpen: false }))
 
-  const showToast = useToastStore((state) => state.showToast)
-
   const updateStatus = (newStatus: StudentRegistrationItemType['status']) => {
     try {
       setItems((prev) =>
@@ -85,13 +181,13 @@ export function useStudentRegistration(
 
       showToast({
         variant: 'success',
-        message: '성공적으로 상태 처리가 완료되었습니다.',
+        message: '성공적으로 상태 처리가 완료됐습니다.',
       })
     } catch (error) {
       console.error(error)
       showToast({
         variant: 'error',
-        message: '해당 과정을 진행하는 중 오류가 발생하였습니다.',
+        message: '상태 변경 중 오류가 발생했습니다.',
       })
     }
   }
@@ -106,13 +202,13 @@ export function useStudentRegistration(
     )
 
     if (submittableItems.length === 0) {
-      return alert('변경 가능한(대기 중인) 항목이 없습니다.')
+      return alert('변경 가능한(대기중인) 항목이 없습니다.')
     }
 
     const isApprove = targetStatus === 'Accepted'
     const config = {
       type: isApprove ? ('confirm' as const) : ('danger' as const),
-      confirmText: isApprove ? '승인' : '반려',
+      confirmText: isApprove ? '확인' : '반려',
       colorClass: isApprove ? 'text-success-400' : 'text-error-400',
     }
 
@@ -136,11 +232,18 @@ export function useStudentRegistration(
   const openApproveModal = () => handleOpenModal('Accepted')
   const openRejectModal = () => handleOpenModal('Rejected')
 
+  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE))
+
   return {
+    isLoading,
     filters,
-    filteredItems,
+    items,
+    totalCount,
+    totalPages,
+    currentPage,
     selectedIds,
     modalConfig,
+    setCurrentPage,
     setFilters,
     applyFilters,
     toggleOne,
