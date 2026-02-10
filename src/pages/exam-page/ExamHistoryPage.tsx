@@ -8,12 +8,13 @@ import { FilterButton } from '@/components/common'
 import { ExamAttemptDetailModal } from '@/components/exam-attempt'
 import { ExamHistoryLayout } from '@/components/layout'
 import HistoryList from '@/components/table/HistoryList'
-import { MOCK_HISTORY_LIST_RESPONSE } from '@/mocks/data/table-data/HistoryList'
 import type { HistoryItem } from '@/types/history'
 import { useToastStore } from '@/store'
+import { useExamHistory } from '@/hooks'
 
 export function ExamHistoryPage() {
   const navigate = useNavigate()
+  const { submissions, isLoading } = useExamHistory()
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const [filter, setFilter] = useState<FilterValue>({
     course: '',
@@ -24,8 +25,6 @@ export function ExamHistoryPage() {
   const [detailOpen, setDetailOpen] = useState(false)
   const [selectedItem, setSelectedItem] = useState<HistoryItem | null>(null)
   const showToast = useToastStore((state) => state.showToast)
-
-  const submissions = MOCK_HISTORY_LIST_RESPONSE.submissions
 
   const courseOptions = useMemo<Option[]>(() => {
     const seen = new Set<string>()
@@ -99,10 +98,16 @@ export function ExamHistoryPage() {
         title={<span className="text-base">쪽지시험 응시 내역 조회</span>}
         headerRight={<FilterButton onClick={handleOpenFilter} />}
       >
-        <HistoryList
-          onClickTitle={handleOpenDetail}
-          submissions={submissions}
-        />
+        {isLoading ? (
+          <div className="text-grey-500 flex h-60 items-center justify-center">
+            데이터를 불러오는 중입니다...
+          </div>
+        ) : (
+          <HistoryList
+            onClickTitle={handleOpenDetail}
+            submissions={submissions}
+          />
+        )}
       </ExamHistoryLayout>
 
       <CourseSubjectFilterModal

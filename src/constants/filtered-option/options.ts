@@ -23,8 +23,11 @@ export const COHORT_OPTIONS: DropdownOption[] = [
 ]
 
 export const SUBJECT_OPTIONS: DropdownOption[] = [
-  { label: 'React', value: 'react' },
-  { label: 'TypeScript', value: 'ts' },
-  { label: 'JavaScript', value: 'js' },
-  { label: 'Next.js', value: 'next' },
+  { label: 'HTML', value: '1' },
+  { label: 'JavaScript', value: '2' },
+  { label: 'React', value: '3' },
+  { label: 'Django', value: '4' },
+  { label: 'Flask', value: '5' },
+  { label: 'AWS', value: '6' },
+  { label: 'Github', value: '7' },
 ]

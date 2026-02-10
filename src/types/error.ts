@@ -1,4 +1,4 @@
-export type ApiErrorMode = 'toast' | 'modal' // | 'none'
+export type ApiErrorMode = 'toast' | 'modal' | 'none'
 
 export interface RequestErrorParams {
   status: number
@@ -14,6 +14,7 @@ export class RequestError extends Error {
   errorCode?: string
   title?: string
   mode: ApiErrorMode
+  isHandled: boolean = false // 지역적으로 처리되었는지 여부
 
   constructor({
     status,

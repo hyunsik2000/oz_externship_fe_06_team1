@@ -15,6 +15,7 @@ interface ProblemFormState {
   prompt: string
   options: string[]
   blankCount: number
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   correctAnswers: any
   point: number
   explanation: string
@@ -27,6 +28,7 @@ interface ProblemFormState {
   setPrompt: (prompt: string) => void
   setOptions: (options: string[]) => void
   setBlankCount: (blankCount: number) => void
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setCorrectAnswers: (correctAnswers: any) => void
   setPoint: (point: number) => void
   setExplanation: (explanation: string) => void

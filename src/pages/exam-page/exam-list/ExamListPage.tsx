@@ -10,7 +10,7 @@ import ExamList from '@/components/table/ExamList'
 import { useAxios, useFilter, type FilterOptionConfig } from '@/hooks'
 import { API_PATHS } from '@/constants/api'
 import type { ExamListResponse } from '@/types/exam'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import ExamModal from '@/components/detail-exam/exam-modal/ExamModal'
 import { COURSE_OPTIONS } from '@/constants/filtered-option'
 
@@ -21,23 +21,23 @@ export function ExamListPage() {
 
   const { sendRequest, isLoading } = useAxios()
 
-  useEffect(() => {
-    const fetchExams = async () => {
-      const response = await sendRequest<ExamListResponse>({
-        method: 'GET',
-        url: API_PATHS.EXAM.LIST,
-        params: {
-          page,
-          size: 10,
-        },
-      })
-      if (response) {
-        console.log(response)
-        setData(response)
-      }
+  const fetchExams = useCallback(async () => {
+    const response = await sendRequest<ExamListResponse>({
+      method: 'GET',
+      url: API_PATHS.EXAM.LIST,
+      params: {
+        page,
+        size: 10,
+      },
+    })
+    if (response) {
+      setData(response)
     }
-    fetchExams()
   }, [page, sendRequest])
+
+  useEffect(() => {
+    fetchExams()
+  }, [fetchExams])
 
   const totalPages = data ? Math.ceil(data.total_count / data.size) : 0
   const paginatedData = data?.exams || []
@@ -54,7 +54,6 @@ export function ExamListPage() {
     isOpen: isFilterOpen,
     openFilter: handleOpenFilter,
     closeFilter: handleCloseFilter,
-    values: filter, // 필터 값
     rows, // 필터 행
     summary, // 필터 요약
     canSubmit, // 필터 제출 가능 여부
@@ -125,6 +124,7 @@ export function ExamListPage() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         mode="create"
+        onSuccess={fetchExams}
       />
     </>
   )

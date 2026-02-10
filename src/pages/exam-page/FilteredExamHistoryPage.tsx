@@ -8,11 +8,11 @@ import { FilterButton } from '@/components/common'
 import { ExamAttemptDetailModal } from '@/components/exam-attempt'
 import { ExamHistoryLayout } from '@/components/layout'
 import HistoryList from '@/components/table/HistoryList'
-import { MOCK_HISTORY_LIST_RESPONSE } from '@/mocks/data/table-data/HistoryList'
 import type { HistoryItem } from '@/types/history'
 import BackCircleIcon from '@/assets/icons/BackCircle.svg?react'
 import CloseIcon from '@/assets/icons/Close.svg?react'
 import { useToastStore } from '@/store'
+import { useExamHistory } from '@/hooks'
 
 type LocationState = {
   filter?: FilterValue
@@ -27,6 +27,7 @@ const EMPTY_FILTER: FilterValue = {
 export function FilteredExamHistoryPage() {
   const navigate = useNavigate()
   const location = useLocation()
+  const { submissions, isLoading } = useExamHistory()
   const locationState = location.state as LocationState | null
   const initialFilter = locationState?.filter ?? EMPTY_FILTER
   const isValidFilter = Boolean(
@@ -40,8 +41,6 @@ export function FilteredExamHistoryPage() {
   const [detailOpen, setDetailOpen] = useState(false)
   const [selectedItem, setSelectedItem] = useState<HistoryItem | null>(null)
   const showToast = useToastStore((state) => state.showToast)
-
-  const submissions = MOCK_HISTORY_LIST_RESPONSE.submissions
 
   useEffect(() => {
     if (!isValidFilter) {
@@ -179,10 +178,16 @@ export function FilteredExamHistoryPage() {
             </div>
           }
         >
-          <HistoryList
-            onClickTitle={handleOpenDetail}
-            submissions={filteredSubmissions}
-          />
+          {isLoading ? (
+            <div className="text-grey-500 flex h-60 items-center justify-center">
+              데이터를 불러오는 중입니다...
+            </div>
+          ) : (
+            <HistoryList
+              onClickTitle={handleOpenDetail}
+              submissions={filteredSubmissions}
+            />
+          )}
         </ExamHistoryLayout>
 
         <CourseSubjectFilterModal

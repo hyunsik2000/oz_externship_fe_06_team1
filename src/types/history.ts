@@ -1,20 +1,20 @@
 export interface HistoryItem {
-  exam_id: number
-  history_id: number
-  exam_title: string
-  subject_name: string
+  submission_id: number
   nickname: string
+  name: string
   course_name: string
   cohort_number: number
-  cheating_count: number
+  exam_title: string
+  subject_name: string
   score: number
+  cheating_count: number
   started_at: string
   finished_at: string
 }
 
 export interface HistoryListResponse {
-  page: number
-  size: number
-  total_count: number
-  submissions: HistoryItem[]
+  count: number
+  next: string | null
+  previous: string | null
+  results: HistoryItem[]
 }

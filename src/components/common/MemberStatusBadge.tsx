@@ -8,6 +8,7 @@ export type MemberStatus =
   | 'Submitted'
   | 'Accepted'
   | 'Rejected'
+  | 'Canceled'
   | 'General'
   | 'Student'
   | 'Staff'
@@ -20,6 +21,7 @@ const STATUS_TO_VARIANT = {
   Submitted: 'success',
   Accepted: 'primary',
   Rejected: 'danger',
+  Canceled: 'default',
   General: 'default',
   Student: 'success',
   Staff: 'primary',

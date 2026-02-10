@@ -1,20 +1,64 @@
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
 import { DetailExamContainer } from '@/components/detail-exam'
 import ExamModal from '@/components/detail-exam/exam-modal/ExamModal'
 import { AlertModal, Button } from '@/components/common'
 import { ExamHistoryLayout } from '@/components/layout'
-import { MOCK_QUESTION_LIST_RESPONSE } from '@/mocks/data/exam-data/QuestionList'
+import { useAxios } from '@/hooks'
+import { API_PATHS } from '@/constants/api'
+import type { QuestionsList } from '@/types/question'
 
 export function DetailExamPage() {
+  const { id } = useParams<{ id: string }>()
+  const navigate = useNavigate()
+  const [data, setData] = useState<QuestionsList | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
-  const examData = MOCK_QUESTION_LIST_RESPONSE
+
+  const { sendRequest, isLoading } = useAxios()
   const BUTTON_STYLE = 'h-[36px] w-[55px] rounded-sm font-normal text-sm'
 
-  const handleDelete = () => {
-    // 추후에 DELETE API 호출 할 곳
-    setIsDeleteModalOpen(false)
+  const fetchDetail = useCallback(async () => {
+    if (!id) return
+    const response = await sendRequest<QuestionsList>({
+      method: 'GET',
+      url: API_PATHS.EXAM.DETAIL(id),
+    })
+    if (response) {
+      setData(response)
+    }
+  }, [id, sendRequest])
+
+  useEffect(() => {
+    fetchDetail()
+  }, [fetchDetail])
+
+  const handleDelete = async () => {
+    if (!id) return
+
+    const success = await sendRequest({
+      method: 'DELETE',
+      url: API_PATHS.EXAM.DETAIL(id),
+      errorTitle: '삭제 실패',
+    })
+
+    if (success) {
+      setIsDeleteModalOpen(false)
+      navigate('/exam/list')
+    }
   }
+
+  if (isLoading && !data) {
+    return (
+      <ExamHistoryLayout title="쪽지시험 상세조회">
+        <div className="text-grey-500 flex h-60 items-center justify-center">
+          로딩 중...
+        </div>
+      </ExamHistoryLayout>
+    )
+  }
+
+  if (!data) return null
 
   return (
     <>
@@ -39,17 +83,19 @@ export function DetailExamPage() {
           </div>
         }
       >
-        <DetailExamContainer data={examData} />
+        <DetailExamContainer data={data} />
       </ExamHistoryLayout>
 
       <ExamModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         mode="edit"
+        id={id}
+        onSuccess={fetchDetail}
         initialData={{
-          title: examData.title,
-          subject_name: examData.subject.title,
-          logo_url: examData.thumbnail_img_url,
+          title: data.title,
+          subject_id: data.subject.id,
+          logo_url: data.thumbnail_img_url,
         }}
       />
 

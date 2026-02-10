@@ -2,7 +2,8 @@ import type { ReactNode } from 'react'
 import type { MemberRole } from '@/types'
 import imgEditIcon from '@/assets/icons/ImgEdit.svg'
 
-const DEFAULT_TABLE_COLUMNS = '141px 130px minmax(0,1fr) 100px minmax(0,1fr)'
+export const DEFAULT_TABLE_COLUMNS =
+  '141px 130px minmax(0,1fr) 100px minmax(0,1fr)'
 
 export function TableWrap({
   children,
@@ -43,7 +44,7 @@ export function ThCell({
 }) {
   return (
     <div
-      className={`border-grey-300 bg-grey-50 text-grey-600 flex h-full min-h-[50px] items-center px-4 py-3 text-sm font-medium ${
+      className={`border-grey-300 bg-grey-50 text-grey-600 flex h-full min-h-12 items-center px-4 py-3 text-sm font-medium ${
         className ?? ''
       } border-r border-b`}
       style={{
@@ -69,7 +70,7 @@ export function TdCell({
 }) {
   return (
     <div
-      className={`border-grey-300 text-grey-600 flex h-full min-h-[50px] items-center px-4 py-3 text-sm break-keep ${
+      className={`border-grey-300 text-grey-600 flex h-full min-h-12 items-center px-4 py-3 text-sm break-keep ${
         className ?? ''
       } border-r border-b`}
       style={{

@@ -28,7 +28,7 @@ export default function App() {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route element={<AdminLayout />}>
-          <Route index element={<Navigate to="/exam/history" replace />} />
+          <Route index element={<Navigate to="/login" replace />} />
           <Route path="/exam">
             <Route path="/exam/dashboard" element={<ExamDashboardPage />} />
             <Route path="/exam/history" element={<ExamHistoryPage />} />

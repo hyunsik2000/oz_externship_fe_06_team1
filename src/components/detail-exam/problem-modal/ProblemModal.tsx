@@ -16,10 +16,12 @@ import { validateProblemForm } from '@/utils/validation'
 interface ProblemModalProps {
   isOpen: boolean
   onClose: () => void
+  examId?: number // 문제 추가 시 필요 (현재 미사용)
   mode?: 'create' | 'edit' // '추가' | '수정' 중 하나
   initialData?: Question // 수정 시 사용할 초기 데이터
   totalScore: number
   questionCount: number
+  onSuccess?: () => void
 }
 
 export default function ProblemModal({
@@ -29,6 +31,7 @@ export default function ProblemModal({
   initialData,
   totalScore,
   questionCount,
+  onSuccess,
 }: ProblemModalProps) {
   // Store에서 상태와 초기화 함수 가져오기
   const {
@@ -114,6 +117,9 @@ export default function ProblemModal({
       })
       return
     }
+
+    // TODO: 문제 생성/수정 API 연동 시 onSuccess와 함께 실제 요청으로 교체
+    onSuccess?.()
     onClose()
   }
 
@@ -185,7 +191,7 @@ export default function ProblemModal({
           <div className="flex justify-end pt-4 pr-8 pb-8">
             <Button
               variant="primary"
-              className="flex h-[36px] w-[55px] rounded-sm font-normal"
+              className="flex h-[36px] min-w-[55px] rounded-sm font-normal"
               onClick={handleSubmit}
             >
               {mode === 'edit' ? '수정' : '추가'}
