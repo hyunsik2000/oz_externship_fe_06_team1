@@ -2,6 +2,8 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { AlertModal, Button, Modal } from '@/components/common'
 import type { HistoryItem } from '@/types/history'
 import { SolutionViewTrigger } from '@/components/exam-attempt/solution-view'
+import { API_PATHS } from '@/constants/api'
+import { useAxios } from '@/hooks'
 
 type ExamAttemptDetailModalProps = {
   open: boolean
@@ -63,6 +65,7 @@ export function ExamAttemptDetailModal({
 }: ExamAttemptDetailModalProps) {
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false)
   const deleteConfirmRootRef = useRef<HTMLDivElement | null>(null)
+  const { sendRequest } = useAxios()
 
   const cohortText = useMemo(() => {
     if (!item) return ''
@@ -80,6 +83,21 @@ export function ExamAttemptDetailModal({
   const handleCloseDetail = () => {
     setDeleteConfirmOpen(false)
     onClose()
+  }
+
+  const handleDelete = async () => {
+    if (!item) return
+    try {
+      await sendRequest<void>({
+        method: 'DELETE',
+        url: API_PATHS.SUBMISSIONS.DETAIL(item.submission_id),
+        errorTitle: '응시 내역 삭제에 실패했습니다.',
+      })
+      onDeleteConfirm?.(item)
+      handleCloseDetail()
+    } catch {
+      // 에러는 useAxios에서 전역 에러 스토어로 처리
+    }
   }
 
   return (
@@ -126,7 +144,7 @@ export function ExamAttemptDetailModal({
               </div>
 
               <TableWrap>
-                <Row2 label="응시 ID" value={item.history_id} />
+                <Row2 label="응시 ID" value={item.submission_id} />
                 <Row2 label="닉네임" value={item.nickname} />
                 <Row2 label="이름" value="-" />
 
@@ -172,10 +190,7 @@ export function ExamAttemptDetailModal({
           description={`응시내역 삭제시 되돌릴 수 없으며,\n응시 수강생은 해당 시험을 재응시할 수 있습니다.`}
           confirmText="확인"
           showCancel={false}
-          onConfirm={() => {
-            onDeleteConfirm?.(item)
-            handleCloseDetail()
-          }}
+          onConfirm={handleDelete}
         />
       </div>
     </>

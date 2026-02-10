@@ -16,6 +16,8 @@ export const API_PATHS = {
   },
   SUBMISSIONS: {
     LIST: '/api/v1/admin/submissions',
+    DETAIL: (submissionId: number | string) =>
+      `/api/v1/admin/exams/submissions/${submissionId}`,
   },
   GRAPH: {
     STUDENT_SCORES: (studentId: number | string) =>
