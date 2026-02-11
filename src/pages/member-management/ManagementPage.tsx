@@ -4,12 +4,13 @@ import { MemberDetailModal } from '@/components/member-management/MemberDetailMo
 import { MemberEditModal } from '@/components/member-management/MemberEditModal'
 import { MemberManagementLayout } from '@/components/layout'
 import MemberList from '@/components/table/MemberList'
-import type { Member, MemberRole } from '@/types'
+import type { Member, MemberDetail, MemberRole } from '@/types'
 import { MOCK_MEMBER_DETAIL_MAP } from '@/mocks/data/member-detail'
 import type { DropdownOption } from '@/types/commonComponents'
 import { useToastStore } from '@/store'
 
 const ROLE_OPTIONS: DropdownOption[] = [
+  { label: '전체', value: 'ALL' },
   { label: 'Admin', value: 'Admin' },
   { label: 'Staff (TA)', value: 'Staff (TA)' },
   { label: 'Student', value: 'Student' },
@@ -19,6 +20,7 @@ const ROLE_OPTIONS: DropdownOption[] = [
 ]
 
 const STATUS_OPTIONS: DropdownOption[] = [
+  { label: '전체', value: 'ALL' },
   { label: 'Activated', value: 'Activated' },
   { label: 'Disabled', value: 'Disabled' },
   { label: 'Withdraw', value: 'Withdraw' },
@@ -40,8 +42,10 @@ export default function ManagementPage({
   externalLoading,
 }: ManagementPageProps) {
   const showRoleFilter = listVariant === 'member'
-  const [roleInput, setRoleInput] = useState<MemberRole | undefined>()
-  const [statusInput, setStatusInput] = useState<Member['status'] | undefined>()
+  const [roleInput, setRoleInput] = useState<MemberRole | 'ALL'>('ALL')
+  const [statusInput, setStatusInput] = useState<Member['status'] | 'ALL'>(
+    'ALL'
+  )
   const [keywordInput, setKeywordInput] = useState('')
   const [role, setRole] = useState<'ALL' | MemberRole>('ALL')
   const [status, setStatus] = useState<'ALL' | Member['status']>('ALL')
@@ -49,6 +53,7 @@ export default function ManagementPage({
   const [detailOpen, setDetailOpen] = useState(false)
   const [editOpen, setEditOpen] = useState(false)
   const [selectedMember, setSelectedMember] = useState<Member | null>(null)
+  const [editDetail, setEditDetail] = useState<MemberDetail | null>(null)
   const [memberList, setMemberList] = useState(listData)
   const showToast = useToastStore((state) => state.showToast)
   const [internalLoading, setInternalLoading] = useState(
@@ -73,6 +78,12 @@ export default function ManagementPage({
     setStatus(statusInput ?? 'ALL')
     setKeyword(keywordInput)
   }
+
+  useEffect(() => {
+    if (keywordInput.trim() === '') {
+      setKeyword('')
+    }
+  }, [keywordInput])
 
   const filtered = useMemo(() => {
     const kw = keyword.trim().toLowerCase()
@@ -102,14 +113,15 @@ export default function ManagementPage({
     setSelectedMember(null)
   }
 
-  const openMemberEdit = () => {
-    if (!selectedMember) return
+  const openMemberEdit = (detail: MemberDetail) => {
+    setEditDetail(detail)
     setDetailOpen(false)
     setEditOpen(true)
   }
 
   const closeMemberEdit = () => {
     setEditOpen(false)
+    setEditDetail(null)
   }
 
   const handleDeleteConfirm = (member: Member) => {
@@ -127,6 +139,13 @@ export default function ManagementPage({
     showToast({
       variant: 'success',
       message: '성공적으로 수정이 완료되었습니다.',
+    })
+  }
+
+  const handlePermissionConfirm = () => {
+    showToast({
+      variant: 'success',
+      message: '권한이 성공적으로 변경되었습니다.',
     })
   }
 
@@ -178,7 +197,11 @@ export default function ManagementPage({
                   placeholder="권한"
                   options={ROLE_OPTIONS}
                   value={roleInput}
-                  onChange={(v) => setRoleInput(v as MemberRole)}
+                  onChange={(v) => {
+                    const val = v as MemberRole | 'ALL'
+                    setRoleInput(val)
+                    setRole(val)
+                  }}
                 />
               </div>
             )}
@@ -190,7 +213,11 @@ export default function ManagementPage({
                 placeholder="회원 상태"
                 options={STATUS_OPTIONS}
                 value={statusInput}
-                onChange={(v) => setStatusInput(v as Member['status'])}
+                onChange={(v) => {
+                  const val = v as Member['status'] | 'ALL'
+                  setStatusInput(val)
+                  setStatus(val)
+                }}
               />
             </div>
 
@@ -232,12 +259,13 @@ export default function ManagementPage({
             member={selectedMember}
             onDeleteConfirm={handleDeleteConfirm}
             onEdit={openMemberEdit}
+            onPermissionConfirm={handlePermissionConfirm}
           />
 
           <MemberEditModal
             open={editOpen}
             onClose={closeMemberEdit}
-            detail={selectedDetail}
+            detail={editDetail ?? selectedDetail}
             courseOptions={courseOptions}
             cohortOptions={cohortOptions}
             onSave={handleEditSave}

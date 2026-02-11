@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import type { MemberRole } from '@/types'
 import imgEditIcon from '@/assets/icons/ImgEdit.svg'
 
@@ -107,14 +107,23 @@ export function ProfileImageCell({
   showEditIcon?: boolean
   onEditClick?: () => void
 }) {
+  const [loadError, setLoadError] = useState(false)
+
+  useEffect(() => {
+    setLoadError(false)
+  }, [imageUrl])
+
+  const showImage = imageUrl && !loadError
+
   return (
     <TdCell rowSpan={4} className="overflow-hidden !p-0">
       <div className="bg-grey-100 relative h-[199px] w-[141px] overflow-hidden">
-        {imageUrl ? (
+        {showImage ? (
           <img
             src={imageUrl}
             alt={alt}
             className="block h-full w-full object-cover"
+            onError={() => setLoadError(true)}
           />
         ) : (
           <div

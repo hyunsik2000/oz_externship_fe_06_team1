@@ -14,7 +14,7 @@ import { useExamHistory } from '@/hooks'
 
 export function ExamHistoryPage() {
   const navigate = useNavigate()
-  const { submissions, isLoading } = useExamHistory()
+  const { submissions, isLoading, refetch } = useExamHistory()
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const [filter, setFilter] = useState<FilterValue>({
     course: '',
@@ -86,6 +86,7 @@ export function ExamHistoryPage() {
   }
 
   const handleDeleteConfirm = () => {
+    refetch()
     showToast({
       variant: 'success',
       message: '응시 내역 삭제가 완료되었습니다.',

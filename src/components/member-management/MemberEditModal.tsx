@@ -12,6 +12,7 @@ import { MOCK_MEMBER_LIST_RESPONSE } from '@/mocks/data/table-data/MemberList'
 import nicknameOverlapAlert from '@/assets/icons/NicknameOverlapAlert.svg'
 import { inputVariants } from '@/constants/variants'
 import { cn } from '@/lib/cn'
+import { formatDateTime } from '@/utils/dateUtils'
 import {
   TableWrap,
   TableRow,
@@ -54,6 +55,10 @@ const GENDER_OPTIONS: Option[] = [
   { label: '미설정', value: '미설정' },
 ]
 
+/** 닉네임 형식: 2~12자, 영문 소문자/숫자/밑줄/한글 */
+const NICKNAME_REGEX = /^[a-z0-9_가-힣ㄱ-ㅎㅏ-ㅣ]{2,12}$/
+const isValidNicknameFormat = (s: string) => NICKNAME_REGEX.test(s.trim())
+
 const normalizeDateValue = (value?: string) => {
   if (!value) return ''
   return value.includes('.') ? value.replace(/\./g, '-') : value
@@ -77,7 +82,6 @@ export function MemberEditModal({
     cohort: '',
     birthDate: '',
   })
-  const [nicknameError, setNicknameError] = useState('')
   const [isNicknameFocused, setIsNicknameFocused] = useState(false)
   const imageInputRef = useRef<HTMLInputElement | null>(null)
 
@@ -104,9 +108,19 @@ export function MemberEditModal({
     )
   }, [value.nickname, detail?.nickname])
 
-  useEffect(() => {
-    setNicknameError(isNicknameDuplicate ? '이미 존재하는 닉네임입니다.' : '')
-  }, [isNicknameDuplicate])
+  const isValidNickname = useMemo(
+    () => isValidNicknameFormat(value.nickname) && !isNicknameDuplicate,
+    [value.nickname, isNicknameDuplicate]
+  )
+
+  const nicknameError = useMemo(() => {
+    const trimmed = value.nickname.trim()
+    if (!trimmed) return ''
+    if (isNicknameDuplicate) return '이미 존재하는 닉네임입니다.'
+    if (!isValidNicknameFormat(value.nickname))
+      return '닉네임은 2~12자, 영문 소문자/숫자/밑줄(_)/한글만 사용할 수 있어요.'
+    return ''
+  }, [value.nickname, isNicknameDuplicate])
 
   const imageUrl = detail?.profileImageUrl ?? DEFAULT_MEMBER_IMAGE_URL
   const openImagePicker = () => imageInputRef.current?.click()
@@ -195,39 +209,36 @@ export function MemberEditModal({
                         onBlur={() => setIsNicknameFocused(false)}
                         className={cn(
                           inputVariants({
-                            status:
-                              nicknameError || isNicknameFocused
-                                ? 'error'
-                                : 'default',
+                            status: nicknameError ? 'error' : 'default',
                             size: 'sm',
                             className: 'pr-10',
                           }),
                           'pl-3'
                         )}
                       />
-                      {(isNicknameFocused || nicknameError) && (
-                        <div className="absolute top-1/2 right-3 -translate-y-1/2">
-                          <div className="relative">
-                            <img
-                              src={nicknameOverlapAlert}
-                              alt="닉네임 안내"
-                              className="h-4 w-4"
-                            />
-                            <div
-                              className={cn(
-                                'absolute right-0 bottom-full z-10 mb-2 w-[260px] rounded-md border bg-white px-3 py-2 text-xs shadow-sm',
-                                isNicknameFocused || nicknameError
-                                  ? 'border-error-400 text-error-400'
-                                  : 'border-grey-200 text-grey-700'
-                              )}
-                            >
-                              {nicknameError
-                                ? nicknameError
-                                : '닉네임은 2~12자, 영문 소문자/숫자/밑줄(_)만 사용할 수 있어요.'}
+                      {(isNicknameFocused || nicknameError) &&
+                        !isValidNickname && (
+                          <div className="absolute top-1/2 right-3 -translate-y-1/2">
+                            <div className="relative">
+                              <img
+                                src={nicknameOverlapAlert}
+                                alt="닉네임 안내"
+                                className="h-4 w-4"
+                              />
+                              <div
+                                className={cn(
+                                  'absolute right-0 bottom-full z-10 mb-2 w-[260px] rounded-md border bg-white px-3 py-2 text-xs shadow-sm',
+                                  nicknameError
+                                    ? 'border-error-400 text-error-400'
+                                    : 'border-grey-200 text-grey-700'
+                                )}
+                              >
+                                {nicknameError ||
+                                  '닉네임은 2~12자, 영문 소문자/숫자/밑줄(_)/한글만 사용할 수 있어요.'}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      )}
+                        )}
                     </div>
                   </div>
                 </TdCell>
@@ -299,7 +310,7 @@ export function MemberEditModal({
 
               <TableRow>
                 <ThCell>가입일</ThCell>
-                <TdCell colSpan={4}>{detail.joinedAt}</TdCell>
+                <TdCell colSpan={4}>{formatDateTime(detail.joinedAt)}</TdCell>
               </TableRow>
 
               <TableRow>

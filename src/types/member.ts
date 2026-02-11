@@ -170,8 +170,19 @@ export type AdminAccountListResponse = {
 
 /** GET /api/v1/admin/accounts/{id}/ 상세 응답 (retrieve) */
 export type AssignedCourseItem = {
-  course?: string | { id?: number; name?: string; course_name?: string }
-  cohort?: number | { id?: number; number?: number }
+  course?:
+    | string
+    | { id?: number; name?: string; course_name?: string; tag?: string }
+  cohort?:
+    | number
+    | {
+        id?: number
+        number?: number
+        status?: string
+        status_display?: string
+        start_date?: string
+        end_date?: string
+      }
   course_name?: string
 }
 export type AdminAccountDetail = AdminAccountListItem & {

@@ -1,4 +1,5 @@
 import { http, HttpResponse } from 'msw'
+import { adminAccountHandlers } from './handlers/adminAccountHandlers'
 import { examGraphHandlers } from './handlers/examGraphHandlers'
 import { memberGraphHandlers } from './handlers/memberGraphHandlers'
 import { withdrawalHandlers } from './handlers/withdrawalHandlers'
@@ -10,6 +11,7 @@ const testHandler = http.get('/api/hello', () => {
 
 export const handlers = [
   testHandler,
+  ...adminAccountHandlers,
   ...examDeploymentHandlers,
   ...examGraphHandlers,
   ...memberGraphHandlers,
