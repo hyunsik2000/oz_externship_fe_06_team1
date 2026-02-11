@@ -19,7 +19,7 @@ const ROLE_OPTIONS: DropdownOption[] = [
 ]
 
 const STATUS_OPTIONS: DropdownOption[] = [
-  { label: 'Activated', value: 'Activated' },
+  { label: 'Active', value: 'active' },
   { label: 'Disabled', value: 'Disabled' },
   { label: 'Withdraw', value: 'Withdraw' },
 ]
@@ -29,6 +29,7 @@ type ManagementPageProps = {
   listVariant: 'member' | 'student'
   listData: Member[]
   enableDetail?: boolean
+  externalLoading?: boolean
 }
 
 export default function ManagementPage({
@@ -36,6 +37,7 @@ export default function ManagementPage({
   listVariant,
   listData,
   enableDetail = true,
+  externalLoading,
 }: ManagementPageProps) {
   const showRoleFilter = listVariant === 'member'
   const [roleInput, setRoleInput] = useState<MemberRole | undefined>()
@@ -49,15 +51,22 @@ export default function ManagementPage({
   const [selectedMember, setSelectedMember] = useState<Member | null>(null)
   const [memberList, setMemberList] = useState(listData)
   const showToast = useToastStore((state) => state.showToast)
-  const [isLoading, setIsLoading] = useState(true)
+  const [internalLoading, setInternalLoading] = useState(
+    externalLoading === undefined
+  )
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false)
-    }, 3000)
+    setMemberList(listData)
+  }, [listData])
 
+  useEffect(() => {
+    if (externalLoading !== undefined) return
+    const timer = setTimeout(() => setInternalLoading(false), 3000)
     return () => clearTimeout(timer)
-  }, [])
+  }, [externalLoading])
+
+  const isLoading =
+    externalLoading !== undefined ? externalLoading : internalLoading
 
   const handleSearch = () => {
     setRole(roleInput ?? 'ALL')

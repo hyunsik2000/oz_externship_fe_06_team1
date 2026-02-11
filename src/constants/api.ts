@@ -1,4 +1,7 @@
 export const API_PATHS = {
+  ACCOUNTS: {
+    LIST: '/api/v1/admin/accounts/',
+  },
   AUTH: {
     LOGIN: '/api/v1/accounts/login/',
     REFRESH_TOKEN: '/api/v1/accounts/me/refresh/',

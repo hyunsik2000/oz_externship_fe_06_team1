@@ -2,7 +2,8 @@ import type { BadgeProps } from '@/components/common/Badge'
 import { Badge } from '@/components/common'
 
 export type MemberStatus =
-  | 'Activated'
+  | 'active'
+  | 'Activated' // mock 등 레거시용
   | 'Disabled'
   | 'Withdraw'
   | 'Submitted'
@@ -14,7 +15,8 @@ export type MemberStatus =
   | 'Staff'
   | 'Admin'
 
-const STATUS_TO_VARIANT = {
+const STATUS_TO_VARIANT: Record<MemberStatus, BadgeProps['variant']> = {
+  active: 'primary',
   Activated: 'primary',
   Disabled: 'danger',
   Withdraw: 'success',
@@ -43,7 +45,7 @@ export function MemberStatusBadge({
       size="status"
       className={className}
     >
-      {status}
+      {status === 'active' || status === 'Activated' ? 'Active' : status}
     </Badge>
   )
 }
