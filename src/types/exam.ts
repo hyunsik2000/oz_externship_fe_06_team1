@@ -15,3 +15,22 @@ export interface ExamListResponse {
   total_count: number
   exams: ExamItem[]
 }
+
+export interface ExamDeploymentItemType {
+  id: number
+  title: string
+  subject_name: string
+  course_name: string
+  cohort: number
+  applicant_count: number
+  average_score: number
+  created_at: string
+  is_active: boolean
+}
+
+export interface PaginatedDeploymentResponse<T> {
+  count: number
+  next: string | null
+  previous: string | null
+  results: T[]
+}
