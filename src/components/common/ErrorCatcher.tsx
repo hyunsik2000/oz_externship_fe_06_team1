@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useErrorStore, useAlertStore } from '@/store'
+import { useErrorStore, useAlertStore, useToastStore } from '@/store'
 // 전역 에러 상태를 감시하여 UI를 트리거
 
 export function ErrorCatcher() {
@@ -20,7 +20,10 @@ export function ErrorCatcher() {
         description: message || '',
       })
     } else if (mode === 'toast') {
-      // toast 기능 구현 시 연동
+      useToastStore.getState().showToast({
+        message: message || '해당 과정을 진행하는 중 오류가 발생하였습니다.',
+        variant: 'error',
+      })
     }
 
     // 출력 후 스토어 비우기
