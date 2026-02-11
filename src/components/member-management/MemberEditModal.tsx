@@ -12,6 +12,7 @@ import { MOCK_MEMBER_LIST_RESPONSE } from '@/mocks/data/table-data/MemberList'
 import nicknameOverlapAlert from '@/assets/icons/NicknameOverlapAlert.svg'
 import { inputVariants } from '@/constants/variants'
 import { cn } from '@/lib/cn'
+import { formatDateTime } from '@/utils/dateUtils'
 import {
   TableWrap,
   TableRow,
@@ -299,7 +300,7 @@ export function MemberEditModal({
 
               <TableRow>
                 <ThCell>가입일</ThCell>
-                <TdCell colSpan={4}>{detail.joinedAt}</TdCell>
+                <TdCell colSpan={4}>{formatDateTime(detail.joinedAt)}</TdCell>
               </TableRow>
 
               <TableRow>

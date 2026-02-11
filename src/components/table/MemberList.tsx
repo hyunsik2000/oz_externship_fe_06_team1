@@ -3,6 +3,7 @@ import { MemberStatusBadge, Pagination } from '@/components/common'
 import { DataTable, type Column } from './data-table/DataTable'
 import type { Member } from '@/types/member'
 import { RoleLabel } from '@/components/member-management/MemberDetailTable'
+import { formatDateTime } from '@/utils/dateUtils'
 
 type MemberListProps = {
   data: Member[]
@@ -94,7 +95,7 @@ const MEMBER_COLUMNS = (
     key: 'joinedAt',
     title: '가입일',
     size: 'xl',
-    cell: (item) => item.joinedAt,
+    cell: (item) => formatDateTime(item.joinedAt),
   },
 ]
 
