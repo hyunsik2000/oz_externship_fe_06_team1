@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { AlertModal, Button, Modal } from '@/components/common'
-import type { HistoryItem } from '@/types/history'
+import type { ExamSubmissionDetail, HistoryItem } from '@/types/history'
 import { SolutionViewTrigger } from '@/components/exam-attempt/solution-view'
 import { API_PATHS } from '@/constants/api'
 import { useAxios, useExamHistoryDetail } from '@/hooks'
@@ -74,11 +74,29 @@ export function ExamAttemptDetailModal({
   const target = detail ?? item
 
   const cohortText = useMemo(() => {
-    if (!target) return ''
-    return `${target.cohort_number}기`
+    if (!target) return '-'
+    const n = target.cohort_number
+    return n != null && n !== 0 ? `${n}기` : '-'
   }, [target])
 
-  const correctText = useMemo(() => '-', [])
+  const correctText = useMemo(() => {
+    const d = detail as ExamSubmissionDetail | null
+    if (d?.correct_answer_count == null || d?.total_question_count == null)
+      return '-'
+    return `${d.correct_answer_count} / ${d.total_question_count}`
+  }, [detail])
+
+  const durationText = useMemo(() => {
+    const d = detail as ExamSubmissionDetail | null
+    return d?.duration_time != null ? `${d.duration_time}분` : '-'
+  }, [detail])
+
+  const elapsedTimeText = useMemo(() => {
+    const d = detail as ExamSubmissionDetail | null
+    const t = d?.elapsed_time
+    if (t == null || t < 0) return '-'
+    return `${t}분`
+  }, [detail])
 
   useEffect(() => {
     if (!open) setDeleteConfirmOpen(false)
@@ -140,19 +158,17 @@ export function ExamAttemptDetailModal({
               <TableWrap>
                 <Row2 label="쪽지시험 명" value={target?.exam_title ?? '-'} />
                 <Row2 label="과목" value={target?.subject_name ?? '-'} />
-                <Row2 label="시험시간" value="-" />
+                <Row2 label="시험시간" value={durationText} />
                 <Row2
                   label="쪽지시험 오픈 시간"
                   value={
-                    target?.started_at ? formatDateTime(target.started_at) : '-'
+                    (detail?.open_at && formatDateTime(detail.open_at)) || '-'
                   }
                 />
                 <Row2
                   label="쪽지시험 마감 시간"
                   value={
-                    target?.finished_at
-                      ? formatDateTime(target.finished_at)
-                      : '-'
+                    (detail?.close_at && formatDateTime(detail.close_at)) || '-'
                   }
                 />
               </TableWrap>
@@ -180,24 +196,19 @@ export function ExamAttemptDetailModal({
 
                 <Row4
                   leftLabel="점수"
-                  leftValue={target ? `${target.score}점` : '-'}
+                  leftValue={target?.score != null ? `${target.score}점` : '-'}
                   rightLabel="정답수 / 총 문제 수"
                   rightValue={correctText}
                 />
 
-                <Row2
-                  label="응시 시간"
-                  value={
-                    target
-                      ? `${formatDateTime(target.started_at)} ~ ${formatDateTime(
-                          target.finished_at
-                        )}`
-                      : '-'
-                  }
-                />
+                <Row2 label="응시 시간" value={elapsedTimeText} />
                 <Row2
                   label="부정행위 수"
-                  value={target?.cheating_count ?? '-'}
+                  value={
+                    target?.cheating_count != null
+                      ? String(target.cheating_count)
+                      : '-'
+                  }
                 />
               </TableWrap>
             </section>
