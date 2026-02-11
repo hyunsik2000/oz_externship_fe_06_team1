@@ -1,6 +1,6 @@
 import type { QuestionsList } from '@/types/question'
 import { SolveQuestionList } from '@/components/exam-attempt/solution-view'
-import TSBadgeIcon from '@/assets/icons/ts.svg?react'
+import TSBadgeIcon from '@/assets/icons/TS.svg?react'
 
 type SolveViewContainerProps = {
   data: QuestionsList
