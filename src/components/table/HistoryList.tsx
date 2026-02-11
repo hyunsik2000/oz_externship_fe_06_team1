@@ -9,7 +9,7 @@ export type ExamHistoryListProps = {
   submissions: HistoryItem[]
 }
 
-const TitleCell = ({
+export const TitleCell = ({
   title,
   onClick,
 }: {
