@@ -31,7 +31,7 @@ type MemberDetailModalProps = {
   onClose: () => void
   member: Member | null
   onDeleteConfirm?: (member: Member) => void
-  onEdit?: () => void
+  onEdit?: (detail: MemberDetail) => void
   onPermissionConfirm?: () => void
 }
 
@@ -236,7 +236,7 @@ export function MemberDetailModal({
                   type="button"
                   variant="primary"
                   className="h-[36px] w-[55.13px] rounded-[3px]"
-                  onClick={onEdit}
+                  onClick={() => onEdit?.(detail)}
                 >
                   수정
                 </Button>
