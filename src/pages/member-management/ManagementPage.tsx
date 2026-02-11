@@ -19,7 +19,7 @@ const ROLE_OPTIONS: DropdownOption[] = [
 ]
 
 const STATUS_OPTIONS: DropdownOption[] = [
-  { label: 'Active', value: 'active' },
+  { label: 'Activated', value: 'Activated' },
   { label: 'Disabled', value: 'Disabled' },
   { label: 'Withdraw', value: 'Withdraw' },
 ]

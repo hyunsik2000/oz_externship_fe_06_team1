@@ -1,6 +1,8 @@
 export const API_PATHS = {
   ACCOUNTS: {
     LIST: '/api/v1/admin/accounts/',
+    DETAIL: (accountId: number | string) =>
+      `/api/v1/admin/accounts/${accountId}/`,
   },
   AUTH: {
     LOGIN: '/api/v1/accounts/login/',

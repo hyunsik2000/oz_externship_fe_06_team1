@@ -86,7 +86,7 @@ export function TdCell({
 const ROLE_LABEL_MAP: Record<MemberRole, string> = {
   Admin: 'Admin',
   'Staff (TA)': 'Staff (TA)',
-  Student: '수강생',
+  Student: 'Student',
   General: 'General',
   'Staff (LC)': 'Staff (LC)',
   'Staff (OM)': 'Staff (OM)',
@@ -102,7 +102,7 @@ export function ProfileImageCell({
   showEditIcon = false,
   onEditClick,
 }: {
-  imageUrl: string
+  imageUrl?: string
   alt: string
   showEditIcon?: boolean
   onEditClick?: () => void
@@ -110,11 +110,20 @@ export function ProfileImageCell({
   return (
     <TdCell rowSpan={4} className="overflow-hidden !p-0">
       <div className="bg-grey-100 relative h-[199px] w-[141px] overflow-hidden">
-        <img
-          src={imageUrl}
-          alt={alt}
-          className="block h-full w-full object-cover"
-        />
+        {imageUrl ? (
+          <img
+            src={imageUrl}
+            alt={alt}
+            className="block h-full w-full object-cover"
+          />
+        ) : (
+          <div
+            className="text-grey-500 flex h-full w-full items-center justify-center text-sm"
+            aria-label={alt}
+          >
+            이미지 없음
+          </div>
+        )}
         {showEditIcon && (
           <button
             type="button"

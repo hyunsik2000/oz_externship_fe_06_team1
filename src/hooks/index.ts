@@ -1,3 +1,4 @@
+export * from './useAdminAccountDetail'
 export * from './useAdminAccounts'
 export * from './useAxios'
 export * from './useFilter'

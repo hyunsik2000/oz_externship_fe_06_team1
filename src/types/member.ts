@@ -167,3 +167,15 @@ export type AdminAccountListResponse = {
   previous: string | null
   results: AdminAccountListItem[]
 }
+
+/** GET /api/v1/admin/accounts/{id}/ 상세 응답 (retrieve) */
+export type AssignedCourseItem = {
+  course?: string | { id?: number; name?: string; course_name?: string }
+  cohort?: number | { id?: number; number?: number }
+  course_name?: string
+}
+export type AdminAccountDetail = AdminAccountListItem & {
+  profile_img_url?: string
+  gender?: string
+  assigned_courses?: AssignedCourseItem[]
+}

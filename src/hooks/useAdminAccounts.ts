@@ -4,16 +4,18 @@ import type {
   AdminAccountListResponse,
   AdminAccountListItem,
   Member,
-  MemberRole,
 } from '@/types/member'
-import type { MemberStatus } from '@/components/common'
 import { useAxios } from './useAxios'
+import {
+  mapApiRoleToMemberRole,
+  mapApiStatusToMemberStatus,
+} from '@/utils/accountMapping'
 
 const DEFAULT_PAGE_SIZE = 20
 
 function mapAccountToMember(item: AdminAccountListItem): Member {
-  const role = (item.role ?? 'General') as MemberRole
-  const status = (item.status ?? 'active') as MemberStatus
+  const role = mapApiRoleToMemberRole(item.role)
+  const status = mapApiStatusToMemberStatus(item.status)
   return {
     id: item.id,
     nickname: item.nickname ?? '',
