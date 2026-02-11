@@ -18,7 +18,7 @@ interface ExamDeployModalProps {
   }
 }
 
-export default function ExamDeployModal({
+export default function ExamDeploymentModal({
   isOpen,
   onClose,
   initialData,

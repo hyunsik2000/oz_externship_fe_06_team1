@@ -2,7 +2,7 @@ import { useState } from 'react'
 import type { ExamItem } from '@/types/exam'
 import { DataTable, type Column } from '@/components/table/data-table/DataTable'
 import { Link } from 'react-router-dom'
-import ExamDeployModal from './data-table/deploy-modal/ExamDeployModal'
+import ExamDeploymentModal from '@/components/table/data-table/deploy-modal/ExamDeploymentModal'
 import { Button } from '@/components/common'
 import { formatDateTime } from '@/utils'
 
@@ -89,7 +89,7 @@ export default function AdminExamList({ data }: { data: ExamItem[] }) {
       <DataTable data={data} columns={columns} />
 
       {selectedItem && (
-        <ExamDeployModal
+        <ExamDeploymentModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           initialData={{
