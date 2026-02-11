@@ -1,5 +1,5 @@
 export * from './ExamDashboardPage'
-export * from './ExamDeploymentHistoryPage'
+export * from './ExamDeploymentPage'
 export * from './FilteredExamHistoryPage'
 export * from './ExamHistoryPage'
 export * from './exam-list/ExamListPage'

@@ -47,8 +47,15 @@ apiClient.interceptors.response.use(
 
     const isRefreshRequest = config?.url?.includes(API_PATHS.AUTH.REFRESH_TOKEN)
 
-    // 401은 인증 흐름이므로 별도 처리 유지 + 리프레시 요청이 401 에러 나면 즉시 error
-    if (status === 401 && !isRefreshRequest) {
+    // 401 에러 처리
+    if (status === 401) {
+      // 리프레시 토큰 요청 자체가 만료/실패한 경우 -> 로그인 페이지 강제 이동시키기
+      if (isRefreshRequest) {
+        alert('다시 로그인 해주세요.')
+        window.location.href = '/login'
+        return new Promise(() => {})
+      }
+      // 일반 요청 실패 -> 토큰 재발급 시도
       return handle401Error(error)
     }
 

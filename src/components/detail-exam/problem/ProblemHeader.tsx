@@ -4,25 +4,26 @@ import DeleteProblem from '@/assets/icons/DeleteProblem.svg?react'
 import type { QuestionType } from '@/types/question'
 
 const TYPE_LABELS: Record<QuestionType, string> = {
-  multiple_choice: '다지선다형',
-  ox: '참/거짓형 (O/X)',
-  ordering: '순서정렬',
-  short_answer: '주관식(단답형)',
-  fill_blank: '빈칸식',
+  MULTI_SELECT: '다지선다형',
+  SINGLE_CHOICE: '다지선다형',
+  OX: '참/거짓형 (O/X)',
+  ORDERING: '순서정렬',
+  SHORT_ANSWER: '주관식(단답형)',
+  FILL_IN_BLANK: '빈칸식',
 }
 
 interface ProblemHeaderProps {
   type?: QuestionType
   onAdd: () => void
   onEdit?: () => void
-  // onDelete?: () => void
+  onDelete?: () => void
 }
 
 export function ProblemHeader({
   type,
   onAdd,
   onEdit,
-  // onDelete,
+  onDelete,
 }: ProblemHeaderProps) {
   if (!type) {
     return (
@@ -46,7 +47,7 @@ export function ProblemHeader({
         <button type="button" className="cursor-pointer" onClick={onEdit}>
           <PutProblem />
         </button>
-        <button type="button" className="cursor-pointer">
+        <button type="button" className="cursor-pointer" onClick={onDelete}>
           <DeleteProblem />
         </button>
       </div>

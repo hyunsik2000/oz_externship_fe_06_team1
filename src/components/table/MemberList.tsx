@@ -1,10 +1,8 @@
 import { useMemo, useState } from 'react'
-import { Pagination } from '@/components/common/Pagination'
-import { MemberStatusBadge } from '@/components/common'
+import { MemberStatusBadge, Pagination } from '@/components/common'
 import { DataTable, type Column } from './data-table/DataTable'
 import type { Member } from '@/types/member'
-
-const getRoleLabel = (role: Member['role']) => role
+import { RoleLabel } from '@/components/member-management/MemberDetailTable'
 
 type MemberListProps = {
   data: Member[]
@@ -78,7 +76,7 @@ const MEMBER_COLUMNS = (
     key: 'role',
     title: '권한',
     size: 'xl',
-    cell: (item) => getRoleLabel(item.role),
+    cell: (item) => <RoleLabel role={item.role} />,
   },
   {
     key: 'birthDate',
@@ -139,7 +137,7 @@ const STUDENT_COLUMNS = (): Column<Member>[] => [
     key: 'role',
     title: '권한',
     size: 'xl',
-    cell: (item) => getRoleLabel(item.role),
+    cell: (item) => <RoleLabel role={item.role} />,
   },
   {
     key: 'course',

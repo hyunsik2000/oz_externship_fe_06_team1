@@ -12,6 +12,7 @@ import {
 import { QUESTION_TYPES } from '@/constants/Question/question-types'
 import { useProblemFormStore } from '@/store/problem-form/useProblemFormStore'
 import { validateProblemForm } from '@/utils/validation'
+import { useQuestionActions } from '@/hooks/problem-form/useQuestionActions'
 
 interface ProblemModalProps {
   isOpen: boolean
@@ -32,6 +33,7 @@ export default function ProblemModal({
   totalScore,
   questionCount,
   onSuccess,
+  examId,
 }: ProblemModalProps) {
   // Store에서 상태와 초기화 함수 가져오기
   const {
@@ -50,6 +52,8 @@ export default function ProblemModal({
     options,
     correctAnswers,
   } = useProblemFormStore()
+
+  const { createQuestion, updateQuestion, isLoading } = useQuestionActions()
 
   // 알림 모달 상태 및 검사를 통과하지 못한 필드로 돌아가는 포커스 관리를 위한 Ref
   const [alertState, setAlertState] = useState({
@@ -89,7 +93,7 @@ export default function ProblemModal({
     }
   }, [isOpen, mode, initialData, reset, initializeForEdit])
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const formData = {
       type,
       question,
@@ -118,9 +122,34 @@ export default function ProblemModal({
       return
     }
 
-    // TODO: 문제 생성/수정 API 연동 시 onSuccess와 함께 실제 요청으로 교체
-    onSuccess?.()
-    onClose()
+    try {
+      if (mode === 'create') {
+        if (!examId) {
+          setAlertState({
+            isOpen: true,
+            title: '잘못된 접근입니다.',
+            description: '시험 정보를 알 수 없습니다.',
+          })
+          return
+        }
+        await createQuestion(examId)
+      } else {
+        if (!initialData?.question_id) {
+          setAlertState({
+            isOpen: true,
+            title: '잘못된 접근입니다.',
+            description: '문제 정보를 알 수 없습니다.',
+          })
+          return
+        }
+        await updateQuestion(initialData.question_id)
+      }
+
+      onSuccess?.()
+      onClose()
+    } catch {
+      // axios error handling
+    }
   }
 
   return (
@@ -193,8 +222,9 @@ export default function ProblemModal({
               variant="primary"
               className="flex h-[36px] min-w-[55px] rounded-sm font-normal"
               onClick={handleSubmit}
+              disabled={isLoading}
             >
-              {mode === 'edit' ? '수정' : '추가'}
+              {isLoading ? '저장 중...' : mode === 'edit' ? '수정' : '추가'}
             </Button>
           </div>
         </div>

@@ -1,12 +1,18 @@
 import ManagementPage from './ManagementPage'
-import { MOCK_MEMBER_LIST_RESPONSE } from '@/mocks/data/table-data/MemberList'
+import { useAdminAccounts } from '@/hooks'
 
 export function MemberManagementPage() {
+  const { members, isLoading } = useAdminAccounts({
+    page: 1,
+    page_size: 20,
+  })
+
   return (
     <ManagementPage
       title="회원관리"
       listVariant="member"
-      listData={MOCK_MEMBER_LIST_RESPONSE.members}
+      listData={members}
+      externalLoading={isLoading}
     />
   )
 }

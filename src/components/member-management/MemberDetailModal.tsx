@@ -9,9 +9,10 @@ import ModifyPermissionModal, {
   type Option,
   type PermissionValue,
 } from './ModifyPermissionModal'
+import { useAdminAccountDetail } from '@/hooks'
 import { MOCK_MEMBER_DETAIL_MAP } from '@/mocks/data/member-detail'
 import type { Member, MemberDetail } from '@/types'
-import memberImg from '@/assets/MemberImg.jpeg'
+import { formatDate, formatDateTime } from '@/utils'
 import {
   TableWrap,
   TableRow,
@@ -21,7 +22,6 @@ import {
   RoleLabel,
 } from './MemberDetailTable'
 
-const DEFAULT_MEMBER_IMAGE_URL = memberImg
 const DETAIL_TABLE_COLUMNS = '141px 130px minmax(0,1fr) 100px minmax(0,1fr)'
 const META_TABLE_COLUMNS =
   '141px minmax(0,1fr) minmax(0,1fr) 100px minmax(0,1fr)'
@@ -69,19 +69,24 @@ export function MemberDetailModal({
     cohort: '',
   })
 
-  const detail = useMemo<MemberDetail | null>(() => {
-    if (!member) return null
+  const accountId = member?.id ?? null
+  const { detail: apiDetail, isLoading: isDetailLoading } =
+    useAdminAccountDetail(accountId)
 
+  const fallbackDetail = useMemo<MemberDetail | null>(() => {
+    if (!member) return null
     return (
       MOCK_MEMBER_DETAIL_MAP[member.id] ?? {
         ...member,
         gender: '미설정',
         phone: '-',
-        Courses: [],
+        ongoingCourses: [],
         cohorts: [],
       }
     )
   }, [member])
+
+  const detail = apiDetail ?? fallbackDetail
 
   useEffect(() => {
     if (!open) {
@@ -143,6 +148,11 @@ export function MemberDetailModal({
         <Modal.Body className="flex h-full flex-col px-8 pt-8 pb-6">
           <div className="mb-6">
             <h2 className="text-grey-800 text-lg font-bold">회원정보</h2>
+            {isDetailLoading && !apiDetail && (
+              <p className="text-grey-500 mt-1 text-xs">
+                상세 정보를 불러오는 중입니다...
+              </p>
+            )}
           </div>
 
           <div className="flex flex-grow flex-col space-y-6">
@@ -150,9 +160,7 @@ export function MemberDetailModal({
               <TableWrap rows={4} columns={DETAIL_TABLE_COLUMNS}>
                 <TableRow>
                   <ProfileImageCell
-                    imageUrl={
-                      detail.profileImageUrl ?? DEFAULT_MEMBER_IMAGE_URL
-                    }
+                    imageUrl={detail.profileImageUrl}
                     alt={`${detail.nickname} 프로필`}
                   />
                   <ThCell>ID</ThCell>
@@ -170,7 +178,9 @@ export function MemberDetailModal({
                   <ThCell>닉네임</ThCell>
                   <TdCell>{detail.nickname}</TdCell>
                   <ThCell>생년월일</ThCell>
-                  <TdCell>{detail.birthDate}</TdCell>
+                  <TdCell>
+                    {detail.birthDate ? formatDate(detail.birthDate) : '-'}
+                  </TdCell>
                 </TableRow>
 
                 <TableRow>
@@ -192,7 +202,9 @@ export function MemberDetailModal({
                 </TableRow>
                 <TableRow>
                   <ThCell>가입일</ThCell>
-                  <TdCell colSpan={4}>{detail.joinedAt}</TdCell>
+                  <TdCell colSpan={4}>
+                    {detail.joinedAt ? formatDateTime(detail.joinedAt) : '-'}
+                  </TdCell>
                 </TableRow>
                 <TableRow>
                   <ThCell>권한</ThCell>

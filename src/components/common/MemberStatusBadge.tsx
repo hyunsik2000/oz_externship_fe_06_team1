@@ -14,7 +14,7 @@ export type MemberStatus =
   | 'Staff'
   | 'Admin'
 
-const STATUS_TO_VARIANT = {
+const STATUS_TO_VARIANT: Record<MemberStatus, BadgeProps['variant']> = {
   Activated: 'primary',
   Disabled: 'danger',
   Withdraw: 'success',

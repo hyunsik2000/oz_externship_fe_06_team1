@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react'
 import { useAxios } from '@/hooks'
 import { API_PATHS } from '@/constants/api'
 import axios from 'axios'
+import { useToastStore } from '@/store'
 
 interface PresignedUrlResponse {
   presigned_url: string
@@ -70,14 +71,28 @@ export function useExamUpload({
         payload.thumbnail_img_url = targetImgUrl
       }
 
-      const response = await sendRequest({
-        method: mode === 'create' ? 'POST' : 'PUT',
-        url:
-          mode === 'create' ? API_PATHS.EXAM.LIST : API_PATHS.EXAM.DETAIL(id!),
-        data: payload,
-      })
+      const response = await sendRequest(
+        {
+          method: mode === 'create' ? 'POST' : 'PUT',
+          url:
+            mode === 'create'
+              ? API_PATHS.EXAM.LIST
+              : API_PATHS.EXAM.DETAIL(id!),
+          data: payload,
+        },
+        {
+          onError: (error) => {
+            error.mode = 'toast'
+            error.message = `${mode === 'create' ? '쪽지시험 생성' : '쪽지시험 수정'}에 실패했습니다.`
+          },
+        }
+      )
 
       if (response) {
+        useToastStore.getState().showToast({
+          message: `성공적으로 ${mode === 'create' ? '쪽지시험 생성' : '쪽지시험 수정'}에 성공했습니다.`,
+          variant: 'success',
+        })
         onSuccess?.()
         onClose()
       }

@@ -147,3 +147,35 @@ export interface PaginatedWithdrawalResponse<T> {
   previous: string | null
   results: T[]
 }
+
+// GET /api/v1/admin/accounts/ 응답 항목 (200 예제값·스키마 기준)
+export type AdminAccountListItem = {
+  id: number
+  email: string
+  nickname?: string
+  name?: string
+  phone_number?: string
+  birthday?: string
+  status?: string
+  role?: string
+  created_at?: string
+}
+
+export type AdminAccountListResponse = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: AdminAccountListItem[]
+}
+
+/** GET /api/v1/admin/accounts/{id}/ 상세 응답 (retrieve) */
+export type AssignedCourseItem = {
+  course?: string | { id?: number; name?: string; course_name?: string }
+  cohort?: number | { id?: number; number?: number }
+  course_name?: string
+}
+export type AdminAccountDetail = AdminAccountListItem & {
+  profile_img_url?: string
+  gender?: string
+  assigned_courses?: AssignedCourseItem[]
+}

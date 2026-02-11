@@ -3,7 +3,13 @@ import { ProblemHeader } from '@/components/detail-exam/problem'
 import ProblemModal from '@/components/detail-exam/problem-modal/ProblemModal'
 import { useState } from 'react'
 
-export function EmptyProblems() {
+export function EmptyProblems({
+  examId,
+  onSuccess,
+}: {
+  examId?: number
+  onSuccess?: () => void
+}) {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   return (
@@ -26,6 +32,10 @@ export function EmptyProblems() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         mode="create"
+        examId={examId}
+        onSuccess={onSuccess}
+        questionCount={0}
+        totalScore={0}
       />
     </>
   )

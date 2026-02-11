@@ -6,18 +6,33 @@ import { cn } from '@/lib/cn'
 interface ProblemOptionProps {
   type: QuestionType
   options: string[] | null
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   answer: any
+  prompt?: string
 }
 
-export function ProblemOption({ type, options, answer }: ProblemOptionProps) {
+export function ProblemOption({
+  type,
+  options,
+  answer,
+  prompt,
+}: ProblemOptionProps) {
   const renderOptions = () => {
+    const isCorrectAnswer = (option: string) => {
+      if (Array.isArray(answer)) {
+        return answer.includes(option)
+      }
+      return answer === option
+    }
+
     switch (type) {
-      case 'multiple_choice':
+      case 'SINGLE_CHOICE':
+      case 'MULTI_SELECT':
         return (
           <div className="flex flex-col gap-11">
             {(options || []).map((option, i) => {
               const alphabet = String.fromCharCode(65 + i)
-              const isCorrect = answer.includes(option)
+              const isCorrect = isCorrectAnswer(option)
 
               return (
                 <div
@@ -42,16 +57,16 @@ export function ProblemOption({ type, options, answer }: ProblemOptionProps) {
             })}
           </div>
         )
-      case 'ox':
+      case 'OX':
         return (
           <div className="flex flex-col gap-11">
             {['O', 'X'].map((option, i) => {
               const alphabet = String.fromCharCode(65 + i)
-              const isCorrect = answer.includes(option)
+              const isCorrect = isCorrectAnswer(option)
 
               return (
                 <div
-                  key={'true_false' + i}
+                  key={'ox' + i}
                   className="flex cursor-pointer items-center gap-4 rounded-lg font-semibold"
                 >
                   <span
@@ -70,11 +85,11 @@ export function ProblemOption({ type, options, answer }: ProblemOptionProps) {
             })}
           </div>
         )
-      case 'ordering':
+      case 'ORDERING':
         return (
           <div className="flex flex-col gap-5 rounded-[8px] border border-[#d9d9d9] px-8 py-4 text-sm">
-            {(options || ['A', 'B', 'C', 'D']).map((option, i) => (
-              <div key={i} className="flex items-center">
+            {(answer || options || []).map((option: string, i: number) => (
+              <div key={'ordering' + i} className="flex items-center">
                 <div className="flex items-center gap-1">
                   <span>({String.fromCharCode(65 + i)})</span>
                   <span>{option}</span>
@@ -83,56 +98,62 @@ export function ProblemOption({ type, options, answer }: ProblemOptionProps) {
             ))}
           </div>
         )
-      case 'short_answer':
+      case 'SHORT_ANSWER':
         return (
           <Input
             type="text"
             className="border-grey-300 text-primary-700 h-[35px] w-2/3 rounded-lg border p-2 font-semibold outline-none"
-            value="타입단언"
+            value={answer}
             readOnly
           />
         )
-      case 'fill_blank':
+      case 'FILL_IN_BLANK': {
+        const lines = (prompt || '').split('\n')
+        const answers = Array.isArray(answer) ? answer : [answer]
+        let blankIndex = 0
+
         return (
           <div className="flex flex-col gap-6">
-            <div className="border-grey-300 flex w-2/3 flex-col gap-4 rounded-[8px] border p-6">
-              <p>
-                1. 변수나 함수의 매개변수, 반환값에 타입을 명시하는 것을{' '}
-                <span className="font-semibold">(A) ________</span> 이라고 한다.
-              </p>
-              <p>
-                2. interface 또는 type 키워드를 사용하여 객체의 구조를 정의할 수
-                있는데, 이렇게 만든 타입을{' '}
-                <span className="font-semibold">(B) ________</span> 이라고
-                부른다.
-              </p>
+            <div className="border-grey-300 flex w-2/3 flex-col gap-4 rounded-[8px] border p-6 text-sm">
+              <div className="flex flex-col gap-2">
+                {lines.map((line, lineIdx) => {
+                  const parts = line.split('__')
+                  return (
+                    <p key={'fill' + lineIdx}>
+                      {parts.map((part, partIdx) => (
+                        <span key={'blank' + partIdx}>
+                          {part}
+                          {partIdx < parts.length - 1 && (
+                            <span className="text-primary-700 font-semibold">
+                              ({String.fromCharCode(65 + blankIndex++)})
+                              ________
+                            </span>
+                          )}
+                        </span>
+                      ))}
+                    </p>
+                  )
+                })}
+              </div>
             </div>
-            <div className="flex gap-10 pl-6">
-              <div className="flex items-center gap-2">
-                <span className="text-grey-400 px-1 text-sm font-bold">
-                  (A)
-                </span>
-                <Input
-                  type="text"
-                  className="border-grey-300 text-primary-700 h-[35px] w-full rounded-lg border p-2 font-semibold outline-none"
-                  value="타입주석"
-                  readOnly
-                />
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-grey-400 px-1 text-sm font-bold">
-                  (B)
-                </span>
-                <Input
-                  type="text"
-                  className="border-grey-300 text-primary-700 h-[35px] w-full rounded-lg border p-2 font-semibold outline-none"
-                  value="사용자 정의 타입"
-                  readOnly
-                />
-              </div>
+            <div className="flex flex-wrap gap-x-10 gap-y-4 pl-6">
+              {answers.map((ans, index) => (
+                <div key={'answer' + index} className="flex items-center gap-2">
+                  <span className="text-grey-400 px-1 text-sm font-bold">
+                    ({String.fromCharCode(65 + index)})
+                  </span>
+                  <Input
+                    type="text"
+                    className="border-grey-300 text-primary-700 h-[35px] min-w-[150px] rounded-lg border p-2 font-semibold outline-none"
+                    value={ans}
+                    readOnly
+                  />
+                </div>
+              ))}
             </div>
           </div>
         )
+      }
       default:
         return null
     }

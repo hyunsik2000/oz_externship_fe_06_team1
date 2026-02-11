@@ -57,6 +57,12 @@ export function AdminSidebar() {
       navigate('/exam/list')
       return
     }
+
+    if (sectionKey === 'exam' && text === '배포 내역 관리') {
+      navigate('/exam/deployments')
+      return
+    }
+
     if (sectionKey === 'exam' && text === '응시 내역 관리') {
       navigate('/exam/history')
       return
@@ -137,6 +143,9 @@ export function AdminSidebar() {
                     (pathname === '/exam/list' &&
                       section.key === 'exam' &&
                       text === '쪽지시험 관리') ||
+                    (pathname === '/exam/deployments' &&
+                      section.key === 'exam' &&
+                      text === '배포 내역 관리') ||
                     (pathname === '/members/management' &&
                       section.key === 'member' &&
                       text === '유저 관리') ||
@@ -157,7 +166,8 @@ export function AdminSidebar() {
                     (section.key === 'exam' &&
                       (text === '응시 내역 관리' ||
                         text === '쪽지시험 대시보드' ||
-                        text === '쪽지시험 관리')) ||
+                        text === '쪽지시험 관리' ||
+                        text === '배포 내역 관리')) ||
                     (section.key === 'member' &&
                       (text === '유저 관리' ||
                         text === '수강생 관리' ||

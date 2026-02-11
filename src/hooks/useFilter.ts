@@ -63,10 +63,13 @@ export function useFilter(configs: FilterOptionConfig[]) {
   }, [configs, values])
 
   const canSubmit = useMemo(() => {
-    // 모든 필드 선택 되었는지 체크
+    // 선택된 값이 옵션 목록에 존재하는지 확인하는 방식으로변경
     return configs
       .filter((conf) => !conf.disabled)
-      .every((conf) => !!values[conf.key])
+      .every((conf) => {
+        const currentValue = values[conf.key]
+        return conf.options.some((opt) => opt.value === currentValue)
+      })
   }, [configs, values])
 
   return {

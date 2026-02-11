@@ -1,0 +1,104 @@
+import { useCallback, useEffect, useState } from 'react'
+import { deploymentApi } from '@/api/deployment'
+import { useToastStore } from '@/store'
+import type { ExamDeploymentItemType } from '@/types'
+
+export function useExamDeployment() {
+  const { showToast } = useToastStore()
+  const [data, setData] = useState<ExamDeploymentItemType[]>([])
+  const [totalCount, setTotalCount] = useState(0)
+  const [isLoading, setIsLoading] = useState(false)
+
+  const [filters, setFilters] = useState({
+    search: '',
+    page: 1,
+    course: '',
+    cohort: '',
+  })
+
+  const [selectedItem, setSelectedItem] =
+    useState<ExamDeploymentItemType | null>(null)
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false)
+
+  const openDetail = (item: ExamDeploymentItemType) => {
+    setSelectedItem(item)
+    setIsDetailModalOpen(true)
+  }
+
+  const closeDetail = () => {
+    setIsDetailModalOpen(false)
+    setSelectedItem(null)
+  }
+
+  const fetchList = useCallback(async () => {
+    setIsLoading(true)
+    try {
+      const response = await deploymentApi.getList({
+        page: filters.page,
+        search: filters.search || undefined,
+        course: filters.course || undefined,
+        cohort: filters.cohort || undefined,
+      })
+      setData(response.data.results)
+      setTotalCount(response.data.count)
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setIsLoading(false)
+    }
+  }, [filters])
+
+  useEffect(() => {
+    fetchList()
+  }, [fetchList])
+
+  const handleToggleStatus = async (id: number, currentStatus: boolean) => {
+    try {
+      await deploymentApi.updateStatus(id, !currentStatus)
+      setData((prev) =>
+        prev.map((item) =>
+          item.id === id ? { ...item, is_active: !currentStatus } : item
+        )
+      )
+      showToast({
+        variant: 'success',
+        message: `배포 상태가 ${!currentStatus ? '활성화' : '비활성화'} 되었습니다.`,
+      })
+    } catch (error) {
+      showToast({ variant: 'error', message: '상태 변경에 실패했습니다.' })
+    }
+  }
+
+  const handleDeleteDeployment = async (id: number) => {
+    try {
+      await deploymentApi.delete(id)
+
+      showToast({
+        variant: 'success',
+        message: '성공적으로 배포 내역이 삭제되었습니다.',
+      })
+
+      await fetchList()
+    } catch (error) {
+      showToast({
+        variant: 'error',
+        message: '배포 내역 삭제에 실패했습니다.',
+      })
+    }
+  }
+
+  return {
+    data,
+    totalCount,
+    filters,
+    setFilters,
+    isLoading,
+    applyFilters: fetchList,
+    handleToggleStatus,
+    isDetailModalOpen,
+    selectedItem,
+    openDetail,
+    closeDetail,
+    handleDeleteDeployment,
+  }
+}

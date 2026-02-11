@@ -2,7 +2,8 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { AlertModal, Button, Modal } from '@/components/common'
 import type { HistoryItem } from '@/types/history'
 import { SolutionViewTrigger } from '@/components/exam-attempt/solution-view'
-import { useExamHistoryDetail } from '@/hooks'
+import { API_PATHS } from '@/constants/api'
+import { useAxios, useExamHistoryDetail } from '@/hooks'
 import { formatDateTime } from '@/utils'
 
 type ExamAttemptDetailModalProps = {
@@ -12,11 +13,11 @@ type ExamAttemptDetailModalProps = {
   onDeleteConfirm?: (item: HistoryItem) => void
 }
 
-function TableWrap({ children }: { children: ReactNode }) {
+export function TableWrap({ children }: { children: ReactNode }) {
   return <div className="border-grey-300 border-t">{children}</div>
 }
 
-function Row2({ label, value }: { label: string; value: ReactNode }) {
+export function Row2({ label, value }: { label: string; value: ReactNode }) {
   return (
     <div className="border-grey-300 grid grid-cols-[140px_1fr] border-b">
       <div className="bg-grey-50 text-grey-600 px-4 py-3 text-sm font-medium">
@@ -27,7 +28,7 @@ function Row2({ label, value }: { label: string; value: ReactNode }) {
   )
 }
 
-function Row4({
+export function Row4({
   leftLabel,
   leftValue,
   rightLabel,
@@ -65,6 +66,7 @@ export function ExamAttemptDetailModal({
 }: ExamAttemptDetailModalProps) {
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false)
   const deleteConfirmRootRef = useRef<HTMLDivElement | null>(null)
+  const { sendRequest } = useAxios()
 
   const submissionId = item?.submission_id ?? null
   const { detail, isLoading } = useExamHistoryDetail(submissionId)
@@ -87,6 +89,21 @@ export function ExamAttemptDetailModal({
   const handleCloseDetail = () => {
     setDeleteConfirmOpen(false)
     onClose()
+  }
+
+  const handleDelete = async () => {
+    if (!item) return
+    try {
+      await sendRequest<void>({
+        method: 'DELETE',
+        url: API_PATHS.SUBMISSIONS.DETAIL(item.submission_id),
+        errorTitle: '응시 내역 삭제에 실패했습니다.',
+      })
+      onDeleteConfirm?.(item)
+      handleCloseDetail()
+    } catch {
+      // 에러는 useAxios에서 전역 에러 스토어로 처리
+    }
   }
 
   return (
@@ -208,10 +225,7 @@ export function ExamAttemptDetailModal({
           description={`응시내역 삭제시 되돌릴 수 없으며,\n응시 수강생은 해당 시험을 재응시할 수 있습니다.`}
           confirmText="확인"
           showCancel={false}
-          onConfirm={() => {
-            onDeleteConfirm?.(item)
-            handleCloseDetail()
-          }}
+          onConfirm={handleDelete}
         />
       </div>
     </>

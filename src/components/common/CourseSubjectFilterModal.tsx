@@ -20,7 +20,7 @@ export type CourseSubjectFilterModalProps = {
   onSubmit: () => void
 }
 
-function SelectRow({
+export function SelectRow({
   label,
   placeholder,
   value,

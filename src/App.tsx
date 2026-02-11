@@ -9,6 +9,7 @@ import { LoginPage } from '@/pages/login'
 import {
   DetailExamPage,
   ExamDashboardPage,
+  ExamDeploymentPage,
   ExamHistoryPage,
   ExamListPage,
   FilteredExamHistoryPage,
@@ -31,6 +32,7 @@ export default function App() {
           <Route index element={<Navigate to="/login" replace />} />
           <Route path="/exam">
             <Route path="/exam/dashboard" element={<ExamDashboardPage />} />
+            <Route path="/exam/deployments" element={<ExamDeploymentPage />} />
             <Route path="/exam/history" element={<ExamHistoryPage />} />
             <Route
               path="/exam/history/filtered"

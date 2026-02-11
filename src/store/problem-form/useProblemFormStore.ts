@@ -40,7 +40,7 @@ interface ProblemFormState {
 
 const initialState = {
   mode: 'create' as const,
-  type: 'multiple_choice' as QuestionType,
+  type: 'MULTI_SELECT' as QuestionType,
   question: '',
   prompt: '',
   options: ['', ''],
@@ -98,7 +98,8 @@ export const useProblemFormStore = create<ProblemFormState>((set) => ({
     })
 
     switch (type) {
-      case 'multiple_choice': {
+      case 'SINGLE_CHOICE':
+      case 'MULTI_SELECT': {
         const targetOptions = options ?? ['', '']
         const answersArray = Array.isArray(correct_answer)
           ? correct_answer
@@ -116,7 +117,7 @@ export const useProblemFormStore = create<ProblemFormState>((set) => ({
         break
       }
 
-      case 'ox':
+      case 'OX':
         // ox 형
         set({
           correctAnswers:
@@ -127,7 +128,7 @@ export const useProblemFormStore = create<ProblemFormState>((set) => ({
         })
         break
 
-      case 'ordering': {
+      case 'ORDERING': {
         const targetOptions = options ?? ['', '']
         const answersArray = correct_answer as string[]
 
@@ -144,14 +145,14 @@ export const useProblemFormStore = create<ProblemFormState>((set) => ({
         break
       }
 
-      case 'short_answer':
+      case 'SHORT_ANSWER':
         // 주관식 단답형
         set({
           correctAnswers: (correct_answer as string) ?? '',
         })
         break
 
-      case 'fill_blank':
+      case 'FILL_IN_BLANK':
         // 빈칸
         set({
           options: options ?? ['', ''],

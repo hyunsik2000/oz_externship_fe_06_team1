@@ -7,9 +7,13 @@ import type { QuestionsList } from '@/types/question'
 
 interface DetailExamContainerProps {
   data: QuestionsList
+  onSuccess?: () => void
 }
 
-export function DetailExamContainer({ data }: DetailExamContainerProps) {
+export function DetailExamContainer({
+  data,
+  onSuccess,
+}: DetailExamContainerProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [swiperRef, setSwiperRef] = useState<SwiperClass | null>(null)
   const totalQuestions = data.questions.length
@@ -42,6 +46,7 @@ export function DetailExamContainer({ data }: DetailExamContainerProps) {
           onSlideChange={handleSlideChange}
           onNext={handleNext}
           onPrev={handlePrev}
+          onSuccess={onSuccess}
         />
       </div>
       {!isEmpty && (
