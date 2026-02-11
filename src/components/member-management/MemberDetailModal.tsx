@@ -109,9 +109,10 @@ export function MemberDetailModal({
     { label: '관리자', value: '관리자' },
   ]
 
-  const courseOptions: Option[] = Array.from(
-    new Set([...(detail.ongoingCourses ?? []), ...(detail.cohorts ?? [])])
-  ).map((c) => ({ label: c, value: c }))
+  const courseOptions: Option[] = (detail.ongoingCourses ?? []).map((c) => ({
+    label: c,
+    value: c,
+  }))
 
   const cohortOptions: Option[] = [
     { label: '11기', value: '11기' },

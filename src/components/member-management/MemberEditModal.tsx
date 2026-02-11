@@ -55,8 +55,8 @@ const GENDER_OPTIONS: Option[] = [
   { label: '미설정', value: '미설정' },
 ]
 
-/** 닉네임 형식: 2~12자, 영문 소문자/숫자/밑줄만 */
-const NICKNAME_REGEX = /^[a-z0-9_]{2,12}$/
+/** 닉네임 형식: 2~12자, 영문 소문자/숫자/밑줄/한글 */
+const NICKNAME_REGEX = /^[a-z0-9_가-힣ㄱ-ㅎㅏ-ㅣ]{2,12}$/
 const isValidNicknameFormat = (s: string) => NICKNAME_REGEX.test(s.trim())
 
 const normalizeDateValue = (value?: string) => {
@@ -118,7 +118,7 @@ export function MemberEditModal({
     if (!trimmed) return ''
     if (isNicknameDuplicate) return '이미 존재하는 닉네임입니다.'
     if (!isValidNicknameFormat(value.nickname))
-      return '닉네임은 2~12자, 영문 소문자/숫자/밑줄(_)만 사용할 수 있어요.'
+      return '닉네임은 2~12자, 영문 소문자/숫자/밑줄(_)/한글만 사용할 수 있어요.'
     return ''
   }, [value.nickname, isNicknameDuplicate])
 
@@ -234,7 +234,7 @@ export function MemberEditModal({
                                 )}
                               >
                                 {nicknameError ||
-                                  '닉네임은 2~12자, 영문 소문자/숫자/밑줄(_)만 사용할 수 있어요.'}
+                                  '닉네임은 2~12자, 영문 소문자/숫자/밑줄(_)/한글만 사용할 수 있어요.'}
                               </div>
                             </div>
                           </div>
