@@ -26,13 +26,32 @@ const STATUS_OPTIONS: DropdownOption[] = [
   { label: 'Withdraw', value: 'Withdraw' },
 ]
 
+type StudentSearchFilters = {
+  cohort_id?: number
+  status?: string
+  keyword?: string
+}
+
 type ManagementPageProps = {
   title: string
   listVariant: 'member' | 'student'
   listData: Member[]
   enableDetail?: boolean
   externalLoading?: boolean
+  /** 수강생: 기수 옵션 및 조회 시 API refetch 콜백 */
+  studentCohortOptions?: DropdownOption[]
+  onStudentSearch?: (filters: StudentSearchFilters) => void
 }
+
+const STUDENT_COHORT_OPTIONS: DropdownOption[] = [
+  { label: '전체', value: '' },
+  { label: '10기', value: '10' },
+  { label: '11기', value: '11' },
+  { label: '12기', value: '12' },
+  { label: '13기', value: '13' },
+  { label: '14기', value: '14' },
+  { label: '15기', value: '15' },
+]
 
 export default function ManagementPage({
   title,
@@ -40,8 +59,15 @@ export default function ManagementPage({
   listData,
   enableDetail = true,
   externalLoading,
+  studentCohortOptions = listVariant === 'student'
+    ? STUDENT_COHORT_OPTIONS
+    : undefined,
+  onStudentSearch,
 }: ManagementPageProps) {
   const showRoleFilter = listVariant === 'member'
+  const showCohortFilter =
+    listVariant === 'student' && studentCohortOptions?.length
+  const [cohortInput, setCohortInput] = useState('')
   const [roleInput, setRoleInput] = useState<MemberRole | 'ALL'>('ALL')
   const [statusInput, setStatusInput] = useState<Member['status'] | 'ALL'>(
     'ALL'
@@ -77,6 +103,16 @@ export default function ManagementPage({
     setRole(roleInput ?? 'ALL')
     setStatus(statusInput ?? 'ALL')
     setKeyword(keywordInput)
+    if (showCohortFilter && onStudentSearch) {
+      const cohortId = cohortInput ? Number(cohortInput) : undefined
+      const statusVal =
+        statusInput && statusInput !== 'ALL' ? statusInput : undefined
+      onStudentSearch({
+        cohort_id: cohortId,
+        status: statusVal,
+        keyword: keywordInput.trim() || undefined,
+      })
+    }
   }
 
   useEffect(() => {
@@ -189,6 +225,18 @@ export default function ManagementPage({
         title={title}
         toolbar={
           <>
+            {showCohortFilter && studentCohortOptions && (
+              <div className="w-[100px]">
+                <Dropdown
+                  variant="memberFilter"
+                  size="sm"
+                  placeholder="기수"
+                  options={studentCohortOptions}
+                  value={cohortInput}
+                  onChange={(v) => setCohortInput(v ?? '')}
+                />
+              </div>
+            )}
             {showRoleFilter && (
               <div className="w-[140px]">
                 <Dropdown
