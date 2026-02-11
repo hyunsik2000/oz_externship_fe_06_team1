@@ -29,6 +29,9 @@ export const API_PATHS = {
     SUBJECT_SCATTER: (subjectId: number | string) =>
       `api/v1/admin/subjects/${subjectId}/scatter`,
   },
+  STUDENTS: {
+    LIST: '/api/v1/admin/students/',
+  },
   MEMBER: {
     STUDENT_REGISTRATION: '/api/v1/admin/student-enrollments/',
     STUDENT_REGISTRATION_ACCEPT: '/api/v1/admin/student-enrollments/accept',

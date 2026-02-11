@@ -1,5 +1,6 @@
 export * from './useAdminAccountDetail'
 export * from './useAdminAccounts'
+export * from './useAdminStudents'
 export * from './useAxios'
 export * from './useFilter'
 export * from './useExamUpload'
