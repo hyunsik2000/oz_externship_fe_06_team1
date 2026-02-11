@@ -27,7 +27,7 @@ const EMPTY_FILTER: FilterValue = {
 export function FilteredExamHistoryPage() {
   const navigate = useNavigate()
   const location = useLocation()
-  const { submissions, isLoading } = useExamHistory()
+  const { submissions, isLoading, refetch } = useExamHistory()
   const locationState = location.state as LocationState | null
   const initialFilter = locationState?.filter ?? EMPTY_FILTER
   const isValidFilter = Boolean(
@@ -143,6 +143,7 @@ export function FilteredExamHistoryPage() {
   }
 
   const handleDeleteConfirm = () => {
+    refetch()
     showToast({
       variant: 'success',
       message: '응시 내역 삭제가 완료되었습니다.',

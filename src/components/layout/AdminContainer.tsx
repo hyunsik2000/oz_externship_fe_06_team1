@@ -15,7 +15,7 @@ export function AdminContainer({
     <div
       className={[
         'min-w-0',
-        'pt-1.5 pl-8',
+        'pt-3 pl-4',
         'overflow-x-auto',
         'overflow-y-auto',
         className,
