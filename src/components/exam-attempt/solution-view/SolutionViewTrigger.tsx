@@ -1,12 +1,12 @@
 import { useMemo, useState } from 'react'
-import type { QuestionListResponse } from '@/types/question'
+import type { QuestionsList } from '@/types/question'
 import {
   SolutionViewButton,
   SolutionViewModal,
 } from '@/components/exam-attempt'
 
 type SolutionViewTriggerProps = {
-  data?: QuestionListResponse | null
+  data?: QuestionsList | null
   pickedAnswerByQuestionId?: Record<number, string | string[]>
 }
 
@@ -16,7 +16,7 @@ export function SolutionViewTrigger({
 }: SolutionViewTriggerProps) {
   const [open, setOpen] = useState(false)
 
-  const devFallbackData: QuestionListResponse | null = useMemo(() => {
+  const devFallbackData: QuestionsList | null = useMemo(() => {
     if (!import.meta.env.DEV) return null
 
     return {
@@ -28,8 +28,8 @@ export function SolutionViewTrigger({
       updated_at: '2025-02-01T00:00:00Z',
       questions: [
         {
-          id: 101,
-          type: 'multiple_choice',
+          question_id: 101,
+          type: 'MULTI_SELECT',
           question:
             'TypeScript 타입 호환성 규칙상, 안전하게 허용되는 상·하위 타입 간 값 할당 방식은 무엇인가요?',
           prompt:
@@ -48,8 +48,8 @@ export function SolutionViewTrigger({
             '하위 타입을 상위 타입으로 취급하는 업캐스팅은 대부분 안전하게 허용됩니다.',
         },
         {
-          id: 102,
-          type: 'multiple_choice',
+          question_id: 102,
+          type: 'SINGLE_CHOICE',
           question: 'TypeScript에서 타입 단언(as)을 사용할 때 주의할 점은?',
           prompt: 'TypeScript에서 타입 단언(as)을 사용할 때 주의할 점은?',
           options: [

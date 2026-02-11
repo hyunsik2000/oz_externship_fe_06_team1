@@ -1,5 +1,5 @@
 import { Modal } from '@/components/common'
-import type { QuestionListResponse } from '@/types/question'
+import type { QuestionsList } from '@/types/question'
 import {
   SolveViewLayout,
   SolveViewContainer,
@@ -8,7 +8,7 @@ import {
 type SolutionViewModalProps = {
   isOpen: boolean
   onClose: () => void
-  data?: QuestionListResponse | null
+  data?: QuestionsList | null
   pickedAnswerByQuestionId?: Record<number, string | string[]>
 }
 

@@ -9,7 +9,6 @@ export const useQuestionActions = () => {
     question,
     prompt,
     options,
-    blankCount,
     correctAnswers,
     point,
     explanation,

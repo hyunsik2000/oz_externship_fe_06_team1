@@ -26,7 +26,7 @@ export function SolveQuestionList({
     )
   }
 
-  const pickedRaw = pickedAnswerByQuestionId?.[current.id]
+  const pickedRaw = pickedAnswerByQuestionId?.[current.question_id]
   const picked = Array.isArray(pickedRaw) ? pickedRaw[0] : pickedRaw
 
   const correct = Array.isArray(current.correct_answer)
@@ -90,7 +90,7 @@ export function SolveQuestionList({
 
                   return (
                     <div
-                      key={`${current.id}-${i}`}
+                      key={`${current.question_id}-${i}`}
                       className="ml-10 flex items-center gap-3"
                     >
                       <span className="border-grey-400 flex h-4 w-4 items-center justify-center rounded-full border">

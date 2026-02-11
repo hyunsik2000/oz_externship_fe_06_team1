@@ -17,8 +17,7 @@ export const examGraphHandlers = [
     }
   ),
 
-  http.get(`*/${API_PATHS.GRAPH.TERM_AVERAGE(':courseId')}`, ({ params }) => {
-    const { courseId } = params
+  http.get(`*/${API_PATHS.GRAPH.TERM_AVERAGE(':courseId')}`, () => {
     return HttpResponse.json(MOCK_TERM_AVG_DATA)
   }),
 

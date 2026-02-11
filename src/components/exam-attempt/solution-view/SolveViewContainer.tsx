@@ -1,9 +1,9 @@
-import type { QuestionListResponse } from '@/types/question'
+import type { QuestionsList } from '@/types/question'
 import { SolveQuestionList } from '@/components/exam-attempt/solution-view'
 import TSBadgeIcon from '@/assets/icons/ts.svg?react'
 
 type SolveViewContainerProps = {
-  data: QuestionListResponse
+  data: QuestionsList
   pickedAnswerByQuestionId?: Record<number, string | string[]>
 }
 
