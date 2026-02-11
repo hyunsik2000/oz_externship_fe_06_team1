@@ -10,6 +10,7 @@ import type { DropdownOption } from '@/types/commonComponents'
 import { useToastStore } from '@/store'
 
 const ROLE_OPTIONS: DropdownOption[] = [
+  { label: '전체', value: 'ALL' },
   { label: 'Admin', value: 'Admin' },
   { label: 'Staff (TA)', value: 'Staff (TA)' },
   { label: 'Student', value: 'Student' },
@@ -19,6 +20,7 @@ const ROLE_OPTIONS: DropdownOption[] = [
 ]
 
 const STATUS_OPTIONS: DropdownOption[] = [
+  { label: '전체', value: 'ALL' },
   { label: 'Activated', value: 'Activated' },
   { label: 'Disabled', value: 'Disabled' },
   { label: 'Withdraw', value: 'Withdraw' },
@@ -40,8 +42,10 @@ export default function ManagementPage({
   externalLoading,
 }: ManagementPageProps) {
   const showRoleFilter = listVariant === 'member'
-  const [roleInput, setRoleInput] = useState<MemberRole | undefined>()
-  const [statusInput, setStatusInput] = useState<Member['status'] | undefined>()
+  const [roleInput, setRoleInput] = useState<MemberRole | 'ALL'>('ALL')
+  const [statusInput, setStatusInput] = useState<Member['status'] | 'ALL'>(
+    'ALL'
+  )
   const [keywordInput, setKeywordInput] = useState('')
   const [role, setRole] = useState<'ALL' | MemberRole>('ALL')
   const [status, setStatus] = useState<'ALL' | Member['status']>('ALL')
@@ -178,7 +182,11 @@ export default function ManagementPage({
                   placeholder="권한"
                   options={ROLE_OPTIONS}
                   value={roleInput}
-                  onChange={(v) => setRoleInput(v as MemberRole)}
+                  onChange={(v) => {
+                    const val = v as MemberRole | 'ALL'
+                    setRoleInput(val)
+                    setRole(val)
+                  }}
                 />
               </div>
             )}
@@ -190,7 +198,11 @@ export default function ManagementPage({
                 placeholder="회원 상태"
                 options={STATUS_OPTIONS}
                 value={statusInput}
-                onChange={(v) => setStatusInput(v as Member['status'])}
+                onChange={(v) => {
+                  const val = v as Member['status'] | 'ALL'
+                  setStatusInput(val)
+                  setStatus(val)
+                }}
               />
             </div>
 
