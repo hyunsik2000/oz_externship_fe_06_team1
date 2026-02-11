@@ -7,6 +7,7 @@ import { ExamHistoryLayout } from '@/components/layout'
 import { useAxios } from '@/hooks'
 import { API_PATHS } from '@/constants/api'
 import type { QuestionsList } from '@/types/question'
+import { useToastStore } from '@/store'
 
 export function DetailExamPage() {
   const { id } = useParams<{ id: string }>()
@@ -36,13 +37,24 @@ export function DetailExamPage() {
   const handleDelete = async () => {
     if (!id) return
 
-    const success = await sendRequest({
-      method: 'DELETE',
-      url: API_PATHS.EXAM.DETAIL(id),
-      errorTitle: '삭제 실패',
-    })
+    const success = await sendRequest(
+      {
+        method: 'DELETE',
+        url: API_PATHS.EXAM.DETAIL(id),
+      },
+      {
+        onError: (error) => {
+          error.mode = 'toast'
+          error.message = '쪽지시험 삭제에 실패했습니다.'
+        },
+      }
+    )
 
     if (success) {
+      useToastStore.getState().showToast({
+        message: '쪽지시험이 삭제되었습니다.',
+        variant: 'success',
+      })
       setIsDeleteModalOpen(false)
       navigate('/exam/list')
     }
