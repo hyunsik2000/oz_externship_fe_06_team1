@@ -6,7 +6,7 @@ import {
   Pagination,
 } from '@/components/common'
 import { ExamListLayout } from '@/components/layout'
-import ExamList from '@/components/table/ExamList'
+import AdminExamList from '@/components/table/AdminExamList'
 import { useAxios, useFilter, type FilterOptionConfig } from '@/hooks'
 import { API_PATHS } from '@/constants/api'
 import type { ExamListResponse } from '@/types/exam'
@@ -159,7 +159,7 @@ export function ExamListPage() {
             존재하는 데이터가 없습니다.
           </div>
         ) : (
-          <ExamList data={paginatedData} />
+          <AdminExamList data={paginatedData} />
         )}
       </ExamListLayout>
       <FilterModal

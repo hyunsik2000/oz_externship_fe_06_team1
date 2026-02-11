@@ -2,7 +2,7 @@ import { useState } from 'react'
 import type { ExamItem } from '@/types/exam'
 import { DataTable, type Column } from '@/components/table/data-table/DataTable'
 import { Link } from 'react-router-dom'
-import ExamDeployModal from '@/components/table/data-table/deploy-modal/ExamDeployModal'
+import ExamDeployModal from './data-table/deploy-modal/ExamDeployModal'
 import { Button } from '@/components/common'
 import { formatDateTime } from '@/utils'
 
@@ -22,7 +22,7 @@ const TitleCell = ({ title, to }: { title: string; to: string }) => (
   </Link>
 )
 
-export default function ExamList({ data }: { data: ExamItem[] }) {
+export default function AdminExamList({ data }: { data: ExamItem[] }) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedItem, setSelectedItem] = useState<ExamItem | null>(null)
 
