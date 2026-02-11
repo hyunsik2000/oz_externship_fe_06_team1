@@ -151,8 +151,12 @@ export function ExamListPage() {
         }
       >
         {isLoading ? (
-          <div className="text-grey-500 flex h-60 items-center justify-center">
+          <div className="flex h-60 items-center justify-center">
             데이터를 불러오는 중입니다...
+          </div>
+        ) : paginatedData.length === 0 ? (
+          <div className="flex h-60 items-center justify-center">
+            존재하는 데이터가 없습니다.
           </div>
         ) : (
           <ExamList data={paginatedData} />
