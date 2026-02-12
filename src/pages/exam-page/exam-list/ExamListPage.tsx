@@ -4,6 +4,7 @@ import {
   FilterModal,
   Input,
   Pagination,
+  TableSkeleton,
 } from '@/components/common'
 import { ExamListLayout } from '@/components/layout'
 import AdminExamList from '@/components/table/AdminExamList'
@@ -122,6 +123,7 @@ export function ExamListPage() {
                 size="search"
                 className="flex-shrink-0"
                 onClick={handleSearch}
+                disabled={isLoading || !data}
               >
                 조회
               </Button>
@@ -151,9 +153,7 @@ export function ExamListPage() {
         }
       >
         {isLoading ? (
-          <div className="flex h-60 items-center justify-center">
-            데이터를 불러오는 중입니다...
-          </div>
+          <TableSkeleton rows={10} />
         ) : paginatedData.length === 0 ? (
           <div className="flex h-60 items-center justify-center">
             존재하는 데이터가 없습니다.
