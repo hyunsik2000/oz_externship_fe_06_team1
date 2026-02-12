@@ -20,26 +20,16 @@ export function LoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    const data = await sendRequest<LoginResponse>(
-      {
-        method: 'POST',
-        url: API_PATHS.AUTH.LOGIN,
-        data: { email, password },
-        errorTitle: '로그인 실패',
-      }
-      // {
-      //   onError: (error) => {
-      //     if (error.status === 400 || error.status === 401) {
-      //       alert('이메일 또는 비밀번호를 확인해주세요.')
-      //       return true
-      //     }
-      //   },
-      // } onError 객체 추가후 return true 를 반드시 해줘야함 -> 이 케이스의 에러는 발생해도 전역 에러 모달로 가지 않음
-    )
+    const data = await sendRequest<LoginResponse>({
+      method: 'POST',
+      url: API_PATHS.AUTH.LOGIN,
+      data: { email, password },
+      errorTitle: '로그인 실패',
+    })
 
     if (data && data.access_token) {
       setAccessToken(data.access_token)
-      navigate('/exam/list')
+      navigate('/members/management')
     }
   }
 
