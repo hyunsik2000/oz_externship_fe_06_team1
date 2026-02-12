@@ -12,7 +12,7 @@ export function MemberManagementPage() {
       title="회원관리"
       listVariant="member"
       listData={members}
-      externalLoading={isLoading}
+      isLoading={isLoading}
     />
   )
 }

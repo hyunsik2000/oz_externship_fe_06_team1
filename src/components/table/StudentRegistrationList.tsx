@@ -19,10 +19,7 @@ type StudentRegistrationListProps = {
 
 export function StudentRegistrationList({
   data,
-  currentPage,
-  totalPages,
   selectedIds,
-  onPageChange,
   onToggleOne,
   onToggleAll,
 }: StudentRegistrationListProps) {
@@ -96,14 +93,6 @@ export function StudentRegistrationList({
     <div className="flex flex-1 flex-col overflow-hidden">
       <div className="flex-1 overflow-hidden">
         <DataTable data={data} columns={columns} />
-      </div>
-
-      <div className="mt-8 flex justify-center">
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onChange={onPageChange}
-        />
       </div>
     </div>
   )
