@@ -29,39 +29,33 @@ export default function App() {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route element={<AdminLayout />}>
-          <Route index element={<Navigate to="/login" replace />} />
-          <Route path="/exam">
-            <Route path="/exam/dashboard" element={<ExamDashboardPage />} />
-            <Route path="/exam/deployments" element={<ExamDeploymentPage />} />
-            <Route path="/exam/history" element={<ExamHistoryPage />} />
+          <Route
+            index
+            element={<Navigate to="/members/management" replace />}
+          />
+          <Route path="exam">
+            <Route path="dashboard" element={<ExamDashboardPage />} />
+            <Route path="deployments" element={<ExamDeploymentPage />} />
+            <Route path="history" element={<ExamHistoryPage />} />
             <Route
-              path="/exam/history/filtered"
+              path="history/filtered"
               element={<FilteredExamHistoryPage />}
             />
-            <Route path="/exam/list" element={<ExamListPage />} />
-            <Route path="/exam/list/:id" element={<DetailExamPage />} />
+            <Route path="list" element={<ExamListPage />} />
+            <Route path="list/:id" element={<DetailExamPage />} />
           </Route>
-          <Route path="/members">
+          <Route path="members">
+            <Route path="dashboard" element={<MemberDashboardPage />} />
+            <Route path="management" element={<MemberManagementPage />} />
             <Route
-              path="/members/dashboard"
-              element={<MemberDashboardPage />}
-            />
-            <Route
-              path="/members/management"
-              element={<MemberManagementPage />}
-            />
-            <Route
-              path="/members/student-management"
+              path="student-management"
               element={<StudentManagementPage />}
             />
             <Route
-              path="/members/student-registration"
+              path="student-registration"
               element={<StudentRegistrationPage />}
             />
-            <Route
-              path="/members/withdrawal"
-              element={<MemberWithdrawalPage />}
-            />
+            <Route path="withdrawal" element={<MemberWithdrawalPage />} />
           </Route>
           <Route path="*" element={<Navigate to="/404" replace />} />
           <Route path="/404" element={<NotFoundPage />} />

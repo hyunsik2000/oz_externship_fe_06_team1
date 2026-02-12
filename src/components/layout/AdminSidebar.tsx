@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import {
   sidebarSectionButtonVariants,
@@ -44,6 +44,14 @@ export function AdminSidebar() {
     if (pathname.startsWith('/members')) return 'member'
     return 'exam'
   })
+
+  useEffect(() => {
+    if (pathname.startsWith('/exam')) {
+      setOpenSection('exam')
+    } else if (pathname.startsWith('/members')) {
+      setOpenSection('member')
+    }
+  }, [pathname])
 
   const toggle = (key: Exclude<SectionKey, null>) => {
     setOpenSection((prev) => (prev === key ? null : key))
@@ -112,7 +120,7 @@ export function AdminSidebar() {
               aria-expanded={isOpen}
               className={sidebarSectionButtonVariants({ open: isOpen })}
             >
-              <div className="flex items-center gap-3">
+              <div className="flex cursor-pointer items-center gap-3">
                 {section.key === 'member' ? (
                   <MemberIcon className="text-primary-600 h-6 w-6" />
                 ) : (
@@ -137,28 +145,28 @@ export function AdminSidebar() {
                     (pathname.startsWith('/exam/history') &&
                       section.key === 'exam' &&
                       text === '응시 내역 관리') ||
-                    (pathname === '/exam/dashboard' &&
+                    (pathname.startsWith('/exam/dashboard') &&
                       section.key === 'exam' &&
                       text === '쪽지시험 대시보드') ||
-                    (pathname === '/exam/list' &&
+                    (pathname.startsWith('/exam/list') &&
                       section.key === 'exam' &&
                       text === '쪽지시험 관리') ||
-                    (pathname === '/exam/deployments' &&
+                    (pathname.startsWith('/exam/deployments') &&
                       section.key === 'exam' &&
                       text === '배포 내역 관리') ||
-                    (pathname === '/members/management' &&
+                    (pathname.startsWith('/members/management') &&
                       section.key === 'member' &&
                       text === '유저 관리') ||
-                    (pathname === '/members/student-management' &&
+                    (pathname.startsWith('/members/student-management') &&
                       section.key === 'member' &&
                       text === '수강생 관리') ||
-                    (pathname === '/members/student-registration' &&
+                    (pathname.startsWith('/members/student-registration') &&
                       section.key === 'member' &&
                       text === '수강생 등록 신청') ||
-                    (pathname === '/members/withdrawal' &&
+                    (pathname.startsWith('/members/withdrawal') &&
                       section.key === 'member' &&
                       text === '회원 탈퇴 관리') ||
-                    (pathname === '/members/dashboard' &&
+                    (pathname.startsWith('/members/dashboard') &&
                       section.key === 'member' &&
                       text === '대시보드')
 
@@ -178,15 +186,15 @@ export function AdminSidebar() {
                   return (
                     <li
                       key={text}
-                      className={sidebarSubmenuItemVariants({
+                      className={`${sidebarSubmenuItemVariants({
                         active: isActive,
-                      })}
+                      })} hover:text-primary-700`}
                     >
                       {isClickable ? (
                         <button
                           type="button"
                           onClick={() => handleClickItem(section.key, text)}
-                          className="w-full text-left"
+                          className="w-full cursor-pointer text-left"
                         >
                           - {text}
                         </button>

@@ -3,8 +3,34 @@ import { API_PATHS } from '@/constants/api'
 import type {
   ExamSubmissionDetail,
   ExamSubmissionDetailApi,
+  ExamSubmissionQuestionApi,
 } from '@/types/history'
+import type { Question, QuestionsList, QuestionType } from '@/types/question'
 import { useAxios } from './useAxios'
+
+/** API type 문자열 → 프론트 QuestionType 매핑 */
+const QUESTION_TYPE_MAP: Record<string, QuestionType> = {
+  single_choice: 'SINGLE_CHOICE',
+  multiple_choice: 'MULTI_SELECT',
+  ox: 'OX',
+  ordering: 'ORDERING',
+  short_answer: 'SHORT_ANSWER',
+  fill_blank: 'FILL_IN_BLANK',
+}
+
+function mapApiQuestionToQuestion(q: ExamSubmissionQuestionApi): Question {
+  return {
+    question_id: q.id,
+    type: QUESTION_TYPE_MAP[q.type] ?? 'SINGLE_CHOICE',
+    question: q.question,
+    prompt: q.prompt ?? '',
+    options: q.options ?? [],
+    blank_count: 0,
+    correct_answer: q.answer,
+    point: q.point,
+    explanation: q.explanation ?? '',
+  }
+}
 
 function mapApiToDetail(
   api: ExamSubmissionDetailApi | null,
@@ -35,13 +61,48 @@ function mapApiToDetail(
   }
 }
 
+function buildQuestionsList(
+  api: ExamSubmissionDetailApi
+): QuestionsList | null {
+  if (!api.questions?.length) return null
+  const exam = api.exam ?? {}
+  return {
+    id: 0,
+    title: exam.exam_title ?? '',
+    subject: { id: 0, title: exam.subject_name ?? '' },
+    questions: api.questions.map(mapApiQuestionToQuestion),
+    thumbnail_img_url: '',
+    created_at: '',
+    updated_at: '',
+  }
+}
+
+function buildPickedAnswers(
+  questions: ExamSubmissionQuestionApi[]
+): Record<number, string | string[]> {
+  const picked: Record<number, string | string[]> = {}
+  for (const q of questions) {
+    if (q.submitted_answer != null) {
+      picked[q.id] = q.submitted_answer
+    }
+  }
+  return picked
+}
+
 export function useExamHistoryDetail(submissionId: number | null) {
   const { sendRequest, isLoading } = useAxios()
   const [detail, setDetail] = useState<ExamSubmissionDetail | null>(null)
+  const [questionsData, setQuestionsData] = useState<QuestionsList | null>(null)
+  const [pickedAnswers, setPickedAnswers] = useState<Record<
+    number,
+    string | string[]
+  > | null>(null)
 
   useEffect(() => {
     if (!submissionId) {
       setDetail(null)
+      setQuestionsData(null)
+      setPickedAnswers(null)
       return
     }
 
@@ -53,9 +114,19 @@ export function useExamHistoryDetail(submissionId: number | null) {
           errorTitle: '응시 내역 상세 조회에 실패했습니다.',
         })
         setDetail(mapApiToDetail(data, submissionId))
+
+        if (data?.questions?.length) {
+          setQuestionsData(buildQuestionsList(data))
+          setPickedAnswers(buildPickedAnswers(data.questions))
+        } else {
+          setQuestionsData(null)
+          setPickedAnswers(null)
+        }
       } catch {
         // 에러는 useAxios에서 전역 에러 스토어로 처리
         setDetail(null)
+        setQuestionsData(null)
+        setPickedAnswers(null)
       }
     }
 
@@ -64,6 +135,8 @@ export function useExamHistoryDetail(submissionId: number | null) {
 
   return {
     detail,
+    questionsData,
+    pickedAnswers,
     isLoading,
   }
 }

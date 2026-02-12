@@ -148,6 +148,59 @@ export interface PaginatedWithdrawalResponse<T> {
   results: T[]
 }
 
+/** GET /api/v1/admin/students/ 쿼리 파라미터 */
+export type AdminStudentsQuery = {
+  cohort_id?: number
+  status?: string
+  search?: string
+  page?: number
+  page_size?: number
+}
+
+/** GET /api/v1/admin/students/ 응답 항목 (enrollment 또는 user 스타일 지원) */
+export type AdminStudentListItem = {
+  id: number
+  email?: string
+  nickname?: string
+  name?: string
+  phone_number?: string
+  birthday?: string
+  status?: string
+  role?: string
+  created_at?: string
+  user?: {
+    id: number
+    email: string
+    name?: string
+    nickname?: string
+    birthday?: string
+    phone_number?: string
+  }
+  cohort?: { id: number; number: number }
+  course?: { id: number; name: string; tag?: string }
+  /** in_progress_course 래퍼 (실제 API 응답 구조) */
+  in_progress_course?: {
+    cohort?: { id: number; number: number }
+    course?: { id: number; name: string; tag?: string }
+  }
+  /** flat 필드 (API 스키마에 따라 다름) */
+  course_name?: string
+  cohort_number?: number
+  /** 수강 중인 과정 목록 (assigned_courses 등) */
+  assigned_courses?: Array<{
+    course?: { id?: number; name?: string }
+    course_name?: string
+    cohort?: number | { id?: number; number?: number }
+  }>
+}
+
+export type AdminStudentListResponse = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: AdminStudentListItem[]
+}
+
 // GET /api/v1/admin/accounts/ 응답 항목 (200 예제값·스키마 기준)
 export type AdminAccountListItem = {
   id: number

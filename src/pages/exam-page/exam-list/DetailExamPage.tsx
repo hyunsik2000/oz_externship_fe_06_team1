@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { DetailExamContainer } from '@/components/detail-exam'
 import ExamModal from '@/components/detail-exam/exam-modal/ExamModal'
-import { AlertModal, Button } from '@/components/common'
+import { AlertModal, Button, TableSkeleton } from '@/components/common'
 import { ExamHistoryLayout } from '@/components/layout'
 import { useAxios } from '@/hooks'
 import { API_PATHS } from '@/constants/api'
@@ -60,18 +60,6 @@ export function DetailExamPage() {
     }
   }
 
-  if (isLoading && !data) {
-    return (
-      <ExamHistoryLayout title="쪽지시험 상세조회">
-        <div className="text-grey-500 flex h-60 items-center justify-center">
-          로딩 중...
-        </div>
-      </ExamHistoryLayout>
-    )
-  }
-
-  if (!data) return null
-
   return (
     <>
       <ExamHistoryLayout
@@ -82,6 +70,7 @@ export function DetailExamPage() {
               variant="success"
               onClick={() => setIsModalOpen(true)}
               className={BUTTON_STYLE}
+              disabled={isLoading || !data}
             >
               수정
             </Button>
@@ -89,27 +78,34 @@ export function DetailExamPage() {
               variant="danger"
               onClick={() => setIsDeleteModalOpen(true)}
               className={BUTTON_STYLE}
+              disabled={isLoading || !data}
             >
               삭제
             </Button>
           </div>
         }
       >
-        <DetailExamContainer data={data} onSuccess={fetchDetail} />
+        {isLoading && !data ? (
+          <TableSkeleton rows={1} rowHeight={700} />
+        ) : (
+          data && <DetailExamContainer data={data} onSuccess={fetchDetail} />
+        )}
       </ExamHistoryLayout>
 
-      <ExamModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        mode="edit"
-        id={id}
-        onSuccess={fetchDetail}
-        initialData={{
-          title: data.title,
-          subject_id: data.subject.id,
-          logo_url: data.thumbnail_img_url,
-        }}
-      />
+      {data && (
+        <ExamModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          mode="edit"
+          id={id}
+          onSuccess={fetchDetail}
+          initialData={{
+            title: data.title,
+            subject_id: data.subject.id,
+            logo_url: data.thumbnail_img_url,
+          }}
+        />
+      )}
 
       <AlertModal
         isOpen={isDeleteModalOpen}
