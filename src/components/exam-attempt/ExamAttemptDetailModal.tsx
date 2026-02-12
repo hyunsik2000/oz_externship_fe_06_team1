@@ -96,7 +96,9 @@ export function ExamAttemptDetailModal({
     const d = detail as ExamSubmissionDetail | null
     const t = d?.elapsed_time
     if (t == null || t < 0) return '-'
-    return `${t}분`
+    const min = Math.floor(t / 60)
+    const sec = t % 60
+    return `${min}분 ${sec}초`
   }, [detail])
 
   useEffect(() => {
