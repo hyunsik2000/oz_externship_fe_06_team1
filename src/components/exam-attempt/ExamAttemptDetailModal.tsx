@@ -69,7 +69,8 @@ export function ExamAttemptDetailModal({
   const { sendRequest } = useAxios()
 
   const submissionId = item?.submission_id ?? null
-  const { detail, isLoading } = useExamHistoryDetail(submissionId)
+  const { detail, questionsData, pickedAnswers, isLoading } =
+    useExamHistoryDetail(submissionId)
 
   const target = detail ?? item
 
@@ -152,7 +153,10 @@ export function ExamAttemptDetailModal({
                 <h3 className="text-grey-800 mb-0 text-sm font-bold">
                   쪽지시험 정보
                 </h3>
-                <SolutionViewTrigger />
+                <SolutionViewTrigger
+                  data={questionsData}
+                  pickedAnswerByQuestionId={pickedAnswers ?? undefined}
+                />
               </div>
 
               <TableWrap>

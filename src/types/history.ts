@@ -12,6 +12,21 @@ export interface HistoryItem {
   finished_at: string
 }
 
+/** API 응답 - 개별 문제 항목 */
+export interface ExamSubmissionQuestionApi {
+  id: number
+  number: number
+  type: string
+  question: string
+  prompt: string | null
+  options: string[]
+  point: number
+  answer: string | string[]
+  submitted_answer: string | string[]
+  is_correct: boolean
+  explanation: string
+}
+
 /** API 상세 응답 - exam/student/result 중첩 구조 */
 export interface ExamSubmissionDetailApi {
   exam?: {
@@ -34,7 +49,7 @@ export interface ExamSubmissionDetailApi {
     cheating_count?: number
     elapsed_time?: number
   }
-  questions?: unknown[]
+  questions?: ExamSubmissionQuestionApi[]
 }
 
 /** 상세 모달용 확장 - API 상세 응답 매핑 결과 */
