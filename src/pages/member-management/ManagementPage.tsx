@@ -37,7 +37,7 @@ type ManagementPageProps = {
   listVariant: 'member' | 'student'
   listData: Member[]
   enableDetail?: boolean
-  externalLoading?: boolean
+  isLoading?: boolean
   /** 수강생: 기수 옵션 및 조회 시 API refetch 콜백 */
   studentCohortOptions?: DropdownOption[]
   onStudentSearch?: (filters: StudentSearchFilters) => void
@@ -58,7 +58,7 @@ export default function ManagementPage({
   listVariant,
   listData,
   enableDetail = true,
-  externalLoading,
+  isLoading,
   studentCohortOptions = listVariant === 'student'
     ? STUDENT_COHORT_OPTIONS
     : undefined,
@@ -82,22 +82,10 @@ export default function ManagementPage({
   const [editDetail, setEditDetail] = useState<MemberDetail | null>(null)
   const [memberList, setMemberList] = useState(listData)
   const showToast = useToastStore((state) => state.showToast)
-  const [internalLoading, setInternalLoading] = useState(
-    externalLoading === undefined
-  )
 
   useEffect(() => {
     setMemberList(listData)
   }, [listData])
-
-  useEffect(() => {
-    if (externalLoading !== undefined) return
-    const timer = setTimeout(() => setInternalLoading(false), 500)
-    return () => clearTimeout(timer)
-  }, [externalLoading])
-
-  const isLoading =
-    externalLoading !== undefined ? externalLoading : internalLoading
 
   const handleSearch = () => {
     setRole(roleInput ?? 'ALL')

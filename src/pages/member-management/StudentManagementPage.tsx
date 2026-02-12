@@ -27,7 +27,7 @@ export function StudentManagementPage() {
       listVariant="student"
       listData={members}
       enableDetail={false}
-      externalLoading={isLoading}
+      isLoading={isLoading}
       onStudentSearch={handleStudentSearch}
     />
   )

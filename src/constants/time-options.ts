@@ -3,6 +3,5 @@ export const TIME_OPTIONS = Array.from({ length: 48 }, (_, i) => {
     .toString()
     .padStart(2, '0')
   const minute = i % 2 === 0 ? '00' : '30'
-  const time = `${hour} : ${minute}`
-  return { value: time, label: time }
+  return { value: `${hour}:${minute}`, label: `${hour} : ${minute}` }
 })

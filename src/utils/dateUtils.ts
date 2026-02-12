@@ -7,7 +7,9 @@ export const getTodayDate = (): string => {
 // 현재 시간을 HH : mm 형식으로 반환, 30분 단위로 올림/내림 처리.
 export const getNearest30MinTime = (): string => {
   const now = new Date()
-  return `${String(now.getHours()).padStart(2, '0')} : ${now.getMinutes() < 30 ? '00' : '30'}`
+  const hours = String(now.getHours()).padStart(2, '0')
+  const minutes = now.getMinutes() < 30 ? '00' : '30'
+  return `${hours}:${minutes}`
 }
 
 // 날짜(YYYY-MM-DD)와 시간(HH : mm)을 백엔드 규격(YYYY-MM-DD HH:mm:ss)으로 변환.

@@ -171,15 +171,17 @@ export function ExamListPage() {
               onChange={setPage}
               containerClassName="flex justify-center"
             />
-            <div className="flex justify-end">
-              <Button
-                variant="primary"
-                onClick={() => setIsModalOpen(true)}
-                className="h-[36px] w-[55px] rounded-sm text-sm font-normal"
-              >
-                생성
-              </Button>
-            </div>
+            {!isLoading && (
+              <div className="flex justify-end">
+                <Button
+                  variant="primary"
+                  onClick={() => setIsModalOpen(true)}
+                  className="h-[36px] w-[55px] rounded-sm text-sm font-normal"
+                >
+                  생성
+                </Button>
+              </div>
+            )}
           </div>
         }
       >

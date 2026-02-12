@@ -18,14 +18,24 @@ export interface ExamListResponse {
 
 export interface ExamDeploymentItemType {
   id: number
-  title: string
-  subject_name: string
-  course_name: string
-  cohort: number
-  applicant_count: number
-  average_score: number
+  submit_count: number
+  avg_score: number
+  status: 'activated' | 'deactivated'
+  exam: {
+    id: number
+    title: string
+    thumbnail_img_url: string
+  }
+  subject: {
+    id: number
+    name: string
+  }
+  cohort: {
+    id: number
+    number: number
+    display: string
+  }
   created_at: string
-  is_active: boolean
 }
 
 export interface PaginatedDeploymentResponse<T> {

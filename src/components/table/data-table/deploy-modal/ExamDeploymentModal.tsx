@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react'
+import { useAxios } from '@/hooks'
+import { useAlertStore, useToastStore } from '@/store'
 import { Modal, Button, Input, Dropdown, AlertModal } from '@/components/common'
-import {
-  getTodayDate,
-  getNearest30MinTime,
-  // formatCorrectTime,
-} from '@/utils'
+import { getTodayDate } from '@/utils'
 import { TIME_OPTIONS } from '@/constants/time-options'
+import { API_PATHS } from '@/constants/api'
 import { DeployRow } from '@/components/table/data-table/deploy-modal/DeployRow'
 
 interface ExamDeployModalProps {
@@ -23,17 +22,53 @@ export default function ExamDeploymentModal({
   onClose,
   initialData,
 }: ExamDeployModalProps) {
+  const { sendRequest } = useAxios()
+  const { showAlert } = useAlertStore()
+  const { showToast } = useToastStore()
+  const [cohortOptions, setCohortOptions] = useState<
+    { label: string; value: string }[]
+  >([])
+
   const [formData, setFormData] = useState({
     course: '',
     cohort: '',
     duration: '60',
     startDate: getTodayDate(),
-    startTime: getNearest30MinTime(),
+    startTime: '',
     endDate: getTodayDate(),
-    endTime: getNearest30MinTime(),
+    endTime: '',
   })
 
   const [isWarningOpen, setIsWarningOpen] = useState(false)
+
+  // 과정 변경 시 기수 목록 조회
+  useEffect(() => {
+    const fetchCohorts = async () => {
+      if (!formData.course) {
+        setCohortOptions([])
+        return
+      }
+      try {
+        const response = await sendRequest<
+          { id: number; number: number; course_id: number }[]
+        >({
+          method: 'GET',
+          url: API_PATHS.COHORT.LIST(formData.course),
+        })
+        if (response) {
+          setCohortOptions(
+            response.map((item) => ({
+              label: `${item.number}기`,
+              value: formData.course,
+            }))
+          )
+        }
+      } catch {
+        // 에러 모달 처리
+      }
+    }
+    fetchCohorts()
+  }, [formData.course, sendRequest])
 
   // 모달 열릴 때 초기화
   useEffect(() => {
@@ -43,18 +78,23 @@ export default function ExamDeploymentModal({
         cohort: '',
         duration: '60',
         startDate: getTodayDate(),
-        startTime: getNearest30MinTime(),
+        startTime: '',
         endDate: getTodayDate(),
-        endTime: getNearest30MinTime(),
+        endTime: '',
       })
     }
   }, [isOpen])
 
   const handleChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }))
+    setFormData((prev) => {
+      if (field === 'course') {
+        return { ...prev, [field]: value, cohort: '' }
+      }
+      return { ...prev, [field]: value }
+    })
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const { course, cohort, duration, startDate, startTime, endDate, endTime } =
       formData
 
@@ -71,19 +111,56 @@ export default function ExamDeploymentModal({
       return
     }
 
-    // const cohortId = parseInt(cohort.replace(/[^0-9]/g, ''), 10)
-    // const requestBody = {
-    //   exam_id: initialData.id,
-    //   cohort_id: cohortId,
-    //   duration_time: parseInt(duration, 10),
-    //   open_at: formatCorrectTime(startDate, startTime),
-    //   close_at: formatCorrectTime(endDate, endTime),
-    // }
+    if (startDate === endDate && startTime === endTime) {
+      showAlert({
+        type: 'warning',
+        title: '시간 설정 오류',
+        description: '시작 시간과 종료 시간은 같을 수 없습니다.',
+      })
+      return
+    }
 
-    // console.log(requestBody)
-    onClose()
+    const requestBody = {
+      exam_id: initialData.id,
+      cohort_id: Number(cohort),
+      duration_time: Number(duration),
+      open_at: `${startDate} ${startTime}:00`,
+      close_at: `${endDate} ${endTime}:00`,
+    }
+
+    const response = await sendRequest(
+      {
+        method: 'POST',
+        url: API_PATHS.DEPLOYMENT.CREATE,
+        data: requestBody,
+      },
+      {
+        onError: (error) => {
+          if (error.status === 404) {
+            showAlert({
+              type: 'warning',
+              title: '시험 배포 실패',
+              description: '해당 과정의 기수를 찾을 수 없습니다.',
+            })
+          } else if (error.status === 409) {
+            showAlert({
+              type: 'warning',
+              title: '시험 배포 실패',
+              description: '해당 기수의 시험을 이미 배포했습니다.',
+            })
+          }
+          return true
+        },
+      }
+    )
+    if (response) {
+      showToast({
+        message: '시험이 성공적으로 배포되었습니다.',
+        variant: 'success',
+      })
+      onClose()
+    }
   }
-
   return (
     <Modal
       isOpen={isOpen}
@@ -111,8 +188,9 @@ export default function ExamDeploymentModal({
                 onChange={(val) => handleChange('course', val)}
                 placeholder="과정을 선택해주세요"
                 options={[
-                  { value: 'frontend', label: '프론트엔드 부트캠프' },
-                  { value: 'backend', label: '백엔드 부트캠프' },
+                  { value: '1', label: '초격차 백엔드 부트캠프' },
+                  { value: '2', label: '초격차 프론트엔드 부트캠프' },
+                  { value: '3', label: '풀스택 개발자 과정' },
                 ]}
                 className="text-grey-600 w-3/5 [&_button]:!h-9"
               />
@@ -123,15 +201,7 @@ export default function ExamDeploymentModal({
                 value={formData.cohort}
                 onChange={(val) => handleChange('cohort', val)}
                 placeholder="기수 선택"
-                options={[
-                  { value: '12기', label: '12기' },
-                  { value: '13기', label: '13기' },
-                  { value: '14기', label: '14기' },
-                  { value: '15기', label: '15기' },
-                  { value: '16기', label: '16기' },
-                  { value: '17기', label: '17기' },
-                  { value: '18기', label: '18기' },
-                ]}
+                options={cohortOptions}
                 className="text-grey-600 w-[120px] [&_button]:!h-9"
               />
             </DeployRow>
@@ -160,6 +230,7 @@ export default function ExamDeploymentModal({
                   value={formData.startTime}
                   onChange={(val) => handleChange('startTime', val)}
                   options={TIME_OPTIONS}
+                  placeholder="시간 선택"
                   className="text-grey-600 w-[150px] [&_button]:!h-9"
                 />
               </div>
@@ -178,6 +249,7 @@ export default function ExamDeploymentModal({
                   value={formData.endTime}
                   onChange={(val) => handleChange('endTime', val)}
                   options={TIME_OPTIONS}
+                  placeholder="시간 선택"
                   className="text-grey-600 w-[150px] [&_button]:!h-9"
                 />
               </div>

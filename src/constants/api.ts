@@ -15,6 +15,10 @@ export const API_PATHS = {
     DETAIL: (id: number | string) => `/api/v1/admin/exams/deployments/${id}/`,
     STATUS: (id: number | string) =>
       `/api/v1/admin/exams/deployments/${id}/status/`,
+    CREATE: '/api/v1/admin/exams/deployments',
+  },
+  COHORT: {
+    LIST: (courseId: number | string) => `/api/v1/${courseId}/cohorts`,
   },
   EXAM: {
     LIST: '/api/v1/admin/exams',
