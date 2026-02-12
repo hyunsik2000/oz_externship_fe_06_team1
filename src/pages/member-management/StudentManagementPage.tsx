@@ -3,7 +3,7 @@ import ManagementPage from './ManagementPage'
 import { useAdminStudents } from '@/hooks'
 
 type StudentFilters = {
-  cohort_id?: number
+  cohort_number?: number
   status?: string
   keyword?: string
 }
@@ -12,7 +12,7 @@ export function StudentManagementPage() {
   const [filters, setFilters] = useState<StudentFilters>({})
 
   const { members, isLoading } = useAdminStudents({
-    cohort_id: filters.cohort_id,
+    cohort_number: filters.cohort_number,
     status: filters.status,
     search: filters.keyword,
   })
