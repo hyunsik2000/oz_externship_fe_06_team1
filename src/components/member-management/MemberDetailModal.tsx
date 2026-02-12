@@ -11,7 +11,7 @@ import ModifyPermissionModal, {
 } from './ModifyPermissionModal'
 import { useAdminAccountDetail } from '@/hooks'
 import { MOCK_MEMBER_DETAIL_MAP } from '@/mocks/data/member-detail'
-import type { Member, MemberDetail } from '@/types'
+import type { Member, MemberDetail, MemberRole } from '@/types'
 import { formatDate, formatDateTime } from '@/utils'
 import {
   TableWrap,
@@ -32,7 +32,7 @@ type MemberDetailModalProps = {
   member: Member | null
   onDeleteConfirm?: (member: Member) => void
   onEdit?: (detail: MemberDetail) => void
-  onPermissionConfirm?: () => void
+  onPermissionConfirm?: (newRole: MemberRole) => void
 }
 
 function CourseList({ items }: { items?: string[] }) {
@@ -65,8 +65,6 @@ export function MemberDetailModal({
 
   const [permissionValue, setPermissionValue] = useState<PermissionValue>({
     role: '',
-    course: '',
-    cohort: '',
   })
 
   const accountId = member?.id ?? null
@@ -104,27 +102,17 @@ export function MemberDetailModal({
   }
 
   const roleOptions: Option[] = [
-    { label: '수강생', value: '수강생' },
-    { label: '멘토', value: '멘토' },
-    { label: '관리자', value: '관리자' },
-  ]
-
-  const courseOptions: Option[] = (detail.ongoingCourses ?? []).map((c) => ({
-    label: c,
-    value: c,
-  }))
-
-  const cohortOptions: Option[] = [
-    { label: '11기', value: '11기' },
-    { label: '12기', value: '12기' },
-    { label: '13기', value: '13기' },
+    { label: 'Admin', value: 'Admin' },
+    { label: 'Student', value: 'Student' },
+    { label: 'Staff (TA)', value: 'Staff (TA)' },
+    { label: 'Staff (LC)', value: 'Staff (LC)' },
+    { label: 'Staff (OM)', value: 'Staff (OM)' },
+    { label: 'General', value: 'General' },
   ]
 
   const openPermissionModal = () => {
     setPermissionValue({
       role: '',
-      course: '',
-      cohort: '',
     })
     setPermissionModalOpen(true)
   }
@@ -132,7 +120,8 @@ export function MemberDetailModal({
   const closePermissionModal = () => setPermissionModalOpen(false)
 
   const submitPermissionModal = () => {
-    onPermissionConfirm?.()
+    const newRole = permissionValue.role as MemberRole
+    if (newRole) onPermissionConfirm?.(newRole)
     handleCloseDetail()
   }
 
@@ -277,8 +266,6 @@ export function MemberDetailModal({
         open={permissionModalOpen}
         onClose={closePermissionModal}
         roleOptions={roleOptions}
-        courseOptions={courseOptions}
-        cohortOptions={cohortOptions}
         value={permissionValue}
         onChange={setPermissionValue}
         onSubmit={submitPermissionModal}

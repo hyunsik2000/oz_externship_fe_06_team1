@@ -9,7 +9,6 @@ const REGISTRATION_STATUS_OPTIONS: DropdownOption[] = [
   { label: '대기(Submitted)', value: 'Submitted' },
   { label: '승인(Accepted)', value: 'Accepted' },
   { label: '반려(Rejected)', value: 'Rejected' },
-  { label: '취소(Canceled)', value: 'Canceled' },
 ]
 
 export function StudentRegistrationPage() {

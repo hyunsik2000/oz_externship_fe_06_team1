@@ -3,6 +3,7 @@ export const API_PATHS = {
     LIST: '/api/v1/admin/accounts/',
     DETAIL: (accountId: number | string) =>
       `/api/v1/admin/accounts/${accountId}/`,
+    PRESIGNED_URL: '/api/v1/admin/accounts/presigned-url/profile',
   },
   AUTH: {
     LOGIN: '/api/v1/accounts/login/',

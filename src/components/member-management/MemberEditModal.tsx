@@ -13,6 +13,8 @@ import nicknameOverlapAlert from '@/assets/icons/NicknameOverlapAlert.svg'
 import { inputVariants } from '@/constants/variants'
 import { cn } from '@/lib/cn'
 import { formatDateTime } from '@/utils/dateUtils'
+import { API_PATHS } from '@/constants/api'
+import { useAxios } from '@/hooks'
 import {
   TableWrap,
   TableRow,
@@ -27,7 +29,7 @@ type Option = { label: string; value: string }
 type MemberEditModalProps = {
   open: boolean
   onClose: () => void
-  onSave?: () => void
+  onSave?: (updatedDetail: MemberDetail) => void
   detail: MemberDetail | null
   courseOptions: Option[]
   cohortOptions: Option[]
@@ -83,7 +85,11 @@ export function MemberEditModal({
     birthDate: '',
   })
   const [isNicknameFocused, setIsNicknameFocused] = useState(false)
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [isSaving, setIsSaving] = useState(false)
   const imageInputRef = useRef<HTMLInputElement | null>(null)
+  const { sendRequest } = useAxios()
 
   useEffect(() => {
     if (!open || !detail) return
@@ -97,7 +103,28 @@ export function MemberEditModal({
       cohort: cohortOptions[0]?.value ?? '',
       birthDate: normalizeDateValue(detail.birthDate),
     })
+    setImageFile(null)
+    setImagePreview(null)
   }, [open, detail, courseOptions, cohortOptions])
+
+  useEffect(() => {
+    if (!imageFile) {
+      setImagePreview(null)
+      return
+    }
+    const url = URL.createObjectURL(imageFile)
+    setImagePreview(url)
+    return () => URL.revokeObjectURL(url)
+  }, [imageFile])
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) setImageFile(file)
+    e.target.value = ''
+  }
+
+  /** 하이픈 등 비숫자 문자 제거 */
+  const sanitizePhone = (phone: string) => phone.replace(/\D/g, '')
 
   const isNicknameDuplicate = useMemo(() => {
     const nickname = value.nickname.trim()
@@ -122,7 +149,8 @@ export function MemberEditModal({
     return ''
   }, [value.nickname, isNicknameDuplicate])
 
-  const imageUrl = detail?.profileImageUrl ?? DEFAULT_MEMBER_IMAGE_URL
+  const imageUrl =
+    imagePreview ?? detail?.profileImageUrl ?? DEFAULT_MEMBER_IMAGE_URL
   const openImagePicker = () => imageInputRef.current?.click()
 
   const canSubmit = useMemo(
@@ -164,6 +192,7 @@ export function MemberEditModal({
                   type="file"
                   accept="image/*"
                   className="hidden"
+                  onChange={handleImageChange}
                 />
                 <ThCell>ID</ThCell>
                 <TdCell colSpan={3}>{detail.id}</TdCell>
@@ -336,10 +365,43 @@ export function MemberEditModal({
           variant="primary"
           size="search"
           className="h-[36px] w-[55px] rounded-[3px]"
-          disabled={!canSubmit}
-          onClick={() => {
-            onSave?.()
-            onClose()
+          disabled={!canSubmit || isSaving}
+          onClick={async () => {
+            if (!detail) return
+            setIsSaving(true)
+            try {
+              const payload: Record<string, string> = {
+                name: value.name,
+                nickname: value.nickname,
+                email: value.email,
+                phone_number: sanitizePhone(value.phone),
+                birthday: value.birthDate,
+              }
+
+              await sendRequest({
+                method: 'PATCH',
+                url: API_PATHS.ACCOUNTS.DETAIL(detail.id),
+                data: payload,
+                errorTitle: '회원 정보 수정에 실패했습니다.',
+              })
+
+              const updatedDetail: MemberDetail = {
+                ...detail,
+                name: value.name,
+                nickname: value.nickname,
+                email: value.email,
+                phone: value.phone,
+                birthDate: value.birthDate,
+                gender:
+                  (value.gender as MemberDetail['gender']) ?? detail.gender,
+              }
+              onSave?.(updatedDetail)
+              onClose()
+            } catch {
+              // 에러는 useAxios에서 전역 에러 스토어로 처리
+            } finally {
+              setIsSaving(false)
+            }
           }}
         >
           저장

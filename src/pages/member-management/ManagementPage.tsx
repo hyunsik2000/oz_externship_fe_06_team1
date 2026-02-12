@@ -10,7 +10,7 @@ import type { DropdownOption } from '@/types/commonComponents'
 import { useToastStore } from '@/store'
 
 const ROLE_OPTIONS: DropdownOption[] = [
-  { label: '전체', value: 'ALL' },
+  { label: '권한', value: 'ALL' },
   { label: 'Admin', value: 'Admin' },
   { label: 'Staff (TA)', value: 'Staff (TA)' },
   { label: 'Student', value: 'Student' },
@@ -20,14 +20,14 @@ const ROLE_OPTIONS: DropdownOption[] = [
 ]
 
 const STATUS_OPTIONS: DropdownOption[] = [
-  { label: '전체', value: 'ALL' },
+  { label: '회원 상태', value: 'ALL' },
   { label: 'Activated', value: 'Activated' },
   { label: 'Disabled', value: 'Disabled' },
   { label: 'Withdraw', value: 'Withdraw' },
 ]
 
 type StudentSearchFilters = {
-  cohort_id?: number
+  cohort_number?: number
   status?: string
   keyword?: string
 }
@@ -44,7 +44,7 @@ type ManagementPageProps = {
 }
 
 const STUDENT_COHORT_OPTIONS: DropdownOption[] = [
-  { label: '전체', value: '' },
+  { label: '기수', value: '' },
   { label: '10기', value: '10' },
   { label: '11기', value: '11' },
   { label: '12기', value: '12' },
@@ -104,11 +104,11 @@ export default function ManagementPage({
     setStatus(statusInput ?? 'ALL')
     setKeyword(keywordInput)
     if (showCohortFilter && onStudentSearch) {
-      const cohortId = cohortInput ? Number(cohortInput) : undefined
+      const cohortNumber = cohortInput ? Number(cohortInput) : undefined
       const statusVal =
         statusInput && statusInput !== 'ALL' ? statusInput : undefined
       onStudentSearch({
-        cohort_id: cohortId,
+        cohort_number: cohortNumber,
         status: statusVal,
         keyword: keywordInput.trim() || undefined,
       })
@@ -119,11 +119,11 @@ export default function ManagementPage({
     if (keywordInput.trim() === '') {
       setKeyword('')
       if (showCohortFilter && onStudentSearch) {
-        const cohortId = cohortInput ? Number(cohortInput) : undefined
+        const cohortNumber = cohortInput ? Number(cohortInput) : undefined
         const statusVal =
           statusInput && statusInput !== 'ALL' ? statusInput : undefined
         onStudentSearch({
-          cohort_id: cohortId,
+          cohort_number: cohortNumber,
           status: statusVal,
           keyword: undefined,
         })
@@ -146,13 +146,24 @@ export default function ManagementPage({
         : true
       const statusMatch = status === 'ALL' ? true : m.status === status
 
+      const cohortMatch =
+        showCohortFilter && cohortInput ? m.cohort === `${cohortInput}기` : true
+
       const keywordMatch = kw
         ? [m.nickname, m.name, m.email].join(' ').toLowerCase().includes(kw)
         : true
 
-      return roleMatch && statusMatch && keywordMatch
+      return roleMatch && statusMatch && cohortMatch && keywordMatch
     })
-  }, [memberList, role, showRoleFilter, status, keyword])
+  }, [
+    memberList,
+    role,
+    showRoleFilter,
+    status,
+    keyword,
+    showCohortFilter,
+    cohortInput,
+  ])
 
   const openMemberDetail = (member: Member) => {
     if (!enableDetail) return
@@ -187,14 +198,35 @@ export default function ManagementPage({
     })
   }
 
-  const handleEditSave = () => {
+  const handleEditSave = (updatedDetail: MemberDetail) => {
+    setMemberList((prev) =>
+      prev.map((m) =>
+        m.id === updatedDetail.id
+          ? {
+              ...m,
+              name: updatedDetail.name,
+              nickname: updatedDetail.nickname,
+              email: updatedDetail.email,
+              phone: updatedDetail.phone,
+              birthDate: updatedDetail.birthDate,
+            }
+          : m
+      )
+    )
     showToast({
       variant: 'success',
       message: '성공적으로 수정이 완료되었습니다.',
     })
   }
 
-  const handlePermissionConfirm = () => {
+  const handlePermissionConfirm = (newRole: Member['role']) => {
+    if (selectedMember) {
+      setMemberList((prev) =>
+        prev.map((m) =>
+          m.id === selectedMember.id ? { ...m, role: newRole } : m
+        )
+      )
+    }
     showToast({
       variant: 'success',
       message: '권한이 성공적으로 변경되었습니다.',
@@ -249,7 +281,20 @@ export default function ManagementPage({
                   placeholder="기수"
                   options={studentCohortOptions}
                   value={cohortInput}
-                  onChange={(v) => setCohortInput(v ?? '')}
+                  onChange={(v) => {
+                    const next = v ?? ''
+                    setCohortInput(next)
+                    const cohortNumber = next ? Number(next) : undefined
+                    const statusVal =
+                      statusInput && statusInput !== 'ALL'
+                        ? statusInput
+                        : undefined
+                    onStudentSearch?.({
+                      cohort_number: cohortNumber,
+                      status: statusVal,
+                      keyword: keywordInput.trim() || undefined,
+                    })
+                  }}
                 />
               </div>
             )}
@@ -281,6 +326,17 @@ export default function ManagementPage({
                   const val = v as Member['status'] | 'ALL'
                   setStatusInput(val)
                   setStatus(val)
+                  if (showCohortFilter && onStudentSearch) {
+                    const cohortNumber = cohortInput
+                      ? Number(cohortInput)
+                      : undefined
+                    const statusVal = val && val !== 'ALL' ? val : undefined
+                    onStudentSearch({
+                      cohort_number: cohortNumber,
+                      status: statusVal,
+                      keyword: keywordInput.trim() || undefined,
+                    })
+                  }
                 }}
               />
             </div>

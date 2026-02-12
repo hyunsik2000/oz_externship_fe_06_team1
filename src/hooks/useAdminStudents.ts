@@ -53,6 +53,8 @@ function mapStudentToMember(item: AdminStudentListItem): Member {
 
 export type UseAdminStudentsOptions = {
   cohort_id?: number
+  /** 기수 번호 (예: 10, 11) - API가 cohort_number로 필터링할 때 사용 */
+  cohort_number?: number
   status?: string
   search?: string
   page?: number
@@ -65,6 +67,7 @@ export function useAdminStudents(options?: UseAdminStudentsOptions) {
   const [totalCount, setTotalCount] = useState(0)
 
   const cohortId = options?.cohort_id
+  const cohortNumber = options?.cohort_number
   const status = options?.status
   const search = options?.search
   const page = options?.page ?? 1
@@ -77,6 +80,7 @@ export function useAdminStudents(options?: UseAdminStudentsOptions) {
         page_size: pageSize,
       }
       if (cohortId != null) params.cohort_id = cohortId
+      if (cohortNumber != null) params.cohort_number = cohortNumber
       if (status) params.status = status.toLowerCase()
       if (search) params.search = search
 
@@ -102,7 +106,7 @@ export function useAdminStudents(options?: UseAdminStudentsOptions) {
     }
 
     void fetchStudents()
-  }, [sendRequest, cohortId, status, search, page, pageSize])
+  }, [sendRequest, cohortId, cohortNumber, status, search, page, pageSize])
 
   return {
     members,

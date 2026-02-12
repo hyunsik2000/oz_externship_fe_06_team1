@@ -5,6 +5,7 @@ import {
   GlobalToast,
   ErrorCatcher,
 } from '@/components/common'
+import { useAuthStore } from '@/store'
 import { LoginPage } from '@/pages/login'
 import {
   DetailExamPage,
@@ -24,14 +25,22 @@ import {
 import { NotFoundPage } from '@/pages/not-found'
 
 export default function App() {
+  const accessToken = useAuthStore((state) => state.accessToken)
+
   return (
     <>
       <Routes>
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="login" element={<LoginPage />} />
         <Route element={<AdminLayout />}>
           <Route
             index
-            element={<Navigate to="/members/management" replace />}
+            element={
+              accessToken ? (
+                <Navigate to="/members/management" replace />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
           />
           <Route path="exam">
             <Route path="dashboard" element={<ExamDashboardPage />} />
