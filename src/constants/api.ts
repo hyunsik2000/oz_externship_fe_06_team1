@@ -11,10 +11,10 @@ export const API_PATHS = {
     LOGOUT: '/api/v1/accounts/logout/',
   },
   DEPLOYMENT: {
-    LIST: '/api/v1/admin/exams/deployments/',
-    DETAIL: (id: number | string) => `/api/v1/admin/exams/deployments/${id}/`,
+    LIST: '/api/v1/admin/exams/deployments',
+    DETAIL: (id: number | string) => `/api/v1/admin/exams/deployments/${id}`,
     STATUS: (id: number | string) =>
-      `/api/v1/admin/exams/deployments/${id}/status/`,
+      `/api/v1/admin/exams/deployments/${id}/status`,
   },
   EXAM: {
     LIST: '/api/v1/admin/exams',

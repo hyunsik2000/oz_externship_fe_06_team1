@@ -7,7 +7,6 @@ import {
   type MemberStatus,
 } from '@/components/common'
 import type { MemberWithdrawalDetailType } from '@/types'
-import memberImg from '@/assets/MemberImg.jpeg'
 import {
   TableWrap,
   TableRow,
@@ -16,8 +15,7 @@ import {
   ProfileImageCell,
   DEFAULT_TABLE_COLUMNS,
 } from './MemberDetailTable'
-
-const DEFAULT_MEMBER_IMAGE_URL = memberImg
+import { formatDate } from '@/utils'
 
 type MemberWithdrawalDetailModalProps = {
   open: boolean
@@ -63,9 +61,7 @@ export function MemberWithdrawalDetailModal({
               <TableWrap rows={4} columns={DEFAULT_TABLE_COLUMNS}>
                 <TableRow>
                   <ProfileImageCell
-                    imageUrl={
-                      user.profile_image_url ?? DEFAULT_MEMBER_IMAGE_URL
-                    }
+                    imageUrl={user.profile_img_url}
                     alt={`${user.nickname} 프로필`}
                   />
                   <ThCell>ID</ThCell>
@@ -73,21 +69,27 @@ export function MemberWithdrawalDetailModal({
                 </TableRow>
                 <TableRow>
                   <ThCell>이름</ThCell>
-                  <TdCell>{user.name}</TdCell>
+                  <TdCell>{user.name || '-'}</TdCell>
                   <ThCell>성별</ThCell>
-                  <TdCell>{user.gender || '-'}</TdCell>
+                  <TdCell>
+                    {user.gender === 'MALE'
+                      ? '남'
+                      : user.gender === 'FEMALE'
+                        ? '여'
+                        : '미설정'}
+                  </TdCell>
                 </TableRow>
                 <TableRow>
                   <ThCell>닉네임</ThCell>
                   <TdCell>{user.nickname}</TdCell>
                   <ThCell>생년월일</ThCell>
-                  <TdCell>{user.birth_date}</TdCell>
+                  <TdCell>{user.birth_date || '-'}</TdCell>
                 </TableRow>
                 <TableRow>
                   <ThCell>이메일</ThCell>
                   <TdCell>{user.email}</TdCell>
                   <ThCell>연락처</ThCell>
-                  <TdCell>{user.phone}</TdCell>
+                  <TdCell>{user.phone || '-'}</TdCell>
                 </TableRow>
               </TableWrap>
             </section>
@@ -98,19 +100,23 @@ export function MemberWithdrawalDetailModal({
                   <ThCell>담당/수강 과정</ThCell>
                   <TdCell colSpan={2}>
                     {detail.assigned_courses.map((c, i) => (
-                      <div key={i}>{c.course_name}</div>
+                      <div key={i}>{c.course?.name}</div>
                     ))}
                   </TdCell>
                   <ThCell>기수</ThCell>
                   <TdCell colSpan={1}>
-                    {detail.assigned_courses.map((c, i) => (
-                      <div key={i}>{c.cohort ? `${c.cohort}기` : ''}</div>
-                    ))}
+                    <div className="flex flex-col gap-1">
+                      {detail.assigned_courses.length > 0
+                        ? detail.assigned_courses.map((c, i) => (
+                            <div key={i}>{c.cohort?.number}기</div>
+                          ))
+                        : '-'}
+                    </div>
                   </TdCell>
                 </TableRow>
                 <TableRow>
                   <ThCell>가입일</ThCell>
-                  <TdCell colSpan={4}>{user.joined_at}</TdCell>
+                  <TdCell colSpan={4}>{formatDate(user.created_at)}</TdCell>
                 </TableRow>
                 <TableRow>
                   <ThCell>권한</ThCell>
@@ -136,9 +142,11 @@ export function MemberWithdrawalDetailModal({
                 </TableRow>
                 <TableRow>
                   <ThCell>탈퇴 요청 일시</ThCell>
-                  <TdCell colSpan={2}>{detail.withdrawn_at}</TdCell>
+                  <TdCell colSpan={2}>{formatDate(detail.withdrawn_at)}</TdCell>
                   <ThCell>삭제 예정 일시</ThCell>
-                  <TdCell colSpan={1}>{detail.due_date}</TdCell>
+                  <TdCell colSpan={1}>
+                    {detail.due_date ? formatDate(detail.due_date) : '-'}
+                  </TdCell>
                 </TableRow>
                 <TableRow>
                   <ThCell>탈퇴 사유</ThCell>

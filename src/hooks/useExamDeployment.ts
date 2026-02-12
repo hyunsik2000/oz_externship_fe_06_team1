@@ -52,17 +52,21 @@ export function useExamDeployment() {
     fetchList()
   }, [fetchList])
 
-  const handleToggleStatus = async (id: number, currentStatus: boolean) => {
+  const handleToggleStatus = async (id: number, currentIsActive: boolean) => {
+    const nextStatus = currentIsActive ? 'activated' : 'deactivated'
+
     try {
-      await deploymentApi.updateStatus(id, !currentStatus)
+      await deploymentApi.updateStatus(id, nextStatus)
       setData((prev) =>
         prev.map((item) =>
-          item.id === id ? { ...item, is_active: !currentStatus } : item
+          item.id === id
+            ? { ...item, status: nextStatus as 'activated' | 'deactivated' }
+            : item
         )
       )
       showToast({
         variant: 'success',
-        message: `배포 상태가 ${!currentStatus ? '활성화' : '비활성화'} 되었습니다.`,
+        message: `배포 상태가 ${nextStatus === 'activated' ? '활성화' : '비활성화'} 되었습니다.`,
       })
     } catch (error) {
       showToast({ variant: 'error', message: '상태 변경에 실패했습니다.' })

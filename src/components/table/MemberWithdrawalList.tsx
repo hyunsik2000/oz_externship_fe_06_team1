@@ -7,6 +7,7 @@ import {
 import { DataTable, type Column } from '@/components/table/data-table/DataTable'
 import type { MemberWithdrawalItemType } from '@/types'
 import { NameCell } from './MemberList'
+import { formatDateTime } from '@/utils'
 
 type MemberWithdrawalListProps = {
   data: MemberWithdrawalItemType[]
@@ -76,7 +77,7 @@ export function MemberWithdrawalList({
         key: 'withdrawn_at',
         title: '탈퇴 일시',
         size: 'xl',
-        cell: (item) => item.withdrawn_at,
+        cell: (item) => formatDateTime(item.withdrawn_at),
       },
     ],
     [onItemClick]

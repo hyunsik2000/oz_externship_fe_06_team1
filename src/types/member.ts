@@ -112,11 +112,11 @@ export type WithdrawalUserInfoType = {
   email: string
   phone: string
   birth_date: string
-  gender: string
+  gender: 'MALE' | 'FEMALE' | null
   role: string
-  joined_at: string
-  profile_image_url?: string
   status: string
+  profile_img_url: string | undefined
+  created_at: string
 }
 
 export type MemberWithdrawalItemType = {
@@ -131,8 +131,19 @@ export type MemberWithdrawalDetailType = {
   id: number
   user: WithdrawalUserInfoType
   assigned_courses: {
-    course_name: string
-    cohort?: number
+    course: {
+      id: number
+      name: string
+      tag: string
+    }
+    cohort: {
+      id: number
+      number: number
+      status: string
+      status_display: string
+      start_date: string
+      end_date: string
+    }
   }[]
   reason: string
   reason_display: string

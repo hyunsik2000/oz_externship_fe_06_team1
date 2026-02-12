@@ -37,32 +37,35 @@ export function ExamDeploymentList({
         title: '제목',
         className: 'flex-1 min-w-[200px]',
         cell: (item) => (
-          <TitleCell title={item.title} onClick={() => onItemClick(item)} />
+          <TitleCell
+            title={item.exam?.title}
+            onClick={() => onItemClick(item)}
+          />
         ),
       },
       {
         key: 'subject',
         title: '과목명',
         size: 'lg',
-        cell: (item) => item.subject_name,
+        cell: (item) => item.subject?.name,
       },
       {
         key: 'course',
         title: '과정 | 기수',
         className: 'flex-1 min-w-[200px]',
-        cell: (item) => `${item.course_name} ${item.cohort}기`,
+        cell: (item) => `${item.cohort?.display} ${item.cohort?.number}기`,
       },
       {
         key: 'count',
         title: '응시 수',
         size: 'md',
-        cell: (item) => item.applicant_count,
+        cell: (item) => item.submit_count,
       },
       {
         key: 'avg',
         title: '평균',
         size: 'md',
-        cell: (item) => item.average_score,
+        cell: (item) => Math.floor(item.avg_score),
       },
       {
         key: 'date',
@@ -74,12 +77,17 @@ export function ExamDeploymentList({
         key: 'status',
         title: '배포 활성 상태',
         size: 'lg',
-        cell: (item) => (
-          <Switch
-            checked={item.is_active}
-            onChange={() => onToggleStatus(item.id, item.is_active)}
-          />
-        ),
+        cell: (item) => {
+          const isActive = item.status === 'activated'
+          return (
+            <Switch
+              checked={isActive}
+              onChange={() => {
+                onToggleStatus(item.id, !isActive)
+              }}
+            />
+          )
+        },
       },
     ],
     [onToggleStatus, onItemClick]
