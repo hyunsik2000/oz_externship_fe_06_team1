@@ -53,7 +53,7 @@ export function ExamDeploymentList({
         key: 'course',
         title: '과정 | 기수',
         className: 'flex-1 min-w-[200px]',
-        cell: (item) => `${item.cohort?.display} ${item.cohort?.number}기`,
+        cell: (item) => `${item.cohort?.display}`,
       },
       {
         key: 'count',

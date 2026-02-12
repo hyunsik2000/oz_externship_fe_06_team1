@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { deploymentApi } from '@/api/deployment'
 import { useToastStore } from '@/store'
-import type { ExamDeploymentItemType } from '@/types'
+import type { ExamDeploymentDetailType, ExamDeploymentItemType } from '@/types'
 
 export function useExamDeployment() {
   const { showToast } = useToastStore()
@@ -18,11 +18,21 @@ export function useExamDeployment() {
 
   const [selectedItem, setSelectedItem] =
     useState<ExamDeploymentItemType | null>(null)
+  const [selectedDetail, setSelectedDetail] =
+    useState<ExamDeploymentDetailType | null>(null)
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false)
 
-  const openDetail = (item: ExamDeploymentItemType) => {
-    setSelectedItem(item)
-    setIsDetailModalOpen(true)
+  const openDetail = async (item: ExamDeploymentItemType) => {
+    try {
+      setIsLoading(true)
+      const response = await deploymentApi.getDetail(item.id)
+      setSelectedDetail(response.data)
+      setIsDetailModalOpen(true)
+    } catch (error) {
+      console.error('상세 조회 실패:', error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const closeDetail = () => {

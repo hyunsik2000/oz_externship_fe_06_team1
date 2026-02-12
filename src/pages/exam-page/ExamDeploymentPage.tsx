@@ -4,7 +4,7 @@ import { ExamDeploymentDetailModal } from '@/components/exam-deployment/ExamDepl
 import { ExamHistoryLayout } from '@/components/layout'
 import { ExamDeploymentList } from '@/components/table/ExamDeploymentList'
 import { useExamDeployment } from '@/hooks/useExamDeployment'
-import { MOCK_DEPLOYMENTS } from '@/mocks/data/table-data/DeploymentList'
+// import { MOCK_DEPLOYMENTS } from '@/mocks/data/table-data/DeploymentList'
 import BackCircleIcon from '@/assets/icons/BackCircle.svg?react'
 import CloseIcon from '@/assets/icons/Close.svg?react'
 import { useMemo, useState } from 'react'
@@ -51,32 +51,34 @@ export function ExamDeploymentPage() {
   type FilterOptionType = { label: string; value: string }
 
   const courseOptions = useMemo<FilterOptionType[]>(() => {
+    if (!data) return []
     const seen = new Set<string>()
-    return MOCK_DEPLOYMENTS.reduce<FilterOptionType[]>((acc, item) => {
-      if (seen.has(item.course_name)) return acc
-      seen.add(item.course_name)
-      acc.push({ label: item.course_name, value: item.course_name })
+    return data.reduce<FilterOptionType[]>((acc, item) => {
+      const courseName = item.cohort?.course?.name
+      if (!courseName || seen.has(courseName)) return acc
+      seen.add(courseName)
+      acc.push({ label: courseName, value: courseName })
       return acc
     }, [])
-  }, [])
+  }, [data])
 
   const cohortOptions = useMemo<FilterOptionType[]>(() => {
-    if (!tempFilter.course) return []
+    if (!tempFilter.course || !data) return []
     const seen = new Set<number>()
-    return MOCK_DEPLOYMENTS.filter(
-      (item) => item.course_name === tempFilter.course
-    )
+    return data
+      .filter((item) => item.cohort?.course?.name === tempFilter.course)
       .reduce<FilterOptionType[]>((acc, item) => {
-        if (seen.has(item.cohort)) return acc
-        seen.add(item.cohort)
+        const cohortNum = item.cohort?.number
+        if (cohortNum === undefined || seen.has(cohortNum)) return acc
+        seen.add(cohortNum)
         acc.push({
-          label: `${item.cohort}기`,
-          value: String(item.cohort),
+          label: `${cohortNum}기`,
+          value: String(cohortNum),
         })
         return acc
       }, [])
       .sort((a, b) => Number(a.value) - Number(b.value))
-  }, [tempFilter.course])
+  }, [tempFilter.course, data])
 
   const handleFilterSubmit = () => {
     setFilters((prev) => ({
@@ -166,7 +168,7 @@ export function ExamDeploymentPage() {
       <ExamDeploymentDetailModal
         isOpen={isDetailModalOpen}
         onClose={closeDetail}
-        data={selectedItem}
+        detail={selectedItem}
         onDeleteConfirm={handleDeleteDeployment}
       />
     </>
