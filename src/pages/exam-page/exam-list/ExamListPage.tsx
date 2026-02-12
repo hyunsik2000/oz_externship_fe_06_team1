@@ -14,6 +14,8 @@ import type { ExamListResponse } from '@/types/exam'
 import { useEffect, useState, useCallback } from 'react'
 import ExamModal from '@/components/detail-exam/exam-modal/ExamModal'
 import { SUBJECT_OPTIONS } from '@/constants/filtered-option'
+import CloseIcon from '@/assets/icons/Close.svg?react'
+import BackCircleIcon from '@/assets/icons/BackCircle.svg?react'
 
 export function ExamListPage() {
   const { sendRequest, isLoading } = useAxios()
@@ -109,26 +111,55 @@ export function ExamListPage() {
       <ExamListLayout
         title="쪽지시험 조회"
         toolbar={
-          <div className="flex w-full items-center justify-between gap-2">
-            <div className="flex gap-2">
-              <Input
-                placeholder="검색어를 입력하세요"
-                className="h-9 w-[250px]"
-                value={searchText}
-                onChange={(e) => setSearchText(e.target.value)}
-                onKeyDown={handleKeyDown}
-              />
-              <Button
-                variant="search"
-                size="search"
-                className="flex-shrink-0"
-                onClick={handleSearch}
-                disabled={isLoading || !data}
-              >
-                조회
-              </Button>
+          <div className="flex w-full flex-col gap-4">
+            {queryParams.subject_id && (
+              <div className="flex items-center gap-2">
+                <p className="text-grey-700">
+                  현재 선택된 과목은{' '}
+                  <span className="text-primary-700 font-semibold">
+                    {SUBJECT_OPTIONS.find(
+                      (option) => option.value === queryParams.subject_id
+                    )?.label || queryParams.subject_id}
+                  </span>
+                  입니다.
+                </p>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setQueryParams((prev) => ({
+                      ...prev,
+                      subject_id: '',
+                    }))
+                  }
+                  aria-label="필터 초기화"
+                  className="relative inline-flex h-4 w-4 items-center justify-center"
+                >
+                  <BackCircleIcon className="h-4 w-4" />
+                  <CloseIcon className="absolute h-2 w-2" />
+                </button>
+              </div>
+            )}
+            <div className="flex w-full items-center justify-between gap-2">
+              <div className="flex gap-2">
+                <Input
+                  placeholder="검색어를 입력하세요"
+                  className="h-9 w-[250px]"
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                />
+                <Button
+                  variant="search"
+                  size="search"
+                  className="flex-shrink-0"
+                  onClick={handleSearch}
+                  disabled={isLoading || !data}
+                >
+                  조회
+                </Button>
+              </div>
+              <FilterButton onClick={handleOpenFilter} />
             </div>
-            <FilterButton onClick={handleOpenFilter} />
           </div>
         }
         footer={
@@ -166,7 +197,7 @@ export function ExamListPage() {
         open={isFilterOpen}
         onClose={handleCloseFilter}
         title="과정별 필터링"
-        subtitle="필터를 적용할 카테고리를 선택해주세요."
+        subtitle="필터를 적용할 과목을 선택해주세요."
         rows={rows}
         summary={summary}
         onSubmit={handleSubmitFilter}
