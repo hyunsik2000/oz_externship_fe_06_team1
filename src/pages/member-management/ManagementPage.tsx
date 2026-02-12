@@ -37,8 +37,7 @@ type ManagementPageProps = {
   listVariant: 'member' | 'student'
   listData: Member[]
   enableDetail?: boolean
-  isLoading?: boolean
-  /** 수강생: 기수 옵션 및 조회 시 API refetch 콜백 */
+  isLoading: boolean
   studentCohortOptions?: DropdownOption[]
   onStudentSearch?: (filters: StudentSearchFilters) => void
 }

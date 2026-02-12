@@ -6,16 +6,14 @@ type MemberManagementLayoutProps = {
   description?: string
   headerRight?: ReactNode
   toolbar?: ReactNode
-  footer?: ReactNode
   children: ReactNode
 }
 
-export function MemberManagementLayout({
+export function MemberRegisterLayout({
   title,
   description,
   headerRight,
   toolbar,
-  footer,
   children,
 }: MemberManagementLayoutProps) {
   return (
@@ -37,8 +35,6 @@ export function MemberManagementLayout({
         {toolbar && <div className="mb-6 flex items-end gap-4">{toolbar}</div>}
 
         <div className="w-full">{children}</div>
-
-        {footer && <div className="flex w-full">{footer}</div>}
       </div>
     </AdminContainer>
   )

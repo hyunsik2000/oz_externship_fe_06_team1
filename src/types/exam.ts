@@ -16,11 +16,10 @@ export interface ExamListResponse {
   exams: ExamItem[]
 }
 
-export interface ExamDeploymentItemType {
+interface BaseDeployment {
   id: number
   submit_count: number
-  avg_score: number
-  status: 'activated' | 'deactivated'
+  created_at: string
   exam: {
     id: number
     title: string
@@ -34,8 +33,24 @@ export interface ExamDeploymentItemType {
     id: number
     number: number
     display: string
+    course: {
+      id: number
+      name: string
+      tag: string
+    }
   }
-  created_at: string
+}
+export interface ExamDeploymentItemType extends BaseDeployment {
+  status: 'activated' | 'deactivated'
+  avg_score: number
+}
+export interface ExamDeploymentDetailType extends BaseDeployment {
+  exam_access_url: string
+  access_code: string
+  not_submitted_count: number
+  duration_time: number
+  open_at: string
+  close_at: string
 }
 
 export interface PaginatedDeploymentResponse<T> {

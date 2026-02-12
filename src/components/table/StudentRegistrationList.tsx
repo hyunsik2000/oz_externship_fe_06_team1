@@ -1,28 +1,18 @@
 import { useMemo } from 'react'
-import {
-  CustomCheckbox,
-  MemberStatusBadge,
-  Pagination,
-} from '@/components/common'
+import { CustomCheckbox, MemberStatusBadge } from '@/components/common'
 import { DataTable, type Column } from '@/components/table/data-table/DataTable'
 import type { StudentRegistrationItemType } from '@/types'
 
 type StudentRegistrationListProps = {
   data: StudentRegistrationItemType[]
-  currentPage: number
-  totalPages: number
   selectedIds: number[]
-  onPageChange: (page: number) => void
   onToggleOne: (id: number) => void
   onToggleAll: () => void
 }
 
 export function StudentRegistrationList({
   data,
-  currentPage,
-  totalPages,
   selectedIds,
-  onPageChange,
   onToggleOne,
   onToggleAll,
 }: StudentRegistrationListProps) {
@@ -96,14 +86,6 @@ export function StudentRegistrationList({
     <div className="flex flex-1 flex-col overflow-hidden">
       <div className="flex-1 overflow-hidden">
         <DataTable data={data} columns={columns} />
-      </div>
-
-      <div className="mt-8 flex justify-center">
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onChange={onPageChange}
-        />
       </div>
     </div>
   )

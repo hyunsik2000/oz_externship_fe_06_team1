@@ -1,5 +1,5 @@
-import { Button, Dropdown, Input } from '@/components/common'
-import { AdminContainer } from '@/components/layout'
+import { Button, Dropdown, Input, TableSkeleton } from '@/components/common'
+import { MemberManagementLayout } from '@/components/layout'
 import { MemberWithdrawalDetailModal } from '@/components/member-management/MemberWithdrawalDetailModal'
 import { MemberWithdrawalList } from '@/components/table/MemberWithdrawalList'
 import { useMemberWithdrawal } from '@/hooks/useMemberWithdrawal'
@@ -30,9 +30,10 @@ export function MemberWithdrawalPage() {
 
   return (
     <>
-      <AdminContainer title="회원 탈퇴 관리">
-        <div className="flex h-full flex-col px-6">
-          <div className="mb-6 flex items-center gap-3">
+      <MemberManagementLayout
+        title="회원 탈퇴 관리"
+        toolbar={
+          <>
             <div className="w-48">
               <Dropdown
                 size="sm"
@@ -60,21 +61,23 @@ export function MemberWithdrawalPage() {
               onClick={applyFilters}
               disabled={isLoading}
             >
-              {isLoading ? '로딩 중...' : '조회'}
+              조회
             </Button>
-          </div>
-
-          <div className="relative flex flex-1 flex-col overflow-hidden">
-            <MemberWithdrawalList
-              data={data}
-              onItemClick={openDetail}
-              currentPage={filters.page}
-              totalCount={totalCount}
-              onPageChange={(page) => setFilters((p) => ({ ...p, page }))}
-            />
-          </div>
-        </div>
-      </AdminContainer>
+          </>
+        }
+      >
+        {isLoading ? (
+          <TableSkeleton rows={10} />
+        ) : (
+          <MemberWithdrawalList
+            data={data}
+            onItemClick={openDetail}
+            currentPage={filters.page}
+            totalCount={totalCount}
+            onPageChange={(page) => setFilters((p) => ({ ...p, page }))}
+          />
+        )}
+      </MemberManagementLayout>
       <MemberWithdrawalDetailModal
         open={isModalOpen}
         onClose={closeDetail}

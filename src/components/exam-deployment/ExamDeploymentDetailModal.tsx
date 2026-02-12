@@ -1,32 +1,50 @@
 import { useEffect, useRef, useState } from 'react'
 import { AlertModal, Button, Modal } from '@/components/common'
-import { type ExamDeploymentItemType } from '@/types'
+import { type ExamDeploymentDetailType } from '@/types'
 import { Row2, Row4, TableWrap } from '../exam-attempt'
+import { formatDate } from '@/utils'
 
 type ExamDeploymentDetailModalProps = {
   isOpen: boolean
   onClose: () => void
-  data: ExamDeploymentItemType | null
+  detail: ExamDeploymentDetailType | null
   onDeleteConfirm?: (id: number) => void
 }
 
 export function ExamDeploymentDetailModal({
   isOpen,
   onClose,
-  data,
+  detail,
   onDeleteConfirm,
 }: ExamDeploymentDetailModalProps) {
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false)
   const deleteConfirmRootRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
-    if (!isOpen) setDeleteConfirmOpen(false)
-  }, [isOpen])
+    if (!open) setDeleteConfirmOpen(false)
+  }, [])
 
-  if (!data) return null
+  if (!detail) return null
+
+  const {
+    id,
+    exam_access_url,
+    access_code,
+    cohort,
+    submit_count,
+    not_submitted_count,
+    duration_time,
+    open_at,
+    close_at,
+    created_at,
+    exam,
+    subject,
+  } = detail
+
+  const totalMemberCount = (submit_count || 0) + (not_submitted_count || 0)
 
   const handleDelete = () => {
-    onDeleteConfirm?.(data.id)
+    onDeleteConfirm?.(detail.id)
     setDeleteConfirmOpen(false)
     onClose()
   }
@@ -52,44 +70,46 @@ export function ExamDeploymentDetailModal({
             <section className="space-y-4">
               <h3 className="text-grey-800 text-sm font-bold">쪽지시험 정보</h3>
               <TableWrap>
-                <Row2 label="쪽지시험 ID" value={data.id} />
-                <Row2 label="쪽지시험 명" value={data.title} />
-                <Row2 label="과목" value={data.subject_name} />
-                <Row2 label="시험 문항" value={`${data.applicant_count}`} />
+                <Row2 label="쪽지시험 ID" value={exam?.id || '-'} />
+                <Row2 label="쪽지시험 명" value={exam?.title || '-'} />
+                <Row2 label="과목" value={subject?.name || '-'} />
+                <Row2 label="시험 문항" value="-" />
               </TableWrap>
             </section>
 
             <section className="space-y-4">
               <h3 className="text-grey-800 text-sm font-bold">배포 정보</h3>
               <TableWrap>
-                <Row2 label="배포 ID" value={data.id} />
+                <Row2 label="배포 ID" value={id} />
                 <Row2
                   label="시험 응시 링크"
                   value={
                     <a
-                      href="#"
-                      className="text-primary-600 hover:text-primary-700 underline"
+                      href={exam_access_url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-primary-600 hover:text-primary-700 break-all underline"
                     >
-                      https://t.onlineexammaker.com/doexam/D06e6AzWL14.html
+                      {exam_access_url || '-'}
                     </a>
                   }
                 />
-                <Row2 label="시험 참가 코드" value="G7aP2zXq" />
+                <Row2 label="시험 참가 코드" value={access_code || '-'} />
                 <Row4
                   leftLabel="응시 대상 과정"
-                  leftValue={data.course_name}
+                  leftValue={subject?.name || '-'}
                   rightLabel="응시 대상 기수"
-                  rightValue={`${data.cohort}기`}
+                  rightValue={`${cohort?.number || 0}기`}
                 />
                 <Row4
                   leftLabel="응시 인원 정보"
-                  leftValue="18 / 21 명"
+                  leftValue={`${submit_count || 0} / ${totalMemberCount} 명`}
                   rightLabel="시험 시간"
-                  rightValue="60분"
+                  rightValue={`${duration_time || 0}분`}
                 />
-                <Row2 label="시작 일시" value="2025.07.20 16:30:00" />
-                <Row2 label="종료 일시" value="2025.07.20 17:30:00" />
-                <Row2 label="배포 생성 일시" value={data.created_at} />
+                <Row2 label="시작 일시" value={formatDate(open_at)} />
+                <Row2 label="종료 일시" value={formatDate(close_at)} />
+                <Row2 label="배포 생성 일시" value={formatDate(created_at)} />
               </TableWrap>
             </section>
 

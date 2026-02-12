@@ -84,12 +84,10 @@ export function MemberWithdrawalList({
   )
 
   return (
-    <div className="flex flex-1 flex-col overflow-hidden">
-      <div className="flex-1 overflow-hidden">
-        <DataTable data={data} columns={columns} />
-      </div>
+    <div className="w-full">
+      <DataTable data={data} columns={columns} />
 
-      <div className="mt-8 flex justify-center">
+      <div className="flex justify-center">
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}

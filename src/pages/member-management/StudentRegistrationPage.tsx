@@ -1,5 +1,12 @@
-import { AlertModal, Button, Dropdown, Input } from '@/components/common'
-import { AdminContainer } from '@/components/layout'
+import {
+  AlertModal,
+  Button,
+  Dropdown,
+  Input,
+  Pagination,
+  TableSkeleton,
+} from '@/components/common'
+import { MemberManagementLayout } from '@/components/layout'
 import { StudentRegistrationList } from '@/components/table/StudentRegistrationList'
 import { useStudentRegistration } from '@/hooks'
 import type { DropdownOption } from '@/types'
@@ -33,9 +40,10 @@ export function StudentRegistrationPage() {
 
   return (
     <>
-      <AdminContainer title="수강생 등록 신청">
-        <div className="flex h-full flex-col px-6">
-          <div className="mb-6 flex items-center gap-3">
+      <MemberManagementLayout
+        title="수강생 등록 신청"
+        toolbar={
+          <>
             <div className="w-48">
               <Dropdown
                 size="sm"
@@ -66,40 +74,50 @@ export function StudentRegistrationPage() {
               onClick={applyFilters}
               disabled={isLoading}
             >
-              {isLoading ? '조회 중...' : '조회'}
+              조회
             </Button>
-          </div>
-
-          <div className="relative flex flex-1 flex-col overflow-hidden">
-            <StudentRegistrationList
-              data={items}
+          </>
+        }
+        footer={
+          <div className="grid w-full grid-cols-3 items-center">
+            <div />
+            <Pagination
               currentPage={currentPage}
               totalPages={totalPages}
-              selectedIds={selectedIds}
-              onPageChange={setCurrentPage}
-              onToggleOne={toggleOne}
-              onToggleAll={toggleAll}
+              onChange={setCurrentPage}
             />
-
-            <div className="absolute right-0 bottom-0 flex gap-2">
-              <Button
-                variant="primary"
-                onClick={openApproveModal}
-                disabled={isActionLoading}
-              >
-                승인
-              </Button>
-              <Button
-                variant="danger"
-                onClick={openRejectModal}
-                disabled={isActionLoading}
-              >
-                반려
-              </Button>
-            </div>
+            {!isLoading && (
+              <div className="flex justify-end gap-2">
+                <Button
+                  variant="primary"
+                  onClick={openApproveModal}
+                  disabled={isActionLoading}
+                >
+                  승인
+                </Button>
+                <Button
+                  variant="danger"
+                  onClick={openRejectModal}
+                  disabled={isActionLoading}
+                >
+                  반려
+                </Button>
+              </div>
+            )}
           </div>
-        </div>
-      </AdminContainer>
+        }
+      >
+        {isLoading ? (
+          <TableSkeleton rows={10} />
+        ) : (
+          <StudentRegistrationList
+            data={items}
+            selectedIds={selectedIds}
+            onToggleOne={toggleOne}
+            onToggleAll={toggleAll}
+          />
+        )}
+      </MemberManagementLayout>
 
       <AlertModal
         isOpen={modalConfig.isOpen}
