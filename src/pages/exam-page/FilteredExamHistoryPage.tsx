@@ -156,7 +156,7 @@ export function FilteredExamHistoryPage() {
         <ExamHistoryLayout
           title="쪽지시험 응시 내역 조회"
           toolbar={
-            <div className="-mt-1.5 flex w-full items-center justify-between gap-3">
+            <div className="flex w-full items-center justify-between gap-3">
               <div className="flex items-center gap-2">
                 <p className="text-grey-700 text-base">
                   현재 선택된 과정은{' '}

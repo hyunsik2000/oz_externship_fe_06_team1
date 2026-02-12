@@ -111,7 +111,7 @@ export function ExamListPage() {
       <ExamListLayout
         title="쪽지시험 조회"
         toolbar={
-          <div className="flex w-full flex-col gap-4">
+          <div className="flex w-full flex-col gap-3">
             {queryParams.subject_id && (
               <div className="flex items-center gap-2">
                 <p className="text-grey-700">
@@ -139,8 +139,8 @@ export function ExamListPage() {
                 </button>
               </div>
             )}
-            <div className="flex w-full items-center justify-between gap-2">
-              <div className="flex gap-2">
+            <div className="flex w-full items-center justify-between">
+              <div className="flex gap-3">
                 <Input
                   placeholder="검색어를 입력하세요"
                   className="h-9 w-[250px]"

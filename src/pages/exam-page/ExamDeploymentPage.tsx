@@ -93,12 +93,9 @@ export function ExamDeploymentPage() {
     <>
       <ExamHistoryLayout
         title="쪽지시험 배포 내역 조회"
-        headerRight={
-          <FilterButton onClick={() => setIsFilterModalOpen(true)} />
-        }
         toolbar={
           isFilterApplied ? (
-            <div className="-mt-1.5 flex w-full items-center justify-between gap-3">
+            <div className="flex w-full items-center justify-between gap-3">
               <div className="flex items-center gap-2">
                 <p className="text-grey-700 text-base">
                   현재 선택된 과정은{' '}
@@ -121,12 +118,12 @@ export function ExamDeploymentPage() {
           ) : undefined
         }
       >
-        <div className="flex h-full flex-col pb-6">
+        <div className="flex h-full flex-col">
           <div className="mb-6 flex items-center justify-between">
-            <div className="flex items-center gap-3">
+            <div className="flex gap-3">
               <Input
                 placeholder="검색어를 입력하세요."
-                className="h-9 w-80"
+                className="h-9 w-[250px]"
                 value={filters.search}
                 onChange={(e) =>
                   setFilters((p) => ({ ...p, search: e.target.value }))
@@ -142,6 +139,7 @@ export function ExamDeploymentPage() {
                 조회
               </Button>
             </div>
+            <FilterButton onClick={() => setIsFilterModalOpen(true)} />
           </div>
 
           <div className="relative flex flex-1 flex-col overflow-hidden">

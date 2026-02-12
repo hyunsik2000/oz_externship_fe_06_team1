@@ -96,8 +96,12 @@ export function ExamHistoryPage() {
   return (
     <>
       <ExamHistoryLayout
-        title={<span className="text-base">쪽지시험 응시 내역 조회</span>}
-        headerRight={<FilterButton onClick={handleOpenFilter} />}
+        title="쪽지시험 응시 내역 조회"
+        toolbar={
+          <div className="flex w-full justify-end">
+            <FilterButton onClick={handleOpenFilter} />
+          </div>
+        }
       >
         {isLoading ? (
           <div className="text-grey-500 flex h-60 items-center justify-center">
