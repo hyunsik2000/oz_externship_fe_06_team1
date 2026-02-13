@@ -26,8 +26,6 @@ export function useExamDeployment() {
       const response = await deploymentApi.getDetail(item.id)
       setSelectedDetail(response.data)
       setIsDetailModalOpen(true)
-    } catch (error) {
-      console.error('상세 조회 실패:', error)
     } finally {
       setIsLoading(false)
     }
@@ -49,8 +47,6 @@ export function useExamDeployment() {
       })
       setData(response.data.results)
       setTotalCount(response.data.count)
-    } catch (error) {
-      console.error(error)
     } finally {
       setIsLoading(false)
     }
@@ -76,7 +72,7 @@ export function useExamDeployment() {
         variant: 'success',
         message: `배포 상태가 ${nextStatus === 'activated' ? '활성화' : '비활성화'} 되었습니다.`,
       })
-    } catch (error) {
+    } catch {
       showToast({ variant: 'error', message: '상태 변경에 실패했습니다.' })
     }
   }
@@ -91,7 +87,7 @@ export function useExamDeployment() {
       })
 
       await fetchList()
-    } catch (error) {
+    } catch {
       showToast({
         variant: 'error',
         message: '배포 내역 삭제에 실패했습니다.',

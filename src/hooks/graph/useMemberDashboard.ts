@@ -40,8 +40,8 @@ export function useMemberDashboard() {
           const res = await fetch(url)
           const data = await res.json()
           setChartResponse({ type: 'pie', data: data })
-        } catch (e) {
-          console.error(e)
+        } catch {
+          // 전역 에러 처리
         }
       }
       autoFetch()
@@ -79,8 +79,8 @@ export function useMemberDashboard() {
         type: currentType,
         data: data,
       } as MemberChartResponseType)
-    } catch (error) {
-      console.error('데이터 로드 실패: ', error)
+    } catch {
+      // 전역 에러 처리
     }
   }
 

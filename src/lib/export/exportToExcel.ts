@@ -34,7 +34,7 @@ export const exportToExcel = async (
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     })
     saveAs(blob, `${fileName}.xlsx`)
-  } catch (error) {
-    console.error('엑셀 저장 중 오류 발생:', error)
+  } catch {
+    // 전역 에러 처리
   }
 }

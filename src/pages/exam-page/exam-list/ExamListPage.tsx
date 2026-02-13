@@ -54,7 +54,7 @@ export function ExamListPage() {
 
   // 데이터 조회
   const fetchExams = useCallback(async () => {
-    const params: Record<string, any> = {
+    const params: Record<string, string | number> = {
       page,
       size: 10,
     }

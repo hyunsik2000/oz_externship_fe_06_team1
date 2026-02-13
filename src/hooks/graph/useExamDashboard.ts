@@ -71,8 +71,8 @@ export function useExamDashboard() {
         type: requestConfig.type,
         data: data,
       } as ExamChartResponseType)
-    } catch (error) {
-      console.error('데이터 로드 실패:', error)
+    } catch {
+      // 전역 에러 처리
     }
   }
 

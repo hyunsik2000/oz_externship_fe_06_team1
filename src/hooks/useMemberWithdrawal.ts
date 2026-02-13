@@ -33,8 +33,6 @@ export function useMemberWithdrawal() {
 
       setData(response.data.results)
       setTotalCount(response.data.count)
-    } catch (error) {
-      console.error('API 호출 에러:', error)
     } finally {
       setIsLoading(false)
     }
@@ -54,8 +52,7 @@ export function useMemberWithdrawal() {
       const response = await withdrawalApi.getDetail(id)
       setSelectedDetail(response.data)
       setIsModalOpen(true)
-    } catch (error) {
-      console.error('상세 정보 로드 실패:', error)
+    } catch {
       showToast({
         variant: 'error',
         message: '상세 정보를 불러오지 못했습니다.',
@@ -79,7 +76,7 @@ export function useMemberWithdrawal() {
       })
       closeDetail()
       await fetchList()
-    } catch (error) {
+    } catch {
       showToast({
         variant: 'error',
         message: '복구 처리 중 오류가 발생했습니다.',

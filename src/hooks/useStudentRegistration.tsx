@@ -129,8 +129,7 @@ export function useStudentRegistration() {
       setItems(response.results.map(mapApiResultToItem))
       setTotalCount(response.count)
       setSelectedIds([])
-    } catch (error) {
-      console.error(error)
+    } catch {
       showToast({
         variant: 'error',
         message: '수강생 등록 신청 목록을 불러오지 못했습니다.',
@@ -207,8 +206,7 @@ export function useStudentRegistration() {
             ? '수강생 등록 신청이 승인되었습니다.'
             : '수강생 등록 신청이 반려되었습니다.'),
       })
-    } catch (error) {
-      console.error(error)
+    } catch {
       showToast({
         variant: 'error',
         message:
